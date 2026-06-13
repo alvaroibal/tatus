@@ -16,15 +16,23 @@ export default function Onboarding() {
     try {
       const [year, month, day] = birthDate.split('-').map(Number)
       const birthDateObj = new Date(year, month - 1, day)
-      const profileId = await db.profiles.add({
-        name: name.trim(),
-        birthDate: birthDateObj,
-        createdAt: new Date(),
+
+      // Atomic transaction: write both records together
+      let profileId: number | undefined
+      await db.transaction('rw', db.profiles, db.appConfig, async () => {
+        profileId = Number(await db.profiles.add({
+          name: name.trim(),
+          birthDate: birthDateObj,
+          createdAt: new Date(),
+        }))
+        await db.appConfig.put({ id: 1, activeProfileId: profileId })
       })
-      await db.appConfig.put({ id: 1, activeProfileId: profileId as number })
+
+      if (!profileId) throw new Error('profileId vacío tras la transacción')
       navigate('/')
-    } catch {
-      showToast('Error al guardar — tu almacenamiento puede estar lleno.')
+    } catch (err) {
+      console.error('[Onboarding] error al guardar:', err)
+      showToast('Error al guardar — intenta de nuevo.')
       setSaving(false)
     }
   }
