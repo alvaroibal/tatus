@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCurrentProfile } from '../hooks/useCurrentProfile'
 import { getStage } from '../utils/getStage'
+import { getPrenatalStage } from '../utils/getPrenatalStage'
 import { StageCard } from '../components/StageCard'
+import { PrenatalCard } from '../components/PrenatalCard'
 import { SkeletonCard } from '../components/SkeletonCard'
 import stagesData from '../data/stages.json'
 import type { Stage } from '../utils/getStage'
@@ -17,21 +19,21 @@ function getLastSeenWeek(profileId: number): number {
   return parseInt(localStorage.getItem(lastSeenKey(profileId)) ?? '-1', 10)
 }
 
-function BeforeBirth({ birthDate, childName }: { birthDate: Date; childName: string }) {
+function BeforeBirth({
+  birthDate,
+  childName,
+  currentWeek,
+}: {
+  birthDate: Date
+  childName: string
+  currentWeek: number
+}) {
   const msUntil = new Date(birthDate).setHours(0, 0, 0, 0) - new Date().setHours(0, 0, 0, 0)
   const daysUntil = Math.ceil(msUntil / 86_400_000)
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] px-6 text-center">
-      <p className="text-5xl mb-4">🌱</p>
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">
-        Faltan {daysUntil} días para conocerte
-      </h2>
-      <p className="text-gray-500 text-sm">{childName}</p>
-      <p className="text-gray-400 text-xs mt-6 leading-relaxed max-w-xs">
-        El diario está disponible. Puedes escribir entradas antes del nacimiento.
-      </p>
-    </div>
-  )
+  // currentWeek is negative before birth; pregnancyWeek = 40 + currentWeek
+  const pregnancyWeek = Math.max(1, 40 + currentWeek)
+  const prenatalStage = getPrenatalStage(pregnancyWeek)
+  return <PrenatalCard pregnancyWeek={pregnancyWeek} stage={prenatalStage} childName={childName} daysUntilBirth={daysUntil} />
 }
 
 function NextWeekLocked({ unlockDate }: { unlockDate: Date }) {
@@ -77,7 +79,7 @@ export default function Home() {
   if (profile === null) return null
 
   if (currentWeek < 0) {
-    return <BeforeBirth birthDate={profile.birthDate} childName={profile.name} />
+    return <BeforeBirth birthDate={profile.birthDate} childName={profile.name} currentWeek={currentWeek} />
   }
 
   const stage = getStage(currentWeek, stages)

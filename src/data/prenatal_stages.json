@@ -1,0 +1,937 @@
+[
+  {
+    "week": 1,
+    "babySize": "semilla de amapola",
+    "babySizeCm": 0.1,
+    "babyWeightG": 0,
+    "development": [
+      "El óvulo acaba de ser fecundado y el cigoto viaja por la trompa de Falopio hacia el útero.",
+      "Se están formando los primeros grupos de células que determinarán el sexo del bebé.",
+      "El material genético de los dos ya está combinado: 23 cromosomas de cada uno."
+    ],
+    "fatherTasks": [
+      "Deja de fumar ya — el humo pasivo afecta al desarrollo en las primeras semanas.",
+      "Reduce el alcohol o elimínalo: el esperma también se ve afectado por el alcohol.",
+      "Toma ácido fólico si no lo hace ya Natalia — es crítico en estas primeras semanas."
+    ],
+    "shopping": [
+      "Ácido fólico 400 mcg (si no tiene ya)",
+      "Libro 'El gran libro del embarazo' o similar para tener referencia"
+    ],
+    "partnerTips": [
+      "Puede no notar nada todavía — es normal.",
+      "El ácido fólico es lo más importante ahora mismo: previene defectos del tubo neural."
+    ]
+  },
+  {
+    "week": 2,
+    "babySize": "semilla de sésamo",
+    "babySizeCm": 0.2,
+    "babyWeightG": 0,
+    "development": [
+      "El blastocisto (bola de células) está intentando implantarse en el útero.",
+      "Las células se dividen a gran velocidad formando las capas embrionarias.",
+      "Si la implantación tiene éxito, el cuerpo empezará a producir hCG (la hormona del embarazo)."
+    ],
+    "fatherTasks": [
+      "Apoya a Natalia con una dieta rica en folatos: espinacas, lentejas, aguacate.",
+      "Reduce el estrés en casa — el estrés materno puede dificultar la implantación.",
+      "Comprad un test de embarazo para tenerlo a mano cuando llegue el momento."
+    ],
+    "shopping": [
+      "Tests de embarazo (pack de varios)",
+      "Vitaminas prenatales completas (Pregnacare o similar)"
+    ],
+    "partnerTips": [
+      "Puede sentir pequeñas manchas de implantación — no es la regla, es normal.",
+      "El cansancio extremo puede aparecer ya esta semana con la subida de progesterona."
+    ]
+  },
+  {
+    "week": 3,
+    "babySize": "semilla de mostaza",
+    "babySizeCm": 0.3,
+    "babyWeightG": 0,
+    "development": [
+      "El embrión ya está implantado y produce hCG, que es lo que detecta el test de embarazo.",
+      "Se están formando las tres capas germinales: ectodermo, mesodermo y endodermo.",
+      "El saco amniótico y la placenta primitiva empiezan a formarse."
+    ],
+    "fatherTasks": [
+      "Haz el test de embarazo — si es positivo, pide cita con el ginecólogo.",
+      "Aprende qué alimentos debe evitar Natalia: alcohol, atún rojo, quesos curados, embutidos.",
+      "Empieza a pensar en quién será el médico/matrona que seguirá el embarazo."
+    ],
+    "shopping": [],
+    "partnerTips": [
+      "Las náuseas matutinas pueden empezar pronto — ten galletas saladas en la mesilla.",
+      "Es normal que sienta los pechos muy sensibles y tensos."
+    ]
+  },
+  {
+    "week": 4,
+    "babySize": "semilla de amapola",
+    "babySizeCm": 0.4,
+    "babyWeightG": 0,
+    "development": [
+      "El tubo neural (que se convertirá en cerebro y médula) está empezando a cerrarse.",
+      "El corazón primitivo ya late, aunque todavía no es detectable por ecografía.",
+      "El embrión tiene el tamaño de un grano de arroz pero ya tiene forma de C."
+    ],
+    "fatherTasks": [
+      "Pide la primera cita prenatal — en España suele ser entre las semanas 8 y 12.",
+      "Infórmate sobre la baja de paternidad en España: actualmente 16 semanas.",
+      "Crea una carpeta compartida para guardar documentos del embarazo."
+    ],
+    "shopping": [],
+    "partnerTips": [
+      "Las náuseas son normales y no significan que algo vaya mal.",
+      "Puede tener muchas ganas de orinar — el útero presiona la vejiga.",
+      "El cansancio extremo es hormonal: déjala descansar sin sentirse culpable."
+    ]
+  },
+  {
+    "week": 5,
+    "babySize": "semilla de ajonjolí",
+    "babySizeCm": 0.5,
+    "babyWeightG": 0,
+    "development": [
+      "El corazón ya late entre 100 y 160 veces por minuto — el doble que el tuyo.",
+      "Se están formando los rudimentos del cerebro, los ojos y la nariz.",
+      "Los brazos y piernas empiezan a aparecer como pequeñas yemas."
+    ],
+    "fatherTasks": [
+      "Acompáñala si tiene náuseas: no hay nada que 'arreglar', solo estar presente.",
+      "Aprende sobre el síndrome de hiperemesis gravídica por si las náuseas son severas.",
+      "Empieza a leer sobre el embarazo — 'El embarazo semana a semana' de Murkoff es bueno."
+    ],
+    "shopping": [
+      "Pulsera de acupresión para náuseas",
+      "Caramelos de jengibre para las náuseas"
+    ],
+    "partnerTips": [
+      "El olfato se dispara en el primer trimestre — algunos olores que antes le gustaban pueden darle asco.",
+      "Come cada pocas horas aunque no tenga hambre: el estómago vacío empeora las náuseas."
+    ]
+  },
+  {
+    "week": 6,
+    "babySize": "lenteja",
+    "babySizeCm": 0.6,
+    "babyWeightG": 0,
+    "development": [
+      "El corazón ya es visible en la ecografía transvaginal — es el primer hito que veréis.",
+      "El cerebro crece a un ritmo vertiginoso: 100 neuronas nuevas por minuto.",
+      "Los oídos, nariz y boca empiezan a formarse aunque aún no tienen forma definitiva."
+    ],
+    "fatherTasks": [
+      "Es el momento de la primera ecografía — no te la pierdas, es especial.",
+      "Empieza a pensar en el espacio del bebé en casa aunque sea pronto.",
+      "Habla con Natalia sobre quién y cuándo avisar a familia y amigos."
+    ],
+    "shopping": [
+      "Cojín de embarazo (body pillow) — lo agradecerá cada vez más",
+      "Crema antiestría (empezar cuanto antes)"
+    ],
+    "partnerTips": [
+      "El sangrado leve puede ocurrir en estas semanas y no siempre significa algo malo — pero consultad siempre.",
+      "Puede tener mucha salivación (ptialismo) — es hormonal y pasará."
+    ]
+  },
+  {
+    "week": 7,
+    "babySize": "arándano",
+    "babySizeCm": 1.3,
+    "babyWeightG": 1,
+    "development": [
+      "El cerebro se divide en sus tres secciones principales: prosencéfalo, mesencéfalo y rombencéfalo.",
+      "Aparecen los párpados aunque aún están fusionados y no se abrirán hasta la semana 28.",
+      "Los riñones primitivos ya empiezan a filtrear y producir orina."
+    ],
+    "fatherTasks": [
+      "Habla con tu empresa sobre la baja de paternidad — cuanto antes, mejor organizados.",
+      "Aprende los signos de alarma en el embarazo: sangrado abundante, dolor intenso, fiebre alta.",
+      "Acompáñala a la primera cita con el ginecólogo si aún no la habéis tenido."
+    ],
+    "shopping": [],
+    "partnerTips": [
+      "El estado de ánimo puede ser muy variable — no lo tomes personal, es progesterona.",
+      "Si el olor de ciertos alimentos le da asco, cocina sin esos ingredientes sin hacer drama."
+    ]
+  },
+  {
+    "week": 8,
+    "babySize": "frambuesa",
+    "babySizeCm": 1.6,
+    "babyWeightG": 1,
+    "development": [
+      "Todos los órganos principales ya están formados aunque siguen desarrollándose.",
+      "Los dedos de las manos empiezan a separarse — ya no son paletas.",
+      "El bebé puede moverse pero Natalia no lo notará todavía hasta la semana 16-20."
+    ],
+    "fatherTasks": [
+      "Informaos sobre el cribado del primer trimestre (semanas 11-13): qué mide y qué significa.",
+      "Propón un pequeño 'baby moon' o escapada de pareja antes del segundo trimestre.",
+      "Habla con vuestro médico sobre las opciones de parto — parto natural, epidural, cesárea."
+    ],
+    "shopping": [
+      "Sujetadores de maternidad — los pechos crecen desde el primer trimestre",
+      "Ropa cómoda de embarazo (leggings con banda elástica)"
+    ],
+    "partnerTips": [
+      "El primer trimestre es el período de mayor riesgo de aborto — es normal sentir cierta ansiedad.",
+      "Comer poco y frecuente ayuda más que tres comidas grandes."
+    ]
+  },
+  {
+    "week": 9,
+    "babySize": "aceituna",
+    "babySizeCm": 2.3,
+    "babyWeightG": 2,
+    "development": [
+      "El embrión ya se llama feto oficialmente a partir de esta semana.",
+      "Los músculos ya funcionan y el bebé da pequeños tirones aunque no los sientas.",
+      "Las células nerviosas del cerebro se multiplican a 250.000 por minuto."
+    ],
+    "fatherTasks": [
+      "Habla con el médico sobre la biopsia corial (si la ofrecen) — se hace entre semanas 10 y 13.",
+      "Empieza a documentar el embarazo: fotos del barriguita cada semana.",
+      "Crea una cuenta de ahorro específica para gastos del bebé si no tenéis una."
+    ],
+    "shopping": [],
+    "partnerTips": [
+      "Puede tener estreñimiento — fibra, agua y paseos suaves ayudan.",
+      "Los dolores de cabeza son comunes en el primer trimestre por los cambios hormonales."
+    ]
+  },
+  {
+    "week": 10,
+    "babySize": "fresa",
+    "babySizeCm": 3.1,
+    "babyWeightG": 4,
+    "development": [
+      "Los órganos vitales están completos y empiezan a funcionar coordinadamente.",
+      "Las huellas dactilares únicas del bebé ya se están formando.",
+      "El bebé puede abrir y cerrar la mandíbula y tiene reflejo de succión primitivo."
+    ],
+    "fatherTasks": [
+      "Informaos sobre el test de ADN fetal en sangre materna (NACE) — detecta trisomías con alta precisión.",
+      "Habla sobre el nombre del bebé — aunque es pronto, es un buen tema para disfrutar juntos.",
+      "Empieza a pensar en el permiso de paternidad: cuándo pedirlo, cómo organizarlo con el trabajo."
+    ],
+    "shopping": [
+      "Aplicación de seguimiento del embarazo (Ovia, BabyCenter)",
+      "Doppler fetal casero — para escuchar el corazón entre ecografías (opcional)"
+    ],
+    "partnerTips": [
+      "Las náuseas suelen empezar a mejorar al final del primer trimestre — hay luz al final.",
+      "Puede sentir mareos al levantarse rápido — dile que se mueva despacio."
+    ]
+  },
+  {
+    "week": 11,
+    "babySize": "lima",
+    "babySizeCm": 4.1,
+    "babyWeightG": 7,
+    "development": [
+      "Los genitales externos empiezan a diferenciarse aunque en la ecografía aún es difícil de ver.",
+      "Las uñas de manos y pies ya están creciendo.",
+      "El bebé ya puede bostezer y tragar pequeñas cantidades de líquido amniótico."
+    ],
+    "fatherTasks": [
+      "Preparad las preguntas para la ecografía del primer trimestre (semana 11-13): medidas, translucencia nucal.",
+      "Empieza a leer sobre el parto para estar preparado como acompañante — no como espectador.",
+      "Habla con Natalia sobre cómo quiere el parto y qué papel quieres tú tener."
+    ],
+    "shopping": [],
+    "partnerTips": [
+      "La barriga empieza a notarse aunque en primigestas puede ser menos visible.",
+      "Los ligamentos del útero se estiran — puede sentir pinchazos laterales al moverse rápido."
+    ]
+  },
+  {
+    "week": 12,
+    "babySize": "ciruela",
+    "babySizeCm": 5.4,
+    "babyWeightG": 14,
+    "development": [
+      "Fin del primer trimestre — el riesgo de aborto baja significativamente a partir de ahora.",
+      "El bebé puede succionar el pulgar y tiene reflejos en los dedos.",
+      "Los intestinos, que estaban en el cordón umbilical, vuelven al interior del abdomen."
+    ],
+    "fatherTasks": [
+      "¡Es el momento de contar la noticia! La mayoría de parejas espera al final del primer trimestre.",
+      "Inscribíos en un curso de preparación al parto — los mejores se llenan pronto.",
+      "Empieza a investigar cochecitos y sillas de coche — hay mucho donde elegir."
+    ],
+    "shopping": [
+      "Reserva plaza en curso de preparación al parto",
+      "Guía comparativa de sillas de coche (si no has empezado a investigar)"
+    ],
+    "partnerTips": [
+      "La energía suele volver en el segundo trimestre — aprovechadlo para hacer cosas juntos.",
+      "Puede que note que el cabello le crece más y brilla más — es el efecto de los estrógenos."
+    ]
+  },
+  {
+    "week": 13,
+    "babySize": "melocotón",
+    "babySizeCm": 7.4,
+    "babyWeightG": 23,
+    "development": [
+      "El bebé ya tiene proporciones más humanas — la cabeza ya no es la mitad del cuerpo.",
+      "Las cuerdas vocales se están formando.",
+      "Los huesos se están endureciendo (osificación) en todo el cuerpo."
+    ],
+    "fatherTasks": [
+      "Haz las fotos de barriguita semanales si no has empezado — las agradeceréis para el álbum.",
+      "Investiga sobre el permiso de paternidad de tu empresa: ¿hay mejora sobre el mínimo legal?",
+      "Empieza a pensar en la decoración de la habitación del bebé — los plazos de entrega pueden ser largos."
+    ],
+    "shopping": [
+      "Almohada de lactancia",
+      "Monitor de bebé (investigar marcas antes de comprar)"
+    ],
+    "partnerTips": [
+      "El segundo trimestre suele ser el más llevadero — más energía, menos náuseas, barriga aún manejable.",
+      "Puede tener encías más sensibles y sangrar al cepillarse — es normal, visita al dentista."
+    ]
+  },
+  {
+    "week": 14,
+    "babySize": "limón",
+    "babySizeCm": 8.7,
+    "babyWeightG": 43,
+    "development": [
+      "El bebé puede fruncir el ceño y hacer muecas — los músculos faciales ya funcionan.",
+      "El hígado produce bilis y el bazo produce glóbulos rojos.",
+      "El sexo del bebé puede verse en la ecografía si el bebé coopera."
+    ],
+    "fatherTasks": [
+      "Decidid si queréis saber el sexo del bebé — es una conversación importante hacerla antes de la ecografía.",
+      "Empieza a buscar y visitar guarderías o centros de estimulación temprana — las listas de espera son largas.",
+      "Habla con el banco sobre hipotecas o sobre si vuestra vivienda actual es adecuada."
+    ],
+    "shopping": [
+      "Inicio investigación de cochecitos (Bugaboo, UPPAbaby, Cybex, Joolz)",
+      "Fajas y ropa de maternidad para el trabajo"
+    ],
+    "partnerTips": [
+      "La barriga empieza a notarse visiblemente — necesitará ropa de maternidad cómoda para el trabajo.",
+      "Puede tener más apetito ahora que las náuseas han pasado — las comidas sanas son importantes."
+    ]
+  },
+  {
+    "week": 15,
+    "babySize": "naranja",
+    "babySizeCm": 10.1,
+    "babyWeightG": 70,
+    "development": [
+      "El bebé puede oír — los sonidos del exterior llegan amortiguados pero tu voz es de las más audibles.",
+      "Los huesos del oído interno ya están lo suficientemente formados para captar vibraciones.",
+      "El bebé traga líquido amniótico y lo expulsa como orina, practicando el sistema digestivo."
+    ],
+    "fatherTasks": [
+      "Habla con el bebé — no te sientas raro, te está escuchando y reconocerá tu voz al nacer.",
+      "Pon música cerca de la barriga — el bebé responde a ritmos y melodías.",
+      "Acompáñala a todas las ecografías que puedas — la del segundo trimestre (semana 20) es la más especial."
+    ],
+    "shopping": [
+      "Cuna o moisés (investigar — los de colecho tienen reglas de seguridad específicas)",
+      "Silla de coche grupo 0+ (investigar ahora, comprar antes de la semana 36)"
+    ],
+    "partnerTips": [
+      "Puede sentir los primeros movimientos del bebé pronto — una sensación como 'mariposas'.",
+      "Los dolores en las caderas y la pelvis son normales: la relaxina relaja los ligamentos."
+    ]
+  },
+  {
+    "week": 16,
+    "babySize": "aguacate",
+    "babySizeCm": 11.6,
+    "babyWeightG": 100,
+    "development": [
+      "El bebé tiene ciclos de sueño y vigilia de 12-14 horas — ya es una personita.",
+      "Los ojos ya pueden percibir la luz aunque los párpados siguen cerrados.",
+      "El sistema musculoesquelético está tan desarrollado que el bebé puede mover los brazos en respuesta a estímulos."
+    ],
+    "fatherTasks": [
+      "Inscribíos en el Registro Civil o prepara la documentación para cuando nazca.",
+      "Planifica el 'babymoon' si queréis hacer un viaje antes del parto — el segundo trimestre es ideal.",
+      "Investiga los seguros médicos para bebés — muchos tienen período de carencia."
+    ],
+    "shopping": [
+      "Babymoon: reserva hotel o escapada tranquila",
+      "Cámara de fotos o lente para el móvil para las fotos de recién nacido"
+    ],
+    "partnerTips": [
+      "Puede empezar a notar los primeros movimientos del bebé esta semana.",
+      "Los calambres en las piernas por la noche son comunes — masajes y estiramientos ayudan."
+    ]
+  },
+  {
+    "week": 17,
+    "babySize": "pera",
+    "babySizeCm": 13.0,
+    "babyWeightG": 140,
+    "development": [
+      "El bebé acumula grasa subcutánea para regular su temperatura fuera del útero.",
+      "El cordón umbilical se hace más grueso y resistente para aguantar el crecimiento.",
+      "Los reflejos de succión y deglución están muy desarrollados — el bebé 'practica' constantemente."
+    ],
+    "fatherTasks": [
+      "Empieza a decidir sobre la habitación del bebé: pintura, muebles, distribución.",
+      "Habla con Natalia sobre la lactancia — ¿quiere intentarlo? ¿Necesita apoyo o información?",
+      "Investiga grupos de padres en tu ciudad — la paternidad compartida es muy valiosa."
+    ],
+    "shopping": [
+      "Pintura para la habitación del bebé (sin COV, específica para bebés)",
+      "Humidificador para la habitación del bebé"
+    ],
+    "partnerTips": [
+      "Puede tener congestión nasal persistente ('rinitis del embarazo') — es hormonal.",
+      "El aumento de peso en el segundo trimestre es normal y saludable — no la hagas sentir mal."
+    ]
+  },
+  {
+    "week": 18,
+    "babySize": "pimiento",
+    "babySizeCm": 14.2,
+    "babyWeightG": 190,
+    "development": [
+      "El bebé ya puede oír con claridad — los latidos del corazón de Natalia son su sonido de fondo constante.",
+      "Se forma el vérnix caseoso, una capa protectora blanca que cubre la piel del bebé.",
+      "El bebé ya tiene su propio ritmo circadiano influenciado por los hábitos de Natalia."
+    ],
+    "fatherTasks": [
+      "Preparad la ecografía morfológica de la semana 20 — es la más completa y larga.",
+      "Habla con tu jefe con antelación sobre tu baja de paternidad — cuanto antes, mejor.",
+      "Empieza a montar los muebles del bebé si ya los tenéis — no lo dejéis para el último mes."
+    ],
+    "shopping": [
+      "Cambiador o tabla de cambios",
+      "Bañera para bebé",
+      "Intercomunicador / monitor de bebé"
+    ],
+    "partnerTips": [
+      "Puede sentir dolor en el nervio ciático — almohada entre las rodillas al dormir.",
+      "Los senos pueden empezar a producir calostro — es completamente normal."
+    ]
+  },
+  {
+    "week": 19,
+    "babySize": "mango",
+    "babySizeCm": 15.3,
+    "babyWeightG": 240,
+    "development": [
+      "El cerebro del bebé está designando áreas especializadas para los cinco sentidos.",
+      "Si es niña, ya tiene todos sus óvulos formados — lleva dentro los gametos de tus futuros nietos.",
+      "Los movimientos del bebé son más coordinados y fuertes — Natalia puede sentirlos claramente."
+    ],
+    "fatherTasks": [
+      "Pon la mano en la barriga — quizás todavía no sientas nada, pero pronto sí.",
+      "Empieza a preparar la bolsa del hospital aunque es pronto — mejor ir haciéndola poco a poco.",
+      "Habla sobre las visitas postparto: quién viene, cuándo, cuánto tiempo — es importante acordarlo antes."
+    ],
+    "shopping": [
+      "Mecedora o silla para dar el pecho/biberón",
+      "Esterilizador y calientabiberones (si planea dar biberón también)"
+    ],
+    "partnerTips": [
+      "El dolor de espalda baja es muy común — una silla ergonómica y zapatos sin tacón ayudan.",
+      "Puede tener manchas oscuras en la piel (cloasma) — protector solar siempre."
+    ]
+  },
+  {
+    "week": 20,
+    "babySize": "plátano",
+    "babySizeCm": 25.6,
+    "babyWeightG": 300,
+    "development": [
+      "¡Mitad del embarazo! A partir de ahora el bebé se mide de cabeza a talón.",
+      "La ecografía morfológica de esta semana revisa todos los órganos del bebé en detalle.",
+      "El bebé traga medio litro de líquido amniótico al día, practicando el sistema digestivo."
+    ],
+    "fatherTasks": [
+      "Acompáñala a la ecografía morfológica — dura 30-45 minutos y veréis el bebé en detalle.",
+      "Fotografía el informe de la ecografía morfológica — es el primer 'retrato' completo de tu hijo.",
+      "Celebrad el ecuador del embarazo — 20 semanas ya, 20 por delante."
+    ],
+    "shopping": [
+      "Cochecito / silla de paseo (si no lo tienes ya)",
+      "Capazo o sistema de viaje compatible con el cochecito",
+      "Moby wrap o fular portabebé"
+    ],
+    "partnerTips": [
+      "Si la morfológica sale bien, el riesgo de complicaciones graves baja mucho — celebradlo.",
+      "Puede sentir contracciones de Braxton Hicks leves — son normales y no son el parto."
+    ]
+  },
+  {
+    "week": 21,
+    "babySize": "zanahoria",
+    "babySizeCm": 26.7,
+    "babyWeightG": 360,
+    "development": [
+      "El bebé chupa el pulgar activamente — lo veréis en las ecografías 4D.",
+      "Las células gustativas ya están maduras — el bebé puede saborear lo que come Natalia.",
+      "El movimiento fetal es ahora regular y tiene un patrón — Natalia aprende a conocerlo."
+    ],
+    "fatherTasks": [
+      "Ponte al día con los trámites del bebé: libro de familia, seguridad social del bebé.",
+      "Empieza a pensar en quién cuidará al bebé cuando ambos volváis al trabajo.",
+      "Lee sobre el cuarto trimestre (los primeros 3 meses tras el parto) — te va a sorprender."
+    ],
+    "shopping": [
+      "Saco de dormir para bebé (en lugar de mantas sueltas — más seguro)",
+      "Termómetro de oído para bebés"
+    ],
+    "partnerTips": [
+      "El bebé se mueve más cuando Natalia está quieta — la emoción de sentirlo os une.",
+      "Puede tener síndrome de piernas inquietas por las noches — masajes y hierro en la dieta."
+    ]
+  },
+  {
+    "week": 22,
+    "babySize": "papaya pequeña",
+    "babySizeCm": 27.8,
+    "babyWeightG": 430,
+    "development": [
+      "Los labios están completamente formados y las encías tienen los gérmenes de los dientes de leche.",
+      "Los ojos están formados aunque los iris aún no tienen pigmento — todos los bebés nacen con ojos oscuros.",
+      "El bebé responde a tu voz cambiando el ritmo cardíaco — ya te reconoce."
+    ],
+    "fatherTasks": [
+      "Graba tu voz leyendo un cuento — ponlo en el altavoz cerca de la barriga. Es lo más.",
+      "Investiga sobre clases de RCP infantil y primeros auxilios para bebés.",
+      "Habla con Natalia sobre el plan de parto — no tiene que ser complejo, pero sí pensado."
+    ],
+    "shopping": [
+      "Hamaca o balancín para bebé",
+      "Juguetes de estimulación temprana (móvil de cuna, sonajeros)"
+    ],
+    "partnerTips": [
+      "El fondo del útero llega al ombligo — la barriga es ya muy visible.",
+      "Puede tener edemas en los pies al final del día — elevar las piernas y reducir la sal."
+    ]
+  },
+  {
+    "week": 23,
+    "babySize": "mango grande",
+    "babySizeCm": 28.9,
+    "babyWeightG": 500,
+    "development": [
+      "Si el bebé naciese ahora tendría pocas posibilidades de sobrevivir — la semana 24 es el umbral de viabilidad.",
+      "El sentido del equilibrio del bebé ya funciona — nota cuando Natalia camina o se mueve.",
+      "El bebé tiene patrones de movimiento reconocibles: horas activo, horas dormido."
+    ],
+    "fatherTasks": [
+      "Aprende a reconocer los movimientos fetales — Natalia os contará qué cuenta como movimiento.",
+      "Empezad a elegir el nombre definitivo si no lo habéis hecho.",
+      "Habla con el pediatra que tendréis — en sanidad pública lo asignan, en privada podéis elegir."
+    ],
+    "shopping": [
+      "Aspirador nasal para bebé (Frida NoseFrida o similar)",
+      "Crema de protección para el culito"
+    ],
+    "partnerTips": [
+      "Puede tener línea nigra (línea oscura en la barriga) — es hormonal y desaparece tras el parto.",
+      "El insomnio en el segundo trimestre es común — el cojín de embarazo ayuda mucho."
+    ]
+  },
+  {
+    "week": 24,
+    "babySize": "mazorca de maíz",
+    "babySizeCm": 30.0,
+    "babyWeightG": 600,
+    "development": [
+      "Semana 24: umbral de viabilidad — con cuidados intensivos el bebé tiene posibilidades de sobrevivir.",
+      "Los pulmones producen surfactante, el líquido que los mantiene abiertos al respirar.",
+      "El cerebro crece muy rápidamente esta semana — está desarrollando los pliegues y surcos."
+    ],
+    "fatherTasks": [
+      "Reservad la visita al hospital donde vais a dar a luz — conoced las instalaciones.",
+      "Habla con Natalia sobre sus miedos al parto y compártele los tuyos — es una conversación que vale la pena.",
+      "Empieza a leer sobre el posparto masculino — los padres también pueden tener depresión posparto."
+    ],
+    "shopping": [
+      "Visita al hospital de referencia",
+      "Ropa de recién nacido: bodies, pijamas, calcetines (talla 0-3 meses)"
+    ],
+    "partnerTips": [
+      "El test de O'Sullivan (glucemia) se hace entre semanas 24-28 — acompáñala, es largo.",
+      "Puede sentir el bebé con hipo — son pequeñas pulsaciones rítmicas, es normal."
+    ]
+  },
+  {
+    "week": 25,
+    "babySize": "coliflor",
+    "babySizeCm": 34.6,
+    "babyWeightG": 660,
+    "development": [
+      "Los capilares de la piel se llenan de sangre dando un color rosado al bebé.",
+      "Los huesos se están endureciendo rápidamente — necesita calcio y vitamina D.",
+      "El bebé responde a la música con movimientos más activos — pon sus canciones favoritas."
+    ],
+    "fatherTasks": [
+      "Haz la revisión del coche y comprueba que la silla de coche está bien instalada (o apréndelo).",
+      "Organiza la casa para cuando llegue el bebé: dónde dormirá, dónde cambiarle, dónde bañarle.",
+      "Habla con tus padres y suegros sobre su papel — cuándo vendráon, cuánto se quedan, qué ayudan."
+    ],
+    "shopping": [
+      "Enrollable o blackout para la ventana de la habitación del bebé",
+      "Pañales de recién nacido (no stockees mucho — el bebé crece rápido)"
+    ],
+    "partnerTips": [
+      "Las contracciones de Braxton Hicks son más frecuentes — no son el parto si no tienen ritmo.",
+      "Puede tener acidez severa ahora que el útero presiona el estómago — comidas pequeñas y frecuentes."
+    ]
+  },
+  {
+    "week": 26,
+    "babySize": "lechuga",
+    "babySizeCm": 35.6,
+    "babyWeightG": 760,
+    "development": [
+      "Los ojos del bebé se abren por primera vez esta semana — ha tenido los párpados cerrados todo este tiempo.",
+      "El bebé puede responder a la luz — si enfocas una linterna en la barriga, puede reaccionar.",
+      "El sistema inmunológico primitivo está en marcha gracias a los anticuerpos de Natalia."
+    ],
+    "fatherTasks": [
+      "Prepara la lista de contactos de emergencia: hospital, matrona, pediatra, familiares.",
+      "Empieza a preparar la bolsa del hospital en serio — tienes 10-12 semanas pero el tiempo vuela.",
+      "Habla con Natalia sobre el regreso al trabajo posparto — cuándo, en qué condiciones."
+    ],
+    "shopping": [
+      "Linterna de cabeza (útil en el parto si hay que moverse de noche)",
+      "Empezar bolsa del hospital: ropa cómoda para Natalia, artículos de higiene"
+    ],
+    "partnerTips": [
+      "El test de glucosa puede hacerse esta semana si no se hizo antes.",
+      "Puede tener hinchazón en manos — si es muy repentina y con dolor de cabeza, llamad al médico."
+    ]
+  },
+  {
+    "week": 27,
+    "babySize": "repollo",
+    "babySizeCm": 36.6,
+    "babyWeightG": 875,
+    "development": [
+      "Fin del segundo trimestre — el bebé ha completado gran parte de su desarrollo crítico.",
+      "El cerebro está muy activo con fases de sueño REM — el bebé ya sueña.",
+      "Los pulmones siguen madurando: es lo último en estar listo para el mundo exterior."
+    ],
+    "fatherTasks": [
+      "Tercer trimestre a la vista — repasad el plan de parto y aseguraos de que el hospital lo tiene.",
+      "Habla con Natalia sobre qué música o ambiente quiere en el parto.",
+      "Empieza a aprender las señales del parto: contracciones regulares, rotura de aguas, pérdida del tapón mucoso."
+    ],
+    "shopping": [
+      "Bolsa del hospital: ropa de bebé para el alta, pañales recién nacido, toallitas",
+      "Sacaleches manual o eléctrico (si planea dar el pecho)"
+    ],
+    "partnerTips": [
+      "El tercer trimestre puede traer más fatiga y dificultad para dormir — sé paciente.",
+      "Puede tener varices o hemorroides — normal pero incómodo: más fibra, agua, evitar estar de pie mucho."
+    ]
+  },
+  {
+    "week": 28,
+    "babySize": "berenjena",
+    "babySizeCm": 37.6,
+    "babyWeightG": 1000,
+    "development": [
+      "¡El bebé pesa ya 1 kilo! A partir de ahora engordará unos 200 gramos por semana.",
+      "El cerebro desarrolla las conexiones entre neuronas a velocidad vertiginosa.",
+      "Los huesos están completamente formados aunque siguen endureciéndose."
+    ],
+    "fatherTasks": [
+      "Las visitas prenatales son ahora cada 2 semanas — reorganiza tu agenda para acompañarla.",
+      "Aprende las señales de alarma del tercer trimestre: preeclampsia, parto prematuro.",
+      "Empieza a practicar el masaje perineal — el médico os puede explicar la técnica."
+    ],
+    "shopping": [
+      "Almohada de lactancia (Boppy o similar si no tienes ya)",
+      "Discos de lactancia absorbentes",
+      "Crema para pezones (Lansinoh o similar)"
+    ],
+    "partnerTips": [
+      "La falta de aliento es normal — el útero empuja el diafragma.",
+      "Puede tener dificultad para dormir en cualquier posición — el cojín de embarazo es imprescindible."
+    ]
+  },
+  {
+    "week": 29,
+    "babySize": "butternut squash",
+    "babySizeCm": 38.6,
+    "babyWeightG": 1150,
+    "development": [
+      "El cerebro del bebé experimenta su mayor período de crecimiento — las circunvoluciones se forman.",
+      "Los músculos y pulmones siguen madurando — cada semana más hace una diferencia enorme.",
+      "El bebé tiene períodos de vigilia cada vez más largos y notorios para Natalia."
+    ],
+    "fatherTasks": [
+      "Practica el trayecto al hospital a diferentes horas del día — incluida la madrugada.",
+      "Ten el coche con el depósito siempre al menos medio lleno en estas últimas semanas.",
+      "Prepara un plan B si el parto empieza cuando estás en el trabajo o fuera de casa."
+    ],
+    "shopping": [
+      "Silla de coche grupo 0+ (comprar ya si no tienes — instalarla en semana 35)",
+      "Maletín o kit de primeros auxilios para bebé"
+    ],
+    "partnerTips": [
+      "Puede tener síntoma de piernas inquietas que empeora por la noche.",
+      "La presión pélvica aumenta — zapatos cómodos y evitar estar de pie demasiado tiempo."
+    ]
+  },
+  {
+    "week": 30,
+    "babySize": "pepino grande",
+    "babySizeCm": 39.9,
+    "babyWeightG": 1300,
+    "development": [
+      "El bebé practica movimientos de respiración aunque los pulmones aún no están listos.",
+      "Más del 90% del tiempo duerme — el tiempo activo lo sientes con patadas y giros.",
+      "La grasa subcutánea hace que la piel deje de ser tan arrugada y traslúcida."
+    ],
+    "fatherTasks": [
+      "Finaliza la bolsa del hospital esta semana — podría ocurrir en cualquier momento aunque es pronto.",
+      "Aprende técnicas de acompañamiento en el parto: respiración, posiciones, masajes.",
+      "Habla con tu empresa para formalizar la baja de paternidad — los trámites llevan tiempo."
+    ],
+    "shopping": [
+      "Termómetro digital de axilar",
+      "Biberones (aunque planee dar el pecho — tener por si acaso)",
+      "Fórmula de inicio (tener en casa como opción)"
+    ],
+    "partnerTips": [
+      "El útero ya llega casi a las costillas — puede tener dificultad para respirar hondo.",
+      "Puede tener pérdidas de orina al estornudar — los ejercicios de Kegel ayudan."
+    ]
+  },
+  {
+    "week": 31,
+    "babySize": "coco",
+    "babySizeCm": 41.1,
+    "babyWeightG": 1500,
+    "development": [
+      "Los cinco sentidos del bebé ya funcionan — puede ver, oír, gustar, tocar y oler.",
+      "El cerebro procesa información y tiene respuestas complejas a los estímulos.",
+      "El bebé se ha dado la vuelta y está posicionándose cabeza abajo normalmente."
+    ],
+    "fatherTasks": [
+      "Comprueba que la silla de coche está correctamente instalada — pide ayuda al concesionario si es necesario.",
+      "Habla con el pediatra elegido sobre las primeras visitas y vacunas.",
+      "Empieza a leer sobre el síndrome de muerte súbita del lactante (SMSL) y cómo prevenirlo."
+    ],
+    "shopping": [
+      "Estetoscopio o doppler para escuchar el corazón del bebé (opcional)",
+      "Ropa de cama para la cuna: sábanas ajustables (sin edredones, sin almohadas)"
+    ],
+    "partnerTips": [
+      "El sueño es muy complicado — turnos de masajes en la espalda y piernas son muy agradecidos.",
+      "Puede tener síntomas de la pelvis pélvica (SPP) — fisioterapeuta de suelo pélvico si es severo."
+    ]
+  },
+  {
+    "week": 32,
+    "babySize": "jícama",
+    "babySizeCm": 42.4,
+    "babyWeightG": 1700,
+    "development": [
+      "La mayoría de bebés ya están cabeza abajo en posición cefálica — listos para el parto.",
+      "Los pulmones están casi maduros — si naciese ahora, tendría muy buenas probabilidades.",
+      "El bebé tiene períodos de sueño REM con movimientos oculares rápidos — sueña activamente."
+    ],
+    "fatherTasks": [
+      "Instala definitivamente la silla de coche en el coche.",
+      "Haz una lista de las cosas que necesitarás los primeros días en casa con el bebé.",
+      "Habla con Natalia sobre la recuperación posparto — qué necesitará, cómo puedes ayudar."
+    ],
+    "shopping": [
+      "Instalar silla de coche en el coche esta semana",
+      "Moisés o cuna de colecho para tener en el dormitorio los primeros meses"
+    ],
+    "partnerTips": [
+      "La presión en la pelvis puede hacer que caminar sea incómodo — ir más despacio es necesario.",
+      "Puede sentir el bebé con hipo varias veces al día — es normal y significa que practica respirar."
+    ]
+  },
+  {
+    "week": 33,
+    "babySize": "piña",
+    "babySizeCm": 43.7,
+    "babyWeightG": 1900,
+    "development": [
+      "Los pulmones producen surfactante de forma autónoma — un paso crítico para respirar al nacer.",
+      "El bebé abre y cierra los ojos respondiendo a la luz.",
+      "El sistema inmunológico recibe anticuerpos maternos a través de la placenta."
+    ],
+    "fatherTasks": [
+      "Haz el curso de RCP infantil — es de pocas horas y puede salvar una vida.",
+      "Ten el número del hospital y el de urgencias del ginecólogo guardados y accesibles.",
+      "Organiza quién cuidará de mascotas o niños mayores cuando llegue el momento del parto."
+    ],
+    "shopping": [
+      "Pañales de repuesto y toallitas (stock para las primeras semanas)",
+      "Portabebé ergonómico (Ergobaby, BabyBjörn) para los paseos y la vida cotidiana"
+    ],
+    "partnerTips": [
+      "El sueño nocturno es ya muy interrumpido — el cuerpo la prepara para las noches de lactancia.",
+      "Puede sentir los pies y tobillos muy hinchados al final del día — elevarlos siempre que pueda."
+    ]
+  },
+  {
+    "week": 34,
+    "babySize": "melón cantalupo",
+    "babySizeCm": 45.0,
+    "babyWeightG": 2100,
+    "development": [
+      "Los pulmones están casi completamente maduros — un parto en la semana 34 tiene muy buen pronóstico.",
+      "El sistema nervioso central está completando sus conexiones finales.",
+      "Las uñas han crecido tanto que el bebé puede arañarse — al nacer llevarán manoplas."
+    ],
+    "fatherTasks": [
+      "La bolsa del hospital debe estar lista y en el coche o junto a la puerta.",
+      "Aprende a reconocer si las contracciones son de parto real: cada 5 minutos, 1 minuto de duración, durante 1 hora (regla 5-1-1).",
+      "Prepara comida y snacks para tener en el hospital durante el parto — puede durar muchas horas."
+    ],
+    "shopping": [
+      "Snacks y bebidas para el parto (barritas energéticas, agua con gas, zumos)",
+      "Auriculares y playlist de música para el parto"
+    ],
+    "partnerTips": [
+      "El tapón mucoso puede desprenderse con semanas de antelación al parto — no es señal inmediata.",
+      "Las contracciones de Braxton Hicks son más frecuentes e intensas — ensayos del útero."
+    ]
+  },
+  {
+    "week": 35,
+    "babySize": "melón honeydew",
+    "babySizeCm": 46.2,
+    "babyWeightG": 2400,
+    "development": [
+      "Los riñones están completamente desarrollados y producen hasta medio litro de orina al día.",
+      "El hígado ya puede procesar bilirrubina aunque los primeros días necesitará adaptarse.",
+      "El bebé ha ganado suficiente grasa para regular su temperatura corporal al nacer."
+    ],
+    "fatherTasks": [
+      "Avisa a tus más cercanos de que la fecha se acerca — para que estén disponibles cuando lo necesitéis.",
+      "Haz una última revisión de la habitación del bebé — ¿falta algo?",
+      "Descansa cuando puedas — las primeras semanas van a ser intensas."
+    ],
+    "shopping": [],
+    "partnerTips": [
+      "La cabeza del bebé encaja en la pelvis ('encajamiento') — puede ser más cómodo respirar pero hay más presión abajo.",
+      "Puede perder el tapón mucoso en cualquier momento — no hay que ir al hospital inmediatamente."
+    ]
+  },
+  {
+    "week": 36,
+    "babySize": "lechuga romana",
+    "babySizeCm": 47.4,
+    "babyWeightG": 2600,
+    "development": [
+      "El bebé es ya 'prematuro tardío' — si nace ahora necesitará pocos o ningún cuidado especial.",
+      "Sigue ganando peso y grasa a razón de 30 gramos al día.",
+      "El sistema digestivo está maduro aunque la flora intestinal la creará al nacer."
+    ],
+    "fatherTasks": [
+      "Las visitas prenatales son ahora semanales — reorganiza el trabajo para acompañarla.",
+      "Ten el coche lleno de gasolina y la bolsa en el coche.",
+      "Avisa en el trabajo que puedes ausentarte en cualquier momento."
+    ],
+    "shopping": [
+      "Juego de sábanas extra para la cuna — los accidentes son frecuentes",
+      "Impermeables para el colchón de la cuna"
+    ],
+    "partnerTips": [
+      "La presión pélvica puede hacer difícil caminar — ve a tu ritmo.",
+      "Si la rotura de aguas es de golpe — al hospital. Si es en goteo — llamad al médico primero."
+    ]
+  },
+  {
+    "week": 37,
+    "babySize": "acelgas",
+    "babySizeCm": 48.6,
+    "babyWeightG": 2900,
+    "development": [
+      "El bebé está considerado 'a término temprano' — los pulmones y el cerebro siguen madurando.",
+      "El vérnix caseoso (la capa blanca) empieza a reabsorberse.",
+      "El bebé ya tiene los reflejos de succión y agarre completamente desarrollados."
+    ],
+    "fatherTasks": [
+      "Todo debe estar listo: bolsa, coche, documentación, pediatra avisado.",
+      "Asegúrate de tener el permiso de paternidad formalmente tramitado.",
+      "Duerme todo lo que puedas — el bebé puede llegar en cualquier momento."
+    ],
+    "shopping": [],
+    "partnerTips": [
+      "Las contracciones de parto son diferentes a las de Braxton Hicks: siguen un ritmo y no cesan al moverse.",
+      "El instinto de 'nidificación' puede ser muy intenso — déjala organizar y ayúdala."
+    ]
+  },
+  {
+    "week": 38,
+    "babySize": "puerro",
+    "babySizeCm": 49.8,
+    "babyWeightG": 3100,
+    "development": [
+      "El bebé está completamente formado y listo — solo está ganando peso y madurando.",
+      "Los pulmones producen suficiente surfactante para respirar de forma autónoma.",
+      "El bebé se mueve menos porque no tiene espacio, pero debe moverse — cuenta los movimientos."
+    ],
+    "fatherTasks": [
+      "Cuenta los movimientos fetales con Natalia: debe sentir al menos 10 movimientos en 2 horas.",
+      "Confirma la hora y teléfono del hospital de nuevo — en el estrés del momento se olvida.",
+      "Escribe un mensaje al bebé — puede ser el comienzo del diario."
+    ],
+    "shopping": [],
+    "partnerTips": [
+      "Las contracciones regulares cada 5 minutos durante una hora son señal de parto — al hospital.",
+      "La rotura de bolsa amniótica es urgente — al hospital inmediatamente aunque no haya contracciones."
+    ]
+  },
+  {
+    "week": 39,
+    "babySize": "sandía pequeña",
+    "babySizeCm": 50.7,
+    "babyWeightG": 3300,
+    "development": [
+      "El bebé está a término completo — puede llegar en cualquier momento.",
+      "Las últimas conexiones cerebrales se están formando incluso ahora.",
+      "La placenta empieza a envejecer — el cuerpo se prepara para el parto."
+    ],
+    "fatherTasks": [
+      "Trabaja desde casa si puedes — o ten un plan claro de cómo llegar al hospital desde el trabajo.",
+      "Ten el teléfono siempre cargado y con cobertura.",
+      "Escríbele una carta al bebé que leerás el día que nazca."
+    ],
+    "shopping": [],
+    "partnerTips": [
+      "Si no hay señales de parto, es normal — solo el 5% de los bebés nace en la fecha exacta.",
+      "Un paseo suave puede estimular las contracciones si el cuello está ya preparado."
+    ]
+  },
+  {
+    "week": 40,
+    "babySize": "sandía",
+    "babySizeCm": 51.2,
+    "babyWeightG": 3400,
+    "development": [
+      "El bebé está completamente listo — todos los órganos funcionan y solo espera su momento.",
+      "La placenta empieza a calcificarse — si el parto no arranca pronto, el médico planteará inducción.",
+      "El bebé tiene los reflejos de succión, agarre, moro y búsqueda completamente activos."
+    ],
+    "fatherTasks": [
+      "Es la fecha estimada de parto — relax, el 80% de los bebés no nace este día exacto.",
+      "Habla con el médico sobre los plazos de inducción si no hay señales de parto.",
+      "Prepárate emocionalmente: en días (o horas) serás padre. Ya lo eres."
+    ],
+    "shopping": [],
+    "partnerTips": [
+      "La espera de los últimos días es agotadora emocionalmente — mucha paciencia y apoyo.",
+      "Si pasan de la semana 41 sin parto, el médico evaluará la inducción — es seguro y habitual."
+    ]
+  }
+]
