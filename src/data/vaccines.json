@@ -1,0 +1,20 @@
+[
+  { "name": "Hepatitis B (1ª dosis)", "ageInDays": 0, "description": "Primera dosis en las primeras horas de vida", "important": true },
+  { "name": "Hepatitis B (2ª dosis)", "ageInDays": 60, "description": "Segunda dosis a los 2 meses", "important": true },
+  { "name": "DTaP + IPV + Hib + HepB (1ª)", "ageInDays": 60, "description": "Hexavalente primera dosis", "important": true },
+  { "name": "Neumococo (1ª dosis)", "ageInDays": 60, "description": "Vacuna antineumocócica", "important": true },
+  { "name": "Rotavirus (1ª dosis)", "ageInDays": 60, "description": "Oral. No pincha.", "important": false },
+  { "name": "Meningococo B (1ª dosis)", "ageInDays": 60, "description": "Bexsero. Puede dar fiebre — ten paracetamol.", "important": true },
+  { "name": "DTaP + IPV + Hib + HepB (2ª)", "ageInDays": 120, "description": "Hexavalente segunda dosis", "important": true },
+  { "name": "Neumococo (2ª dosis)", "ageInDays": 120, "description": "4 meses", "important": true },
+  { "name": "Meningococo B (2ª dosis)", "ageInDays": 120, "description": "4 meses", "important": true },
+  { "name": "Rotavirus (2ª dosis)", "ageInDays": 120, "description": "4 meses", "important": false },
+  { "name": "DTaP + IPV + Hib + HepB (3ª)", "ageInDays": 180, "description": "Hexavalente tercera dosis", "important": true },
+  { "name": "Neumococo (3ª dosis)", "ageInDays": 180, "description": "6 meses", "important": true },
+  { "name": "Meningococo C (1ª dosis)", "ageInDays": 180, "description": "6 meses", "important": true },
+  { "name": "Gripe (si temporada)", "ageInDays": 183, "description": "Si nacido antes de temporada gripal (oct-mar)", "important": false },
+  { "name": "Triple vírica SRP (1ª)", "ageInDays": 365, "description": "12 meses", "important": true },
+  { "name": "Meningococo C (2ª dosis)", "ageInDays": 365, "description": "12 meses", "important": true },
+  { "name": "Varicela (1ª dosis)", "ageInDays": 365, "description": "12 meses", "important": true },
+  { "name": "Hepatitis A (única dosis)", "ageInDays": 395, "description": "12-15 meses — NUEVO en AEP 2026", "important": true }
+]
