@@ -1,4 +1,6 @@
 import { createHashRouter } from 'react-router-dom'
+import AppLayout from '../components/AppLayout'
+import Onboarding from '../pages/Onboarding'
 import Home from '../pages/Home'
 import Vaccines from '../pages/Vaccines'
 import DiaryList from '../pages/DiaryList'
@@ -8,11 +10,18 @@ import GrowthTracker from '../pages/GrowthTracker'
 import Settings from '../pages/Settings'
 
 export const router = createHashRouter([
-  { path: '/',             element: <Home /> },
-  { path: '/vacunas',      element: <Vaccines /> },
-  { path: '/diario',       element: <DiaryList /> },
-  { path: '/diario/nueva', element: <DiaryForm /> },
-  { path: '/timeline',     element: <Timeline /> },
-  { path: '/crecimiento',  element: <GrowthTracker /> },
-  { path: '/ajustes',      element: <Settings /> },
+  { path: '/onboarding', element: <Onboarding /> },
+  {
+    path: '/',
+    element: <AppLayout />,
+    children: [
+      { index: true,          element: <Home /> },
+      { path: 'vacunas',      element: <Vaccines /> },
+      { path: 'diario',       element: <DiaryList /> },
+      { path: 'diario/nueva', element: <DiaryForm /> },
+      { path: 'timeline',     element: <Timeline /> },
+      { path: 'crecimiento',  element: <GrowthTracker /> },
+      { path: 'ajustes',      element: <Settings /> },
+    ],
+  },
 ])
