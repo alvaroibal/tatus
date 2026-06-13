@@ -3,15 +3,27 @@ import { db, type BabyProfile } from '../db/db'
 import { calculateWeek } from '../utils/calculateWeek'
 
 export function useCurrentProfile(): { profile: BabyProfile | null; currentWeek: number; isLoading: boolean } {
-  const config = useLiveQuery(() => db.appConfig.get(1))
-  const profile = useLiveQuery(
+  // Use toArray() instead of get(1) so we can distinguish:
+  //   undefined → still loading (useLiveQuery sentinel)
+  //   []        → DB empty, no config yet
+  //   [{...}]   → config exists
+  const configArr = useLiveQuery(() => db.appConfig.toArray(), [])
+  const activeId = configArr?.[0]?.activeProfileId
+
+  const profileArr = useLiveQuery(
     () =>
-      config?.activeProfileId
-        ? db.profiles.get(config.activeProfileId)
-        : undefined,
-    [config?.activeProfileId]
+      activeId !== undefined
+        ? db.profiles.where('id').equals(activeId).toArray()
+        : Promise.resolve([] as BabyProfile[]),
+    [activeId]
   )
-  const isLoading = config === undefined
+
+  const isLoading =
+    configArr === undefined ||
+    (activeId !== undefined && profileArr === undefined)
+
+  const profile = profileArr?.[0] ?? null
   const currentWeek = profile ? calculateWeek(profile.birthDate) : -1
-  return { profile: profile ?? null, currentWeek, isLoading }
+
+  return { profile, currentWeek, isLoading }
 }
