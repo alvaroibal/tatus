@@ -9,6 +9,7 @@ export interface BackupEnvelope {
     diaryEntries: unknown[]
     growthRecords: unknown[]
     appConfig: unknown
+    futureLetters?: unknown[]
   }
 }
 
@@ -22,16 +23,17 @@ export async function importBackup(fileContent: string): Promise<boolean> {
   }
 
   const envelope = parsed as BackupEnvelope
-  if (envelope?.schemaVersion !== 1) {
+  if (envelope?.schemaVersion !== 1 && envelope?.schemaVersion !== 2) {
     showToast('Este archivo es de una versión incompatible.')
     return false
   }
 
-  await db.transaction('rw', [db.profiles, db.diaryEntries, db.growthRecords, db.appConfig], async () => {
+  await db.transaction('rw', [db.profiles, db.diaryEntries, db.growthRecords, db.appConfig, db.futureLetters], async () => {
     await db.profiles.clear()
     await db.diaryEntries.clear()
     await db.growthRecords.clear()
     await db.appConfig.clear()
+    await db.futureLetters.clear()
 
     await db.profiles.bulkAdd(envelope.data.profiles as Parameters<typeof db.profiles.bulkAdd>[0])
     await db.diaryEntries.bulkAdd(envelope.data.diaryEntries as Parameters<typeof db.diaryEntries.bulkAdd>[0])
@@ -39,27 +41,32 @@ export async function importBackup(fileContent: string): Promise<boolean> {
     if (envelope.data.appConfig) {
       await db.appConfig.put(envelope.data.appConfig as Parameters<typeof db.appConfig.put>[0])
     }
+    if (envelope.data.futureLetters?.length) {
+      await db.futureLetters.bulkAdd(envelope.data.futureLetters as Parameters<typeof db.futureLetters.bulkAdd>[0])
+    }
   })
 
   return true
 }
 
 export function exportBackup(): Promise<string> {
-  return db.transaction('r', [db.profiles, db.diaryEntries, db.growthRecords, db.appConfig], async () => {
-    const [profiles, diaryEntries, growthRecords, appConfigArr] = await Promise.all([
+  return db.transaction('r', [db.profiles, db.diaryEntries, db.growthRecords, db.appConfig, db.futureLetters], async () => {
+    const [profiles, diaryEntries, growthRecords, appConfigArr, futureLetters] = await Promise.all([
       db.profiles.toArray(),
       db.diaryEntries.toArray(),
       db.growthRecords.toArray(),
       db.appConfig.toArray(),
+      db.futureLetters.toArray(),
     ])
     const envelope: BackupEnvelope = {
-      schemaVersion: 1,
+      schemaVersion: 2,
       exportedAt: new Date().toISOString(),
       data: {
         profiles,
         diaryEntries,
         growthRecords,
         appConfig: appConfigArr[0] ?? null,
+        futureLetters,
       },
     }
     return JSON.stringify(envelope, null, 2)

@@ -29,11 +29,23 @@ export interface AppConfig {
   activeProfileId: number
 }
 
+export interface FutureLetter {
+  id?: number
+  profileId: number
+  date: Date
+  week: number           // negative = prenatal, 0+ = postnatal
+  pregnancyWeek?: number // set when week < 0: 40 + week
+  title?: string
+  body: string
+  locked: boolean
+}
+
 class TatusDB extends Dexie {
   profiles!: EntityTable<BabyProfile, 'id'>
   diaryEntries!: EntityTable<DiaryEntry, 'id'>
   growthRecords!: Dexie.Table<GrowthRecord>
   appConfig!: Dexie.Table<AppConfig, number>
+  futureLetters!: EntityTable<FutureLetter, 'id'>
 
   constructor() {
     super('tatus-db')
@@ -42,6 +54,13 @@ class TatusDB extends Dexie {
       diaryEntries: '++id,profileId,date,week,milestone',
       growthRecords: '[profileId+week],date',
       appConfig: 'id',
+    })
+    this.version(2).stores({
+      profiles: '++id,name',
+      diaryEntries: '++id,profileId,date,week,milestone',
+      growthRecords: '[profileId+week],date',
+      appConfig: 'id',
+      futureLetters: '++id,profileId,date,week',
     })
   }
 }
