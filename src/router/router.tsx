@@ -10,6 +10,7 @@ import GrowthTracker from '../pages/GrowthTracker'
 import LetterList from '../pages/LetterList'
 import LetterForm from '../pages/LetterForm'
 import Settings from '../pages/Settings'
+import YearReview from '../pages/YearReview'
 
 export const router = createHashRouter([
   { path: '/onboarding', element: <Onboarding /> },
@@ -28,6 +29,7 @@ export const router = createHashRouter([
       { path: 'cartas/nueva',   element: <LetterForm /> },
       { path: 'cartas/:id',     element: <LetterForm /> },
       { path: 'ajustes',        element: <Settings /> },
+      { path: 'year-review',   element: <YearReview /> },
     ],
   },
 ])

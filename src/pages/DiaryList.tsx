@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useCurrentProfile } from '../hooks/useCurrentProfile'
 import { db, type DiaryEntry, type EntryPhoto } from '../db/db'
+import { shareEntry } from '../utils/shareCard'
+import { showToast } from '../utils/toast'
 import { PageHeader } from '../components/PageHeader'
 
 function formatDate(d: Date): string {
@@ -16,12 +18,28 @@ function formatDate(d: Date): string {
 function EntryRow({
   entry,
   photo,
+  childName,
   onTap,
 }: {
   entry: DiaryEntry
   photo: EntryPhoto | undefined
+  childName: string
   onTap: () => void
 }) {
+  const [sharing, setSharing] = useState(false)
+
+  async function handleShare(e: React.MouseEvent) {
+    e.stopPropagation()
+    setSharing(true)
+    try {
+      await shareEntry(entry, childName)
+    } catch {
+      showToast('No se pudo compartir.')
+    } finally {
+      setSharing(false)
+    }
+  }
+
   return (
     <li>
       <button onClick={onTap} className="w-full text-left bg-gray-50 rounded-2xl p-4 flex gap-3">
@@ -37,7 +55,19 @@ function EntryRow({
             <span className="text-xs text-gray-400 capitalize">
               {formatDate(entry.date)} · Semana {entry.week}
             </span>
-            {entry.milestone && <span className="text-yellow-400 text-sm">★</span>}
+            <div className="flex items-center gap-2 shrink-0">
+              {entry.milestone && (
+                <button
+                  onClick={handleShare}
+                  disabled={sharing}
+                  className="text-xs text-gray-300 active:text-blue-500 disabled:opacity-40"
+                  aria-label="Compartir hito"
+                >
+                  {sharing ? '…' : '↗'}
+                </button>
+              )}
+              {entry.milestone && <span className="text-yellow-400 text-sm">★</span>}
+            </div>
           </div>
           <p className="text-sm text-gray-800 leading-relaxed line-clamp-3">{entry.text}</p>
         </div>
@@ -114,6 +144,7 @@ export default function DiaryList() {
               key={entry.id}
               entry={entry}
               photo={firstPhotos?.[entry.id!]}
+              childName={profile.name}
               onTap={() => navigate(`/diario/${entry.id}`)}
             />
           ))}
