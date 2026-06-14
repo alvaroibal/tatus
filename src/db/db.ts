@@ -40,12 +40,19 @@ export interface FutureLetter {
   locked: boolean
 }
 
+export interface EntryPhoto {
+  id?: number
+  diaryEntryId: number
+  dataUrl: string  // compressed JPEG base64
+}
+
 class TatusDB extends Dexie {
   profiles!: EntityTable<BabyProfile, 'id'>
   diaryEntries!: EntityTable<DiaryEntry, 'id'>
   growthRecords!: Dexie.Table<GrowthRecord>
   appConfig!: Dexie.Table<AppConfig, number>
   futureLetters!: EntityTable<FutureLetter, 'id'>
+  entryPhotos!: EntityTable<EntryPhoto, 'id'>
 
   constructor() {
     super('tatus-db')
@@ -61,6 +68,14 @@ class TatusDB extends Dexie {
       growthRecords: '[profileId+week],date',
       appConfig: 'id',
       futureLetters: '++id,profileId,date,week',
+    })
+    this.version(3).stores({
+      profiles: '++id,name',
+      diaryEntries: '++id,profileId,date,week,milestone',
+      growthRecords: '[profileId+week],date',
+      appConfig: 'id',
+      futureLetters: '++id,profileId,date,week',
+      entryPhotos: '++id,diaryEntryId',
     })
   }
 }

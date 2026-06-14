@@ -21,6 +21,7 @@ export const router = createHashRouter([
       { path: 'vacunas',        element: <Vaccines /> },
       { path: 'diario',         element: <DiaryList /> },
       { path: 'diario/nueva',   element: <DiaryForm /> },
+      { path: 'diario/:id',     element: <DiaryForm /> },
       { path: 'timeline',       element: <Timeline /> },
       { path: 'crecimiento',    element: <GrowthTracker /> },
       { path: 'cartas',         element: <LetterList /> },

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useCurrentProfile } from '../hooks/useCurrentProfile'
-import { db } from '../db/db'
+import { db, type DiaryEntry, type EntryPhoto } from '../db/db'
 import { PageHeader } from '../components/PageHeader'
 
 function formatDate(d: Date): string {
@@ -11,6 +11,39 @@ function formatDate(d: Date): string {
     day: 'numeric',
     month: 'short',
   })
+}
+
+function EntryRow({
+  entry,
+  photo,
+  onTap,
+}: {
+  entry: DiaryEntry
+  photo: EntryPhoto | undefined
+  onTap: () => void
+}) {
+  return (
+    <li>
+      <button onClick={onTap} className="w-full text-left bg-gray-50 rounded-2xl p-4 flex gap-3">
+        {photo && (
+          <img
+            src={photo.dataUrl}
+            alt=""
+            className="w-16 h-16 object-cover rounded-xl shrink-0"
+          />
+        )}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs text-gray-400 capitalize">
+              {formatDate(entry.date)} · Semana {entry.week}
+            </span>
+            {entry.milestone && <span className="text-yellow-400 text-sm">★</span>}
+          </div>
+          <p className="text-sm text-gray-800 leading-relaxed line-clamp-3">{entry.text}</p>
+        </div>
+      </button>
+    </li>
+  )
 }
 
 export default function DiaryList() {
@@ -27,6 +60,22 @@ export default function DiaryList() {
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     },
     [profile?.id, milestonesOnly]
+  )
+
+  // Load first photo for each entry (for thumbnails)
+  const entryIds = entries?.map(e => e.id!).filter(Boolean) ?? []
+  const firstPhotos = useLiveQuery(
+    async () => {
+      if (entryIds.length === 0) return {}
+      const all = await db.entryPhotos.where('diaryEntryId').anyOf(entryIds).toArray()
+      // Keep only the first photo per entry
+      const map: Record<number, EntryPhoto> = {}
+      for (const p of all) {
+        if (!map[p.diaryEntryId]) map[p.diaryEntryId] = p
+      }
+      return map
+    },
+    [entryIds.join(',')]
   )
 
   if (isLoading || !profile) return null
@@ -61,22 +110,12 @@ export default function DiaryList() {
       ) : (
         <ul className="px-5 space-y-3">
           {entries.map(entry => (
-            <li
+            <EntryRow
               key={entry.id}
-              className="bg-gray-50 rounded-2xl p-4"
-            >
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs text-gray-400 capitalize">
-                  {formatDate(entry.date)} · Semana {entry.week}
-                </span>
-                {entry.milestone && (
-                  <span className="text-yellow-400 text-sm">★</span>
-                )}
-              </div>
-              <p className="text-sm text-gray-800 leading-relaxed line-clamp-3">
-                {entry.text}
-              </p>
-            </li>
+              entry={entry}
+              photo={firstPhotos?.[entry.id!]}
+              onTap={() => navigate(`/diario/${entry.id}`)}
+            />
           ))}
         </ul>
       )}

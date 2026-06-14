@@ -10,6 +10,7 @@ export interface BackupEnvelope {
     growthRecords: unknown[]
     appConfig: unknown
     futureLetters?: unknown[]
+    entryPhotos?: unknown[]
   }
 }
 
@@ -23,17 +24,18 @@ export async function importBackup(fileContent: string): Promise<boolean> {
   }
 
   const envelope = parsed as BackupEnvelope
-  if (envelope?.schemaVersion !== 1 && envelope?.schemaVersion !== 2) {
+  if (![1, 2, 3].includes(envelope?.schemaVersion)) {
     showToast('Este archivo es de una versión incompatible.')
     return false
   }
 
-  await db.transaction('rw', [db.profiles, db.diaryEntries, db.growthRecords, db.appConfig, db.futureLetters], async () => {
+  await db.transaction('rw', [db.profiles, db.diaryEntries, db.growthRecords, db.appConfig, db.futureLetters, db.entryPhotos], async () => {
     await db.profiles.clear()
     await db.diaryEntries.clear()
     await db.growthRecords.clear()
     await db.appConfig.clear()
     await db.futureLetters.clear()
+    await db.entryPhotos.clear()
 
     await db.profiles.bulkAdd(envelope.data.profiles as Parameters<typeof db.profiles.bulkAdd>[0])
     await db.diaryEntries.bulkAdd(envelope.data.diaryEntries as Parameters<typeof db.diaryEntries.bulkAdd>[0])
@@ -44,22 +46,26 @@ export async function importBackup(fileContent: string): Promise<boolean> {
     if (envelope.data.futureLetters?.length) {
       await db.futureLetters.bulkAdd(envelope.data.futureLetters as Parameters<typeof db.futureLetters.bulkAdd>[0])
     }
+    if (envelope.data.entryPhotos?.length) {
+      await db.entryPhotos.bulkAdd(envelope.data.entryPhotos as Parameters<typeof db.entryPhotos.bulkAdd>[0])
+    }
   })
 
   return true
 }
 
 export function exportBackup(): Promise<string> {
-  return db.transaction('r', [db.profiles, db.diaryEntries, db.growthRecords, db.appConfig, db.futureLetters], async () => {
-    const [profiles, diaryEntries, growthRecords, appConfigArr, futureLetters] = await Promise.all([
+  return db.transaction('r', [db.profiles, db.diaryEntries, db.growthRecords, db.appConfig, db.futureLetters, db.entryPhotos], async () => {
+    const [profiles, diaryEntries, growthRecords, appConfigArr, futureLetters, entryPhotos] = await Promise.all([
       db.profiles.toArray(),
       db.diaryEntries.toArray(),
       db.growthRecords.toArray(),
       db.appConfig.toArray(),
       db.futureLetters.toArray(),
+      db.entryPhotos.toArray(),
     ])
     const envelope: BackupEnvelope = {
-      schemaVersion: 2,
+      schemaVersion: 3,
       exportedAt: new Date().toISOString(),
       data: {
         profiles,
@@ -67,6 +73,7 @@ export function exportBackup(): Promise<string> {
         growthRecords,
         appConfig: appConfigArr[0] ?? null,
         futureLetters,
+        entryPhotos,
       },
     }
     return JSON.stringify(envelope, null, 2)
