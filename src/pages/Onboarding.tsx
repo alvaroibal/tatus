@@ -1,31 +1,60 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { db } from '../db/db'
+import { db, type BabyProfile } from '../db/db'
 import { showToast } from '../utils/toast'
+import { addDays } from '../utils/age'
+import { dueDateFromLastPeriod } from '../utils/pregnancy'
+import { fromInputDate, inputCls } from '../components/uiHelpers'
+
+type Stage = 'trying' | 'expecting' | 'born'
+
+const STAGES: { id: Stage; emoji: string; title: string; subtitle: string }[] = [
+  { id: 'trying', emoji: '🌱', title: 'Estamos buscando bebé', subtitle: 'Preparación, días fértiles y salud de los dos' },
+  { id: 'expecting', emoji: '🤰', title: 'Estamos embarazados', subtitle: 'Semana a semana hasta el parto' },
+  { id: 'born', emoji: '👶', title: 'Ya ha nacido', subtitle: 'Desarrollo, registro diario, vacunas y más' },
+]
 
 export default function Onboarding() {
   const navigate = useNavigate()
+  const [stage, setStage] = useState<Stage | null>(null)
   const [name, setName] = useState('')
-  const [birthDate, setBirthDate] = useState('')
+  const [partner, setPartner] = useState('')
+  const [dateStr, setDateStr] = useState('')
+  const [dateKind, setDateKind] = useState<'due' | 'fur'>('due')
   const [saving, setSaving] = useState(false)
+
+  const needsDate = stage === 'expecting' || stage === 'born'
+  const canSubmit = stage && (stage === 'trying' || (dateStr && (stage === 'expecting' || name.trim())))
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!name.trim() || !birthDate) return
+    if (!canSubmit || !stage) return
     setSaving(true)
     try {
-      const [year, month, day] = birthDate.split('-').map(Number)
-      const birthDateObj = new Date(year, month - 1, day)
+      let profile: Omit<BabyProfile, 'id'>
+      if (stage === 'trying') {
+        profile = {
+          name: name.trim() || 'Nuestro bebé',
+          birthDate: addDays(new Date(), 280),
+          createdAt: new Date(),
+          phase: 'trying',
+        }
+      } else {
+        const d = fromInputDate(dateStr)
+        const isFur = stage === 'expecting' && dateKind === 'fur'
+        profile = {
+          name: name.trim() || 'Bebé',
+          birthDate: isFur ? dueDateFromLastPeriod(d) : d,
+          createdAt: new Date(),
+          ...(stage === 'expecting' ? { phase: 'expecting' as const } : {}),
+          ...(isFur ? { lastPeriod: d, cycleLength: 28 } : {}),
+        }
+      }
 
-      // Atomic transaction: write both records together
       let profileId: number | undefined
       await db.transaction('rw', db.profiles, db.appConfig, async () => {
-        profileId = Number(await db.profiles.add({
-          name: name.trim(),
-          birthDate: birthDateObj,
-          createdAt: new Date(),
-        }))
-        await db.appConfig.put({ id: 1, activeProfileId: profileId })
+        profileId = Number(await db.profiles.add(profile))
+        await db.appConfig.put({ id: 1, activeProfileId: profileId, partnerName: partner.trim() || undefined })
       })
 
       if (!profileId) throw new Error('profileId vacío tras la transacción')
@@ -40,44 +69,71 @@ export default function Onboarding() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-white">
       <div className="w-full max-w-sm">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Bienvenido, papá</h1>
-        <p className="text-gray-500 mb-8">Vamos a configurar Tatuś.</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Bienvenido a Tatuś</h1>
+        <p className="text-gray-500 mb-8">Todo lo que necesitas, desde que decidís ser padres hasta que tu hijo crece.</p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nombre del bebé
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder="ej. Marco"
-              required
-              autoFocus
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-gray-700">¿En qué momento estáis?</p>
+            {STAGES.map(s => (
+              <button
+                type="button"
+                key={s.id}
+                onClick={() => setStage(s.id)}
+                className={`w-full text-left rounded-2xl p-4 border-2 flex items-center gap-3 transition-colors ${
+                  stage === s.id ? 'border-blue-600 bg-blue-50' : 'border-gray-100'
+                }`}
+              >
+                <span className="text-2xl">{s.emoji}</span>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">{s.title}</p>
+                  <p className="text-xs text-gray-500">{s.subtitle}</p>
+                </div>
+              </button>
+            ))}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Fecha de nacimiento
-            </label>
-            <input
-              type="date"
-              value={birthDate}
-              onChange={e => setBirthDate(e.target.value)}
-              required
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <p className="mt-1.5 text-xs text-gray-400">
-              Si aún no ha nacido, pon la fecha estimada.
-            </p>
-          </div>
+          {stage && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Nombre del bebé {stage !== 'born' && <span className="text-gray-400 font-normal">(opcional)</span>}
+                </label>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="ej. Marco"
+                  required={stage === 'born'} className={`${inputCls} text-base py-3`} />
+              </div>
+
+              {needsDate && (
+                <div>
+                  {stage === 'expecting' && (
+                    <div className="flex bg-gray-100 rounded-xl p-1 mb-2">
+                      {([['due', 'Sé la fecha probable'], ['fur', 'Sé la última regla']] as const).map(([k, l]) => (
+                        <button type="button" key={k} onClick={() => setDateKind(k)}
+                          className={`flex-1 text-xs py-2 rounded-lg ${dateKind === k ? 'bg-white shadow-sm font-semibold text-gray-900' : 'text-gray-500'}`}>
+                          {l}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {stage === 'born' ? 'Fecha de nacimiento' : dateKind === 'due' ? 'Fecha probable de parto' : 'Primer día de la última regla'}
+                  </label>
+                  <input type="date" value={dateStr} onChange={e => setDateStr(e.target.value)} required className={`${inputCls} text-base py-3`} />
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Nombre de tu pareja <span className="text-gray-400 font-normal">(opcional)</span>
+                </label>
+                <input type="text" value={partner} onChange={e => setPartner(e.target.value)} placeholder="Para personalizar los consejos" className={`${inputCls} text-base py-3`} />
+              </div>
+            </>
+          )}
 
           <button
             type="submit"
-            disabled={saving || !name.trim() || !birthDate}
+            disabled={saving || !canSubmit}
             className="w-full bg-blue-600 text-white rounded-xl py-3.5 font-semibold text-base disabled:opacity-40 active:bg-blue-700"
           >
             {saving ? 'Guardando…' : 'Empezar'}

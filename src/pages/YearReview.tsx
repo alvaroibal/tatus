@@ -59,7 +59,7 @@ async function computeReview(profileId: number, year: number): Promise<ReviewDat
 
 function StatBox({ value, label }: { value: number; label: string }) {
   return (
-    <div className="bg-gray-50 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+    <div className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
       <p className="text-3xl font-bold text-gray-900">{value}</p>
       <p className="text-xs text-gray-400 mt-1">{label}</p>
     </div>
@@ -87,7 +87,7 @@ export default function YearReview() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <div className="min-h-screen bg-white pb-10">
+    <div className="min-h-screen bg-[#fafaf8] pb-10">
       {/* Header */}
       <div className="flex items-center gap-3 px-5 pt-12 pb-4 border-b border-gray-100">
         <button onClick={() => navigate('/ajustes')} className="text-gray-400">
@@ -165,7 +165,7 @@ export default function YearReview() {
               <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
                 Crecimiento
               </p>
-              <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
+              <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-2">
                 {data.growthFirst.heightCm != null && data.growthLast.heightCm != null && (
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-500">Altura</span>
@@ -201,7 +201,7 @@ export default function YearReview() {
               <ul className="space-y-3">
                 {data.topMilestones.map(entry => (
                   <li key={entry.id} className="flex gap-3">
-                    <span className="text-yellow-400 mt-0.5 shrink-0">★</span>
+                    <span className="text-amber-500 mt-0.5 shrink-0">★</span>
                     <div className="min-w-0">
                       <p className="text-xs text-gray-400 mb-0.5 capitalize">
                         {new Date(entry.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}

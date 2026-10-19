@@ -1,4 +1,5 @@
 import type { Stage } from '../utils/getStage'
+import { weekOfLifeLabel } from '../utils/age'
 
 interface Props {
   week: number
@@ -29,10 +30,10 @@ export function StageCard({ week, stage, childName }: Props) {
     <div>
       <div className="px-5 pt-5 pb-4">
         <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1">
-          Semana {week}
+          {weekOfLifeLabel(week)}
         </p>
         <h2 className="text-xl font-bold text-gray-900 leading-snug">
-          ¿Qué pasa esta semana?
+          {week < 52 ? '¿Qué pasa esta semana?' : '¿Qué pasa en esta etapa?'}
         </h2>
         <p className="text-sm text-gray-400 mt-0.5">{childName}</p>
       </div>
@@ -46,7 +47,7 @@ export function StageCard({ week, stage, childName }: Props) {
       <div className="px-5 pb-4">
         <div className="bg-blue-50 rounded-2xl p-4">
           <h3 className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-3">
-            Tu tarea esta semana
+            Tus tareas ahora
           </h3>
           <ul className="space-y-2.5">
             {stage.fatherTasks.map((task, i) => (

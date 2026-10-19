@@ -12,7 +12,7 @@
     "fatherTasks": [
       "Deja de fumar ya — el humo pasivo afecta al desarrollo en las primeras semanas.",
       "Reduce el alcohol o elimínalo: el esperma también se ve afectado por el alcohol.",
-      "Toma ácido fólico si no lo hace ya Natalia — es crítico en estas primeras semanas."
+      "Toma ácido fólico si no lo hace ya {pareja} — es crítico en estas primeras semanas."
     ],
     "shopping": [
       "Ácido fólico 400 mcg (si no tiene ya)",
@@ -34,7 +34,7 @@
       "Si la implantación tiene éxito, el cuerpo empezará a producir hCG (la hormona del embarazo)."
     ],
     "fatherTasks": [
-      "Apoya a Natalia con una dieta rica en folatos: espinacas, lentejas, aguacate.",
+      "Apoya a {pareja} con una dieta rica en folatos: espinacas, lentejas, aguacate.",
       "Reduce el estrés en casa — el estrés materno puede dificultar la implantación.",
       "Comprad un test de embarazo para tenerlo a mano cuando llegue el momento."
     ],
@@ -59,7 +59,7 @@
     ],
     "fatherTasks": [
       "Haz el test de embarazo — si es positivo, pide cita con el ginecólogo.",
-      "Aprende qué alimentos debe evitar Natalia: alcohol, atún rojo, quesos curados, embutidos.",
+      "Aprende qué alimentos debe evitar {pareja}: alcohol, atún rojo, quesos sin pasteurizar, embutidos crudos.",
       "Empieza a pensar en quién será el médico/matrona que seguirá el embarazo."
     ],
     "shopping": [],
@@ -127,7 +127,7 @@
     "fatherTasks": [
       "Es el momento de la primera ecografía — no te la pierdas, es especial.",
       "Empieza a pensar en el espacio del bebé en casa aunque sea pronto.",
-      "Habla con Natalia sobre quién y cuándo avisar a familia y amigos."
+      "Habla con {pareja} sobre quién y cuándo avisar a familia y amigos."
     ],
     "shopping": [
       "Cojín de embarazo (body pillow) — lo agradecerá cada vez más",
@@ -167,7 +167,7 @@
     "development": [
       "Todos los órganos principales ya están formados aunque siguen desarrollándose.",
       "Los dedos de las manos empiezan a separarse — ya no son paletas.",
-      "El bebé puede moverse pero Natalia no lo notará todavía hasta la semana 16-20."
+      "El bebé puede moverse pero {pareja} no lo notará todavía hasta la semana 16-20."
     ],
     "fatherTasks": [
       "Informaos sobre el cribado del primer trimestre (semanas 11-13): qué mide y qué significa.",
@@ -241,7 +241,7 @@
     "fatherTasks": [
       "Preparad las preguntas para la ecografía del primer trimestre (semana 11-13): medidas, translucencia nucal.",
       "Empieza a leer sobre el parto para estar preparado como acompañante — no como espectador.",
-      "Habla con Natalia sobre cómo quiere el parto y qué papel quieres tú tener."
+      "Habla con {pareja} sobre cómo quiere el parto y qué papel quieres tú tener."
     ],
     "shopping": [],
     "partnerTips": [
@@ -381,7 +381,7 @@
     ],
     "fatherTasks": [
       "Empieza a decidir sobre la habitación del bebé: pintura, muebles, distribución.",
-      "Habla con Natalia sobre la lactancia — ¿quiere intentarlo? ¿Necesita apoyo o información?",
+      "Habla con {pareja} sobre la lactancia — ¿quiere intentarlo? ¿Necesita apoyo o información?",
       "Investiga grupos de padres en tu ciudad — la paternidad compartida es muy valiosa."
     ],
     "shopping": [
@@ -399,9 +399,9 @@
     "babySizeCm": 14.2,
     "babyWeightG": 190,
     "development": [
-      "El bebé ya puede oír con claridad — los latidos del corazón de Natalia son su sonido de fondo constante.",
+      "El bebé ya puede oír con claridad — los latidos del corazón de {pareja} son su sonido de fondo constante.",
       "Se forma el vérnix caseoso, una capa protectora blanca que cubre la piel del bebé.",
-      "El bebé ya tiene su propio ritmo circadiano influenciado por los hábitos de Natalia."
+      "El bebé ya tiene su propio ritmo circadiano influenciado por los hábitos de {pareja}."
     ],
     "fatherTasks": [
       "Preparad la ecografía morfológica de la semana 20 — es la más completa y larga.",
@@ -426,7 +426,7 @@
     "development": [
       "El cerebro del bebé está designando áreas especializadas para los cinco sentidos.",
       "Si es niña, ya tiene todos sus óvulos formados — lleva dentro los gametos de tus futuros nietos.",
-      "Los movimientos del bebé son más coordinados y fuertes — Natalia puede sentirlos claramente."
+      "Los movimientos del bebé son más coordinados y fuertes — {pareja} puede sentirlos claramente."
     ],
     "fatherTasks": [
       "Pon la mano en la barriga — quizás todavía no sientas nada, pero pronto sí.",
@@ -474,8 +474,8 @@
     "babyWeightG": 360,
     "development": [
       "El bebé chupa el pulgar activamente — lo veréis en las ecografías 4D.",
-      "Las células gustativas ya están maduras — el bebé puede saborear lo que come Natalia.",
-      "El movimiento fetal es ahora regular y tiene un patrón — Natalia aprende a conocerlo."
+      "Las células gustativas ya están maduras — el bebé puede saborear lo que come {pareja}.",
+      "El movimiento fetal es ahora regular y tiene un patrón — {pareja} aprende a conocerlo."
     ],
     "fatherTasks": [
       "Ponte al día con los trámites del bebé: libro de familia, seguridad social del bebé.",
@@ -487,7 +487,7 @@
       "Termómetro de oído para bebés"
     ],
     "partnerTips": [
-      "El bebé se mueve más cuando Natalia está quieta — la emoción de sentirlo os une.",
+      "El bebé se mueve más cuando {pareja} está quieta — la emoción de sentirlo os une.",
       "Puede tener síndrome de piernas inquietas por las noches — masajes y hierro en la dieta."
     ]
   },
@@ -504,7 +504,7 @@
     "fatherTasks": [
       "Graba tu voz leyendo un cuento — ponlo en el altavoz cerca de la barriga. Es lo más.",
       "Investiga sobre clases de RCP infantil y primeros auxilios para bebés.",
-      "Habla con Natalia sobre el plan de parto — no tiene que ser complejo, pero sí pensado."
+      "Habla con {pareja} sobre el plan de parto — no tiene que ser complejo, pero sí pensado."
     ],
     "shopping": [
       "Hamaca o balancín para bebé",
@@ -522,11 +522,11 @@
     "babyWeightG": 500,
     "development": [
       "Si el bebé naciese ahora tendría pocas posibilidades de sobrevivir — la semana 24 es el umbral de viabilidad.",
-      "El sentido del equilibrio del bebé ya funciona — nota cuando Natalia camina o se mueve.",
+      "El sentido del equilibrio del bebé ya funciona — nota cuando {pareja} camina o se mueve.",
       "El bebé tiene patrones de movimiento reconocibles: horas activo, horas dormido."
     ],
     "fatherTasks": [
-      "Aprende a reconocer los movimientos fetales — Natalia os contará qué cuenta como movimiento.",
+      "Aprende a reconocer los movimientos fetales — {pareja} os contará qué cuenta como movimiento.",
       "Empezad a elegir el nombre definitivo si no lo habéis hecho.",
       "Habla con el pediatra que tendréis — en sanidad pública lo asignan, en privada podéis elegir."
     ],
@@ -551,7 +551,7 @@
     ],
     "fatherTasks": [
       "Reservad la visita al hospital donde vais a dar a luz — conoced las instalaciones.",
-      "Habla con Natalia sobre sus miedos al parto y compártele los tuyos — es una conversación que vale la pena.",
+      "Habla con {pareja} sobre sus miedos al parto y compártele los tuyos — es una conversación que vale la pena.",
       "Empieza a leer sobre el posparto masculino — los padres también pueden tener depresión posparto."
     ],
     "shopping": [
@@ -595,16 +595,16 @@
     "development": [
       "Los ojos del bebé se abren por primera vez esta semana — ha tenido los párpados cerrados todo este tiempo.",
       "El bebé puede responder a la luz — si enfocas una linterna en la barriga, puede reaccionar.",
-      "El sistema inmunológico primitivo está en marcha gracias a los anticuerpos de Natalia."
+      "El sistema inmunológico primitivo está en marcha gracias a los anticuerpos de {pareja}."
     ],
     "fatherTasks": [
       "Prepara la lista de contactos de emergencia: hospital, matrona, pediatra, familiares.",
       "Empieza a preparar la bolsa del hospital en serio — tienes 10-12 semanas pero el tiempo vuela.",
-      "Habla con Natalia sobre el regreso al trabajo posparto — cuándo, en qué condiciones."
+      "Habla con {pareja} sobre el regreso al trabajo posparto — cuándo, en qué condiciones."
     ],
     "shopping": [
       "Linterna de cabeza (útil en el parto si hay que moverse de noche)",
-      "Empezar bolsa del hospital: ropa cómoda para Natalia, artículos de higiene"
+      "Empezar bolsa del hospital: ropa cómoda para {pareja}, artículos de higiene"
     ],
     "partnerTips": [
       "El test de glucosa puede hacerse esta semana si no se hizo antes.",
@@ -623,7 +623,7 @@
     ],
     "fatherTasks": [
       "Tercer trimestre a la vista — repasad el plan de parto y aseguraos de que el hospital lo tiene.",
-      "Habla con Natalia sobre qué música o ambiente quiere en el parto.",
+      "Habla con {pareja} sobre qué música o ambiente quiere en el parto.",
       "Empieza a aprender las señales del parto: contracciones regulares, rotura de aguas, pérdida del tapón mucoso."
     ],
     "shopping": [
@@ -668,7 +668,7 @@
     "development": [
       "El cerebro del bebé experimenta su mayor período de crecimiento — las circunvoluciones se forman.",
       "Los músculos y pulmones siguen madurando — cada semana más hace una diferencia enorme.",
-      "El bebé tiene períodos de vigilia cada vez más largos y notorios para Natalia."
+      "El bebé tiene períodos de vigilia cada vez más largos y notorios para {pareja}."
     ],
     "fatherTasks": [
       "Practica el trayecto al hospital a diferentes horas del día — incluida la madrugada.",
@@ -746,7 +746,7 @@
     "fatherTasks": [
       "Instala definitivamente la silla de coche en el coche.",
       "Haz una lista de las cosas que necesitarás los primeros días en casa con el bebé.",
-      "Habla con Natalia sobre la recuperación posparto — qué necesitará, cómo puedes ayudar."
+      "Habla con {pareja} sobre la recuperación posparto — qué necesitará, cómo puedes ayudar."
     ],
     "shopping": [
       "Instalar silla de coche en el coche esta semana",
@@ -882,7 +882,7 @@
       "El bebé se mueve menos porque no tiene espacio, pero debe moverse — cuenta los movimientos."
     ],
     "fatherTasks": [
-      "Cuenta los movimientos fetales con Natalia: debe sentir al menos 10 movimientos en 2 horas.",
+      "Cuenta los movimientos fetales con {pareja}: debe sentir al menos 10 movimientos en 2 horas.",
       "Confirma la hora y teléfono del hospital de nuevo — en el estrés del momento se olvida.",
       "Escribe un mensaje al bebé — puede ser el comienzo del diario."
     ],

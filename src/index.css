@@ -8,10 +8,13 @@ body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: #fff;
+  background: #fafaf8;
   color: #111827;
 }
 
 #root {
   min-height: 100svh;
 }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }

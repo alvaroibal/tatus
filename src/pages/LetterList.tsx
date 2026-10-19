@@ -90,7 +90,7 @@ export default function LetterList() {
             <li key={letter.id}>
               <button
                 onClick={() => navigate(`/cartas/${letter.id}`)}
-                className="w-full text-left bg-gray-50 rounded-2xl p-4"
+                className="w-full text-left bg-white rounded-2xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">

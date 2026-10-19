@@ -1,4 +1,5 @@
 import type { PrenatalStage } from '../utils/getPrenatalStage'
+import { useAppConfig, partnerLabel, withPartner } from '../hooks/useAppConfig'
 
 interface Props {
   pregnancyWeek: number
@@ -7,7 +8,7 @@ interface Props {
   daysUntilBirth: number
 }
 
-function Section({ emoji, title, items }: { emoji: string; title: string; items: string[] }) {
+function Section({ emoji, title, items, partner }: { emoji: string; title: string; items: string[]; partner: string }) {
   if (items.length === 0) return null
   return (
     <div className="mb-5">
@@ -17,8 +18,8 @@ function Section({ emoji, title, items }: { emoji: string; title: string; items:
       <ul className="space-y-2">
         {items.map((item, i) => (
           <li key={i} className="flex gap-2 text-sm text-gray-700 leading-relaxed">
-            <span className="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-blue-400" />
-            {item}
+            <span className="mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full bg-gray-300" />
+            {withPartner(item, partner)}
           </li>
         ))}
       </ul>
@@ -27,21 +28,36 @@ function Section({ emoji, title, items }: { emoji: string; title: string; items:
 }
 
 export function PrenatalCard({ pregnancyWeek, stage, childName, daysUntilBirth }: Props) {
+  const progress = Math.round((pregnancyWeek / 40) * 100)
+  const partner = partnerLabel(useAppConfig())
+  const trimester = pregnancyWeek <= 13 ? '1.er trimestre' : pregnancyWeek <= 27 ? '2.º trimestre' : '3.er trimestre'
+
   return (
-    <div className="px-5 pt-4 pb-2">
-      {/* Header */}
-      <div className="mb-5">
-        <div className="flex items-baseline justify-between mb-1">
-          <h1 className="text-2xl font-bold text-gray-900">
-            Semana {pregnancyWeek} de embarazo
-          </h1>
-          <span className="text-xs text-gray-400">{daysUntilBirth}d para conocerte</span>
+    <div className="px-5 pt-6 pb-2">
+      {/* Hero counter */}
+      <div className="mb-7">
+        <p className="text-8xl font-bold text-gray-900 leading-none tabular-nums">
+          {daysUntilBirth}
+        </p>
+        <p className="text-sm text-gray-400 mt-2">días para conocerte, {childName}</p>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mb-7">
+        <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-2">
+          <div
+            className="h-full bg-amber-400 rounded-full"
+            style={{ width: `${progress}%` }}
+          />
         </div>
-        <p className="text-sm text-gray-500">{childName}</p>
+        <div className="flex justify-between items-center">
+          <span className="text-xs text-gray-400">Semana {pregnancyWeek} de 40</span>
+          <span className="text-xs text-gray-300">{trimester}</span>
+        </div>
       </div>
 
       {/* Baby size card */}
-      <div className="bg-blue-50 rounded-2xl px-4 py-3 mb-5 flex items-center justify-between">
+      <div className="bg-blue-50 rounded-2xl px-4 py-3 mb-6 flex items-center justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-0.5">
             Tamaño del bebé
@@ -61,23 +77,12 @@ export function PrenatalCard({ pregnancyWeek, stage, childName, daysUntilBirth }
       </div>
 
       {/* Content sections */}
-      <Section emoji="🧬" title="Desarrollo esta semana" items={stage.development} />
-      <Section emoji="👨‍👶" title="Qué hace papá" items={stage.fatherTasks} />
+      <Section emoji="🧬" title="Desarrollo esta semana" partner={partner} items={stage.development} />
+      <Section emoji="👨‍👶" title="Qué hace papá" partner={partner} items={stage.fatherTasks} />
       {stage.shopping.length > 0 && (
-        <Section emoji="🛒" title="Considerar comprar" items={stage.shopping} />
+        <Section emoji="🛒" title="Considerar comprar" partner={partner} items={stage.shopping} />
       )}
-      <Section emoji="💛" title="Cómo ayudar a Natalia" items={stage.partnerTips} />
-
-      {/* Trimester badge */}
-      <div className="mt-4 mb-2 flex justify-center">
-        <span className="text-xs text-gray-300 px-3 py-1 rounded-full border border-gray-100">
-          {pregnancyWeek <= 13
-            ? '1.er trimestre'
-            : pregnancyWeek <= 27
-            ? '2.º trimestre'
-            : '3.er trimestre'}
-        </span>
-      </div>
+      <Section emoji="💛" title={`Cómo ayudar a ${partner}`} partner={partner} items={stage.partnerTips} />
     </div>
   )
 }

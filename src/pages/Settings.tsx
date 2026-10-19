@@ -4,7 +4,9 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { useCurrentProfile } from '../hooks/useCurrentProfile'
 import { db, type BabyProfile } from '../db/db'
 import { showToast } from '../utils/toast'
-import { exportBackup, importBackup } from '../utils/importBackup'
+import { deleteProfileData, exportBackup, importBackup } from '../utils/importBackup'
+import { useAppConfig } from '../hooks/useAppConfig'
+import { toInputDate } from '../components/uiHelpers'
 import { PageHeader } from '../components/PageHeader'
 
 declare const __APP_VERSION__: string
@@ -24,6 +26,9 @@ function DebugPanel({ profile }: { profile: BabyProfile }) {
     growthRecords: await db.growthRecords.count(),
     futureLetters: await db.futureLetters.count(),
     entryPhotos: await db.entryPhotos.count(),
+    careLogs: await db.careLogs.count(),
+    appointments: await db.appointments.count(),
+    checks: await db.checks.count(),
   }), [])
 
   async function fetchStorage() {
@@ -41,7 +46,7 @@ function DebugPanel({ profile }: { profile: BabyProfile }) {
     <div className="mx-5 mb-6 bg-gray-900 rounded-2xl p-4 text-xs text-green-400 font-mono space-y-1">
       <p className="text-gray-500 mb-2">— debug panel —</p>
       <p>profile: {profile.name} (id={profile.id})</p>
-      <p>birthDate: {new Date(profile.birthDate).toISOString().slice(0, 10)}</p>
+      <p>birthDate: {toInputDate(profile.birthDate)} · phase: {profile.phase ?? '—'}</p>
       <p>build: {__APP_VERSION__}</p>
       {counts && <>
         <p>profiles: {counts.profiles}</p>
@@ -49,6 +54,9 @@ function DebugPanel({ profile }: { profile: BabyProfile }) {
         <p>growthRecords: {counts.growthRecords}</p>
         <p>futureLetters: {counts.futureLetters}</p>
         <p>entryPhotos: {counts.entryPhotos}</p>
+        <p>careLogs: {counts.careLogs}</p>
+        <p>appointments: {counts.appointments}</p>
+        <p>checks: {counts.checks}</p>
       </>}
       {storage
         ? <p>storage: {mb(storage.used)} / {mb(storage.quota)}</p>
@@ -77,7 +85,7 @@ function AddProfileForm({ onDone }: { onDone: () => void }) {
           birthDate: birthDateObj,
           createdAt: new Date(),
         }))
-        await db.appConfig.put({ id: 1, activeProfileId: newId })
+        await db.appConfig.update(1, { activeProfileId: newId })
       })
       showToast(`Perfil de ${name.trim()} creado.`)
       onDone()
@@ -125,6 +133,84 @@ function AddProfileForm({ onDone }: { onDone: () => void }) {
   )
 }
 
+// ── Family section ───────────────────────────────────────────────────────────
+
+function FamilySection({ profile }: { profile: BabyProfile }) {
+  const config = useAppConfig()
+  const [partner, setPartner] = useState<string | null>(null)
+  const [babyName, setBabyName] = useState<string | null>(null)
+  const value = partner ?? config?.partnerName ?? ''
+
+  async function saveName() {
+    if (babyName === null || !babyName.trim()) return setBabyName(null)
+    await db.profiles.update(profile.id!, { name: babyName.trim() })
+    showToast('Nombre actualizado')
+    setBabyName(null)
+  }
+
+  async function savePartner() {
+    if (partner === null) return
+    await db.appConfig.update(1, { partnerName: partner.trim() || undefined })
+    showToast('Guardado')
+    setPartner(null)
+  }
+
+  async function setSex(sex: BabyProfile['sex']) {
+    await db.profiles.update(profile.id!, { sex })
+  }
+
+  async function setTrying(trying: boolean) {
+    if (trying) {
+      if (!confirm('¿Volver al modo "buscando bebé" para este perfil?')) return
+      await db.profiles.update(profile.id!, { phase: 'trying' })
+    } else {
+      await db.profiles.update(profile.id!, { phase: 'expecting' })
+    }
+  }
+
+  return (
+    <section className="px-5 mb-6">
+      <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Familia</p>
+      <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-4">
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1">Nombre del bebé</label>
+          <input value={babyName ?? profile.name} onChange={e => setBabyName(e.target.value)} onBlur={saveName}
+            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1">Nombre de tu pareja</label>
+          <div className="flex gap-2">
+            <input value={value} onChange={e => setPartner(e.target.value)} onBlur={savePartner} placeholder="tu pareja"
+              className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <p className="text-xs text-gray-400 mt-1">Se usa en los consejos del embarazo.</p>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-gray-500 mb-1">Sexo de {profile.name} (para percentiles)</p>
+          <div className="flex gap-2">
+            {([['boy', 'Niño'], ['girl', 'Niña'], [undefined, 'Sin indicar']] as const).map(([k, l]) => (
+              <button key={l} onClick={() => setSex(k)}
+                className={`flex-1 text-xs rounded-xl py-2 border ${profile.sex === k ? 'bg-blue-50 border-blue-200 text-blue-700 font-semibold' : 'border-gray-200 text-gray-500'}`}>
+                {l}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-gray-500 mb-1">Etapa</p>
+          {profile.phase === 'trying' ? (
+            <button onClick={() => setTrying(false)} className="text-sm text-blue-600">Ya estamos embarazados → usa la calculadora de fecha de parto</button>
+          ) : new Date(profile.birthDate) > new Date() ? (
+            <button onClick={() => setTrying(true)} className="text-sm text-gray-500">Volver a "buscando bebé"</button>
+          ) : (
+            <p className="text-sm text-gray-500">Nacido/a. Usa "Editar fecha" para corregir la fecha de nacimiento.</p>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 export default function Settings() {
@@ -148,7 +234,7 @@ export default function Settings() {
   async function handleSwitch(p: BabyProfile) {
     if (p.id === activeId) return
     try {
-      await db.appConfig.put({ id: 1, activeProfileId: p.id! })
+      await db.appConfig.update(1, { activeProfileId: p.id! })
     } catch {
       showToast('Error al cambiar de perfil.')
     }
@@ -161,26 +247,11 @@ export default function Settings() {
     }
     if (!confirm(`¿Borrar el perfil de ${p.name} y todos sus datos?`)) return
     try {
-      await db.transaction('rw', [db.profiles, db.diaryEntries, db.growthRecords, db.futureLetters, db.entryPhotos, db.appConfig], async () => {
-        const entries = await db.diaryEntries.where('profileId').equals(p.id!).toArray()
-        const entryIds = entries.map(e => e.id!).filter(Boolean)
-
-        await db.profiles.delete(p.id!)
-        await db.diaryEntries.where('profileId').equals(p.id!).delete()
-        await db.futureLetters.where('profileId').equals(p.id!).delete()
-        if (entryIds.length) {
-          await db.entryPhotos.where('diaryEntryId').anyOf(entryIds).delete()
-        }
-        // growthRecords: filter by profileId
-        const allGrowth = await db.growthRecords.toArray()
-        const toDelete = allGrowth.filter(g => g.profileId === p.id!).map(g => [g.profileId, g.week] as [number, number])
-        if (toDelete.length) await db.growthRecords.bulkDelete(toDelete)
-
-        if (p.id === activeId) {
-          const remaining = (allProfiles ?? []).filter(x => x.id !== p.id)
-          if (remaining.length) await db.appConfig.put({ id: 1, activeProfileId: remaining[0].id! })
-        }
-      })
+      await deleteProfileData(p.id!)
+      if (p.id === activeId) {
+        const remaining = (allProfiles ?? []).filter(x => x.id !== p.id)
+        if (remaining.length) await db.appConfig.update(1, { activeProfileId: remaining[0].id! })
+      }
       showToast(`Perfil de ${p.name} borrado.`)
     } catch {
       showToast('Error al borrar el perfil.')
@@ -193,7 +264,12 @@ export default function Settings() {
     if (!newDateStr || !profile?.id) return
     const [y, m, d] = newDateStr.split('-').map(Number)
     try {
-      await db.profiles.update(profile.id, { birthDate: new Date(y, m - 1, d) })
+      const birthDate = new Date(y, m - 1, d)
+      await db.profiles.update(profile.id, {
+        birthDate,
+        // Una fecha pasada significa que ya ha nacido
+        phase: birthDate <= new Date() ? undefined : 'expecting',
+      })
       showToast('Fecha actualizada')
       setEditingDate(false)
     } catch {
@@ -243,7 +319,7 @@ export default function Settings() {
     if (next >= 10) setDebugVisible(true)
   }
 
-  const birthDateInput = new Date(profile.birthDate).toISOString().slice(0, 10)
+  const birthDateInput = toInputDate(profile.birthDate)
 
   return (
     <div className="pb-6">
@@ -257,7 +333,7 @@ export default function Settings() {
             <div
               key={p.id}
               className={`flex items-center gap-3 rounded-2xl p-4 ${
-                p.id === activeId ? 'bg-blue-50 border border-blue-100' : 'bg-gray-50'
+                p.id === activeId ? 'bg-blue-50 border border-blue-100' : 'bg-white border border-gray-100'
               }`}
             >
               <button
@@ -291,7 +367,7 @@ export default function Settings() {
 
           {/* Edit birthDate inline */}
           {editingDate && (
-            <div className="bg-gray-50 rounded-2xl p-4 flex items-center gap-2">
+            <div className="bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-2">
               <input
                 type="date"
                 defaultValue={birthDateInput}
@@ -316,18 +392,30 @@ export default function Settings() {
         </div>
       </section>
 
-      {/* Año en review */}
+      {/* Familia */}
+      <FamilySection profile={profile} />
+
+      {/* Más */}
       <section className="px-5 mb-6">
-        <button
-          onClick={() => navigate('/year-review')}
-          className="w-full bg-gray-50 rounded-2xl p-4 flex items-center justify-between"
-        >
-          <div>
-            <p className="text-sm font-medium text-gray-900">Año en review</p>
-            <p className="text-xs text-gray-400 mt-0.5">Resumen de {new Date().getFullYear()}</p>
-          </div>
-          <span className="text-gray-300">›</span>
-        </button>
+        <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Más</p>
+        <div className="space-y-2">
+          {[
+            { to: '/vacunas', title: 'Vacunas', sub: 'Calendario orientativo 2026' },
+            { to: '/crecimiento', title: 'Crecimiento', sub: 'Peso, talla y percentiles OMS' },
+            { to: '/herramientas/citas', title: 'Citas', sub: 'Ecografías, pediatra y revisiones' },
+            { to: '/timeline', title: 'Hitos', sub: 'Línea de tiempo de momentos especiales' },
+            { to: '/year-review', title: 'Año en review', sub: `Resumen de ${new Date().getFullYear()}` },
+          ].map(l => (
+            <button key={l.to} onClick={() => navigate(l.to)}
+              className="w-full bg-white border border-gray-100 rounded-2xl p-4 flex items-center justify-between">
+              <div className="text-left">
+                <p className="text-sm font-medium text-gray-900">{l.title}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{l.sub}</p>
+              </div>
+              <span className="text-gray-300">›</span>
+            </button>
+          ))}
+        </div>
       </section>
 
       {/* Backup */}
@@ -336,7 +424,7 @@ export default function Settings() {
         <div className="space-y-2">
           <button
             onClick={handleExport}
-            className="w-full bg-gray-50 rounded-2xl p-4 flex items-center justify-between"
+            className="w-full bg-white border border-gray-100 rounded-2xl p-4 flex items-center justify-between"
           >
             <div>
               <p className="text-sm font-medium text-gray-900">Exportar backup</p>
@@ -347,7 +435,7 @@ export default function Settings() {
           <button
             onClick={() => fileRef.current?.click()}
             disabled={importing}
-            className="w-full bg-gray-50 rounded-2xl p-4 flex items-center justify-between disabled:opacity-50"
+            className="w-full bg-white border border-gray-100 rounded-2xl p-4 flex items-center justify-between disabled:opacity-50"
           >
             <div>
               <p className="text-sm font-medium text-gray-900">

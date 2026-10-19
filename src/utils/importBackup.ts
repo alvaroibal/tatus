@@ -11,8 +11,16 @@ export interface BackupEnvelope {
     appConfig: unknown
     futureLetters?: unknown[]
     entryPhotos?: unknown[]
+    careLogs?: unknown[]
+    appointments?: unknown[]
+    checks?: unknown[]
   }
 }
+
+const ALL_TABLES = () => [
+  db.profiles, db.diaryEntries, db.growthRecords, db.appConfig, db.futureLetters,
+  db.entryPhotos, db.careLogs, db.appointments, db.checks,
+]
 
 export async function importBackup(fileContent: string): Promise<boolean> {
   let parsed: unknown
@@ -24,18 +32,13 @@ export async function importBackup(fileContent: string): Promise<boolean> {
   }
 
   const envelope = parsed as BackupEnvelope
-  if (![1, 2, 3].includes(envelope?.schemaVersion)) {
+  if (![1, 2, 3, 4].includes(envelope?.schemaVersion)) {
     showToast('Este archivo es de una versión incompatible.')
     return false
   }
 
-  await db.transaction('rw', [db.profiles, db.diaryEntries, db.growthRecords, db.appConfig, db.futureLetters, db.entryPhotos], async () => {
-    await db.profiles.clear()
-    await db.diaryEntries.clear()
-    await db.growthRecords.clear()
-    await db.appConfig.clear()
-    await db.futureLetters.clear()
-    await db.entryPhotos.clear()
+  await db.transaction('rw', ALL_TABLES(), async () => {
+    for (const t of ALL_TABLES()) await t.clear()
 
     await db.profiles.bulkAdd(envelope.data.profiles as Parameters<typeof db.profiles.bulkAdd>[0])
     await db.diaryEntries.bulkAdd(envelope.data.diaryEntries as Parameters<typeof db.diaryEntries.bulkAdd>[0])
@@ -49,23 +52,35 @@ export async function importBackup(fileContent: string): Promise<boolean> {
     if (envelope.data.entryPhotos?.length) {
       await db.entryPhotos.bulkAdd(envelope.data.entryPhotos as Parameters<typeof db.entryPhotos.bulkAdd>[0])
     }
+    if (envelope.data.careLogs?.length) {
+      await db.careLogs.bulkAdd(envelope.data.careLogs as Parameters<typeof db.careLogs.bulkAdd>[0])
+    }
+    if (envelope.data.appointments?.length) {
+      await db.appointments.bulkAdd(envelope.data.appointments as Parameters<typeof db.appointments.bulkAdd>[0])
+    }
+    if (envelope.data.checks?.length) {
+      await db.checks.bulkAdd(envelope.data.checks as Parameters<typeof db.checks.bulkAdd>[0])
+    }
   })
 
   return true
 }
 
 export function exportBackup(): Promise<string> {
-  return db.transaction('r', [db.profiles, db.diaryEntries, db.growthRecords, db.appConfig, db.futureLetters, db.entryPhotos], async () => {
-    const [profiles, diaryEntries, growthRecords, appConfigArr, futureLetters, entryPhotos] = await Promise.all([
+  return db.transaction('r', ALL_TABLES(), async () => {
+    const [profiles, diaryEntries, growthRecords, appConfigArr, futureLetters, entryPhotos, careLogs, appointments, checks] = await Promise.all([
       db.profiles.toArray(),
       db.diaryEntries.toArray(),
       db.growthRecords.toArray(),
       db.appConfig.toArray(),
       db.futureLetters.toArray(),
       db.entryPhotos.toArray(),
+      db.careLogs.toArray(),
+      db.appointments.toArray(),
+      db.checks.toArray(),
     ])
     const envelope: BackupEnvelope = {
-      schemaVersion: 3,
+      schemaVersion: 4,
       exportedAt: new Date().toISOString(),
       data: {
         profiles,
@@ -74,8 +89,30 @@ export function exportBackup(): Promise<string> {
         appConfig: appConfigArr[0] ?? null,
         futureLetters,
         entryPhotos,
+        careLogs,
+        appointments,
+        checks,
       },
     }
     return JSON.stringify(envelope, null, 2)
+  })
+}
+
+/** Borra un perfil y todo lo que cuelga de él. */
+export async function deleteProfileData(profileId: number): Promise<void> {
+  await db.transaction('rw', ALL_TABLES(), async () => {
+    const entries = await db.diaryEntries.where('profileId').equals(profileId).toArray()
+    const entryIds = entries.map(e => e.id!).filter(Boolean)
+    await db.profiles.delete(profileId)
+    await db.diaryEntries.where('profileId').equals(profileId).delete()
+    await db.futureLetters.where('profileId').equals(profileId).delete()
+    if (entryIds.length) await db.entryPhotos.where('diaryEntryId').anyOf(entryIds).delete()
+    const growth = (await db.growthRecords.toArray())
+      .filter(g => g.profileId === profileId)
+      .map(g => [g.profileId, g.week] as [number, number])
+    if (growth.length) await db.growthRecords.bulkDelete(growth)
+    await db.careLogs.where('profileId').equals(profileId).delete()
+    await db.appointments.where('profileId').equals(profileId).delete()
+    await db.checks.where('profileId').equals(profileId).delete()
   })
 }

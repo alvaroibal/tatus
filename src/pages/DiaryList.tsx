@@ -42,7 +42,7 @@ function EntryRow({
 
   return (
     <li>
-      <button onClick={onTap} className="w-full text-left bg-gray-50 rounded-2xl p-4 flex gap-3">
+      <button onClick={onTap} className="w-full text-left bg-white rounded-2xl p-4 flex gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
         {photo && (
           <img
             src={photo.dataUrl}
@@ -66,7 +66,7 @@ function EntryRow({
                   {sharing ? '…' : '↗'}
                 </button>
               )}
-              {entry.milestone && <span className="text-yellow-400 text-sm">★</span>}
+              {entry.milestone && <span className="text-amber-500 text-sm">★</span>}
             </div>
           </div>
           <p className="text-sm text-gray-800 leading-relaxed line-clamp-3">{entry.text}</p>
