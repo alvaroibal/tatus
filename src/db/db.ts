@@ -1,9 +1,11 @@
 import Dexie, { type EntityTable } from 'dexie'
+import { CHANGES_TABLE, naturalUid, syncMiddleware, type SyncChange, type SyncMeta } from '../sync/changeLog'
+import { getDeviceId, newUid, nextStamp } from '../sync/clock'
 
 export type ProfilePhase = 'trying' | 'expecting'
 export type BabySex = 'boy' | 'girl'
 
-export interface BabyProfile {
+export interface BabyProfile extends SyncMeta {
   id?: number
   name: string
   birthDate: Date        // real or estimated due date (placeholder while trying)
@@ -14,7 +16,7 @@ export interface BabyProfile {
   cycleLength?: number   // días (modo buscando)
 }
 
-export interface DiaryEntry {
+export interface DiaryEntry extends SyncMeta {
   id?: number
   profileId: number
   date: Date
@@ -23,7 +25,7 @@ export interface DiaryEntry {
   milestone: boolean
 }
 
-export interface GrowthRecord {
+export interface GrowthRecord extends SyncMeta {
   profileId: number  // compound PK — no auto-increment id
   week: number       // compound PK
   date: Date
@@ -39,7 +41,7 @@ export interface AppConfig {
   parentName?: string
 }
 
-export interface FutureLetter {
+export interface FutureLetter extends SyncMeta {
   id?: number
   profileId: number
   date: Date
@@ -50,7 +52,7 @@ export interface FutureLetter {
   locked: boolean
 }
 
-export interface EntryPhoto {
+export interface EntryPhoto extends SyncMeta {
   id?: number
   diaryEntryId: number
   dataUrl: string  // compressed JPEG base64
@@ -58,7 +60,7 @@ export interface EntryPhoto {
 
 export type CareType = 'breast' | 'bottle' | 'diaper' | 'sleep' | 'med' | 'pump'
 
-export interface CareLog {
+export interface CareLog extends SyncMeta {
   id?: number
   profileId: number
   type: CareType
@@ -72,7 +74,7 @@ export interface CareLog {
   note?: string
 }
 
-export interface Appointment {
+export interface Appointment extends SyncMeta {
   id?: number
   profileId: number
   date: Date
@@ -82,7 +84,7 @@ export interface Appointment {
   done: boolean
 }
 
-export interface CheckState {
+export interface CheckState extends SyncMeta {
   key: string        // `${profileId}|${listId}|${itemId}`
   profileId: number
   done: boolean
@@ -98,6 +100,7 @@ class TatusDB extends Dexie {
   careLogs!: EntityTable<CareLog, 'id'>
   appointments!: EntityTable<Appointment, 'id'>
   checks!: Dexie.Table<CheckState, string>
+  syncChanges!: Dexie.Table<SyncChange, [string, string]>
 
   constructor() {
     super('tatus-db')
@@ -139,6 +142,45 @@ class TatusDB extends Dexie {
         if (c.partnerName === undefined) c.partnerName = 'Natalia'
       })
     })
+    // v5: sincronización entre dispositivos. Cada fila compartida lleva uid,
+    // updatedAt y updatedBy; syncChanges guarda lo pendiente de subir.
+    this.version(5).stores({
+      profiles: '++id,name,uid',
+      diaryEntries: '++id,profileId,date,week,milestone,uid',
+      growthRecords: '[profileId+week],date,uid',
+      appConfig: 'id',
+      futureLetters: '++id,profileId,date,week,uid',
+      entryPhotos: '++id,diaryEntryId,uid',
+      careLogs: '++id,profileId,start,type,uid',
+      appointments: '++id,profileId,date,uid',
+      checks: 'key,profileId,uid',
+      [CHANGES_TABLE]: '[tbl+uid],at',
+    }).upgrade(async tx => {
+      const at = nextStamp()
+      const by = getDeviceId()
+      const profileUid = new Map<number, string>()
+      await tx.table('profiles').toCollection().modify((p: BabyProfile) => {
+        p.uid ??= newUid()
+        p.updatedAt = at
+        p.updatedBy = by
+        profileUid.set(p.id!, p.uid)
+      })
+      for (const t of ['diaryEntries', 'futureLetters', 'entryPhotos', 'careLogs', 'appointments']) {
+        await tx.table(t).toCollection().modify((r: SyncMeta) => {
+          r.uid ??= newUid()
+          r.updatedAt = at
+          r.updatedBy = by
+        })
+      }
+      for (const t of ['growthRecords', 'checks'] as const) {
+        await tx.table(t).toCollection().modify((r: SyncMeta & { profileId: number }) => {
+          r.uid = naturalUid(t, r as unknown as Record<string, unknown>, profileUid.get(r.profileId) ?? `p${r.profileId}`)
+          r.updatedAt = at
+          r.updatedBy = by
+        })
+      }
+    })
+    this.use(syncMiddleware)
   }
 }
 

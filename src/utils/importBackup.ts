@@ -32,7 +32,7 @@ export async function importBackup(fileContent: string): Promise<boolean> {
   }
 
   const envelope = parsed as BackupEnvelope
-  if (![1, 2, 3, 4].includes(envelope?.schemaVersion)) {
+  if (![1, 2, 3, 4, 5].includes(envelope?.schemaVersion)) {
     showToast('Este archivo es de una versión incompatible.')
     return false
   }
@@ -80,7 +80,7 @@ export function exportBackup(): Promise<string> {
       db.checks.toArray(),
     ])
     const envelope: BackupEnvelope = {
-      schemaVersion: 4,
+      schemaVersion: 5,
       exportedAt: new Date().toISOString(),
       data: {
         profiles,
