@@ -3,6 +3,13 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router/router'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import '@fontsource-variable/bricolage-grotesque/wght.css'
+import '@fontsource/atkinson-hyperlegible/latin-400.css'
+import '@fontsource/atkinson-hyperlegible/latin-ext-400.css'
+import '@fontsource/atkinson-hyperlegible/latin-700.css'
+import '@fontsource/atkinson-hyperlegible/latin-ext-700.css'
+import '@fontsource-variable/literata/wght.css'
+import '@fontsource-variable/literata/wght-italic.css'
 import './index.css'
 
 async function idbAvailable(): Promise<boolean> {

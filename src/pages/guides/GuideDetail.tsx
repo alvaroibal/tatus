@@ -31,7 +31,7 @@ export default function GuideDetail() {
           <ul className="space-y-2">
             {s.items.map((item, i) => (
               <li key={i} className="flex gap-2 text-sm text-gray-700 leading-relaxed">
-                <span className="mt-2 shrink-0 w-1.5 h-1.5 rounded-full bg-blue-300" />
+                <span className="mt-2 shrink-0 w-1.5 h-1.5 rounded-full bg-tinta-300" />
                 <span>{item}</span>
               </li>
             ))}
@@ -43,7 +43,7 @@ export default function GuideDetail() {
         <div className="px-5 space-y-2">
           {guide.tools.map(t => (
             <button key={t.to} onClick={() => navigate(t.to)}
-              className="w-full bg-blue-50 text-blue-700 rounded-2xl py-3 px-4 text-sm font-semibold text-left flex justify-between">
+              className="w-full bg-tinta-50 text-tinta-700 rounded-2xl py-3 px-4 text-sm font-semibold text-left flex justify-between">
               {t.label}<span>→</span>
             </button>
           ))}

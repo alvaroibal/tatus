@@ -56,12 +56,12 @@ export function TryingHome({ profile }: { profile: BabyProfile }) {
         </div>
       </button>
 
-      <div className="bg-blue-50 rounded-2xl p-4">
-        <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 mb-2">Consejo de hoy</p>
-        <p className="text-sm text-blue-900 leading-relaxed">{tip}</p>
+      <div className="bg-tinta-50 rounded-2xl p-4">
+        <p className="text-xs font-semibold uppercase tracking-widest text-tinta-600 mb-2">Consejo de hoy</p>
+        <p className="text-sm text-tinta-900 leading-relaxed">{tip}</p>
       </div>
 
-      <button onClick={() => navigate('/herramientas/fecha-parto')} className="w-full bg-blue-600 text-white rounded-2xl py-4 text-sm font-semibold">
+      <button onClick={() => navigate('/herramientas/fecha-parto')} className="w-full bg-tinta-600 text-white rounded-2xl py-4 text-sm font-semibold">
         🎉 ¡Positivo! Empezar el embarazo
       </button>
     </div>

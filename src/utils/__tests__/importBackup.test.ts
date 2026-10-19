@@ -30,7 +30,7 @@ describe('importBackup', () => {
     const badVersion = JSON.stringify({ schemaVersion: 99, exportedAt: '', data: {} })
     const result = await importBackup(badVersion)
     expect(result).toBe(false)
-    expect(toastMessages[0]).toContain('versión incompatible')
+    expect(toastMessages[0]).toContain('otra versión de Tatuś')
   })
 
   it('calls db.transaction and returns true for valid v1 backup', async () => {

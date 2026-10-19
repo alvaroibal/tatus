@@ -12,10 +12,10 @@ export function SkeletonCard() {
           <div className="h-4 bg-gray-200 rounded w-2/5" />
         </div>
       ))}
-      <div className="bg-blue-50 rounded-2xl p-4 space-y-2">
-        <div className="h-3 bg-blue-100 rounded w-28" />
-        <div className="h-4 bg-blue-100 rounded w-4/5" />
-        <div className="h-4 bg-blue-100 rounded w-3/5" />
+      <div className="bg-tinta-50 rounded-2xl p-4 space-y-2">
+        <div className="h-3 bg-tinta-100 rounded w-28" />
+        <div className="h-4 bg-tinta-100 rounded w-4/5" />
+        <div className="h-4 bg-tinta-100 rounded w-3/5" />
       </div>
     </div>
   )

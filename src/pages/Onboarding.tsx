@@ -5,6 +5,7 @@ import { showToast } from '../utils/toast'
 import { addDays } from '../utils/age'
 import { dueDateFromLastPeriod } from '../utils/pregnancy'
 import { fromInputDate, inputCls } from '../components/uiHelpers'
+import { Wordmark } from '../components/ui'
 
 type Stage = 'trying' | 'expecting' | 'born'
 
@@ -61,16 +62,17 @@ export default function Onboarding() {
       navigate('/')
     } catch (err) {
       console.error('[Onboarding] error al guardar:', err)
-      showToast('Error al guardar — intenta de nuevo.')
+      showToast('No se ha guardado. Tus datos siguen aquí; vuelve a intentarlo.')
       setSaving(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-white">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-leche">
       <div className="w-full max-w-sm">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Bienvenido a Tatuś</h1>
-        <p className="text-gray-500 mb-8">Todo lo que necesitas, desde que decidís ser padres hasta que tu hijo crece.</p>
+        <Wordmark className="block text-6xl text-tinta-600 mb-8" />
+        <h1 className="text-3xl font-bold text-gray-900 mb-2 leading-tight">Una semana cada vez.</h1>
+        <p className="text-gray-500 mb-8">Qué le pasa a tu hijo y qué puedes hacer tú, desde que buscáis el embarazo hasta los cinco años. Y todo lo que escribas, guardado para cuando tenga 18.</p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
@@ -81,7 +83,7 @@ export default function Onboarding() {
                 key={s.id}
                 onClick={() => setStage(s.id)}
                 className={`w-full text-left rounded-2xl p-4 border-2 flex items-center gap-3 transition-colors ${
-                  stage === s.id ? 'border-blue-600 bg-blue-50' : 'border-gray-100'
+                  stage === s.id ? 'border-tinta-600 bg-tinta-50' : 'border-gray-100'
                 }`}
               >
                 <span className="text-2xl">{s.emoji}</span>
@@ -134,7 +136,7 @@ export default function Onboarding() {
           <button
             type="submit"
             disabled={saving || !canSubmit}
-            className="w-full bg-blue-600 text-white rounded-xl py-3.5 font-semibold text-base disabled:opacity-40 active:bg-blue-700"
+            className="w-full bg-tinta-600 text-white rounded-xl py-3.5 font-semibold text-base disabled:opacity-40 active:bg-tinta-700"
           >
             {saving ? 'Guardando…' : 'Empezar'}
           </button>

@@ -89,7 +89,7 @@ export default function Appointments() {
       <BackHeader
         title="Citas"
         subtitle="Ecografías, pediatra, matrona, vacunas"
-        right={!draft ? <button onClick={() => setDraft(EMPTY)} className="text-sm text-blue-600 font-semibold">+ Nueva</button> : undefined}
+        right={!draft ? <button onClick={() => setDraft(EMPTY)} className="text-sm text-tinta-600 font-semibold">+ Nueva</button> : undefined}
       />
 
       {draft && (
@@ -103,7 +103,7 @@ export default function Appointments() {
             <div className="flex flex-wrap gap-2">
               {(Object.keys(KIND_LABELS) as Appointment['kind'][]).map(k => (
                 <button key={k} onClick={() => setDraft({ ...draft, kind: k })}
-                  className={`text-xs rounded-full px-3 py-1.5 border ${draft.kind === k ? 'bg-blue-50 border-blue-200 text-blue-700 font-semibold' : 'border-gray-200 text-gray-500'}`}>
+                  className={`text-xs rounded-full px-3 py-1.5 border ${draft.kind === k ? 'bg-tinta-50 border-tinta-200 text-tinta-700 font-semibold' : 'border-gray-200 text-gray-500'}`}>
                   {KIND_LABELS[k].emoji} {KIND_LABELS[k].label}
                 </button>
               ))}
@@ -130,7 +130,7 @@ export default function Appointments() {
                 </div>
                 <button
                   onClick={() => setDraft({ ...EMPTY, title: s.title, kind: s.kind, date: toInputDate(s.date) })}
-                  className="text-xs text-blue-600 font-semibold shrink-0"
+                  className="text-xs text-tinta-600 font-semibold shrink-0"
                 >
                   + Añadir
                 </button>
@@ -153,13 +153,13 @@ export default function Appointments() {
                   <span className="text-xl">{KIND_LABELS[a.kind].emoji}</span>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-gray-900">{a.title}</p>
-                    <p className="text-xs text-blue-600 capitalize mt-0.5">{fmt(a.date)} · {formatTime(a.date)}</p>
+                    <p className="text-xs text-tinta-600 capitalize mt-0.5">{fmt(a.date)} · {formatTime(a.date)}</p>
                     {a.notes && <p className="text-xs text-gray-500 mt-1.5 whitespace-pre-wrap">{a.notes}</p>}
                   </div>
                 </div>
                 <div className="flex gap-4 mt-3 pl-9 text-xs">
                   <button onClick={() => toggleDone(a)} className="text-green-600 font-medium">✓ Hecha</button>
-                  <button onClick={() => exportIcs(a)} className="text-blue-600">Añadir al calendario</button>
+                  <button onClick={() => exportIcs(a)} className="text-tinta-600">Añadir al calendario</button>
                   <button onClick={() => remove(a)} className="text-red-400 ml-auto">Borrar</button>
                 </div>
               </li>

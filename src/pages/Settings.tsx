@@ -60,7 +60,7 @@ function DebugPanel({ profile }: { profile: BabyProfile }) {
       </>}
       {storage
         ? <p>storage: {mb(storage.used)} / {mb(storage.quota)}</p>
-        : <button onClick={fetchStorage} className="text-yellow-400 underline">medir storage</button>
+        : <button onClick={fetchStorage} className="text-yema underline">medir storage</button>
       }
     </div>
   )
@@ -90,35 +90,35 @@ function AddProfileForm({ onDone }: { onDone: () => void }) {
       showToast(`Perfil de ${name.trim()} creado.`)
       onDone()
     } catch {
-      showToast('Error al crear el perfil.')
+      showToast('No se ha podido crear el perfil. Vuelve a intentarlo.')
     } finally {
       setSaving(false)
     }
   }
 
   return (
-    <div className="bg-blue-50 rounded-2xl p-4 space-y-3 mt-2">
-      <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest">Nuevo bebé</p>
+    <div className="bg-tinta-50 rounded-2xl p-4 space-y-3 mt-2">
+      <p className="text-xs font-semibold text-tinta-600 uppercase tracking-widest">Nuevo bebé</p>
       <input
         type="text"
         value={name}
         onChange={e => setName(e.target.value)}
         placeholder="Nombre"
-        className="w-full border border-blue-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="w-full border border-tinta-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-tinta-400"
         autoFocus
       />
       <input
         type="date"
         value={birthDate}
         onChange={e => setBirthDate(e.target.value)}
-        className="w-full border border-blue-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="w-full border border-tinta-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-tinta-400"
       />
-      <p className="text-xs text-blue-400">Pon la fecha estimada si aún no ha nacido.</p>
+      <p className="text-xs text-tinta-400">Pon la fecha estimada si aún no ha nacido.</p>
       <div className="flex gap-2">
         <button
           onClick={handleSave}
           disabled={saving || !name.trim() || !birthDate}
-          className="flex-1 bg-blue-600 text-white rounded-xl py-2 text-sm font-semibold disabled:opacity-40"
+          className="flex-1 bg-tinta-600 text-white rounded-xl py-2 text-sm font-semibold disabled:opacity-40"
         >
           {saving ? 'Guardando…' : 'Guardar'}
         </button>
@@ -175,13 +175,13 @@ function FamilySection({ profile }: { profile: BabyProfile }) {
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">Nombre del bebé</label>
           <input value={babyName ?? profile.name} onChange={e => setBabyName(e.target.value)} onBlur={saveName}
-            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tinta-500" />
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">Nombre de tu pareja</label>
           <div className="flex gap-2">
             <input value={value} onChange={e => setPartner(e.target.value)} onBlur={savePartner} placeholder="tu pareja"
-              className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tinta-500" />
           </div>
           <p className="text-xs text-gray-400 mt-1">Se usa en los consejos del embarazo.</p>
         </div>
@@ -190,7 +190,7 @@ function FamilySection({ profile }: { profile: BabyProfile }) {
           <div className="flex gap-2">
             {([['boy', 'Niño'], ['girl', 'Niña'], [undefined, 'Sin indicar']] as const).map(([k, l]) => (
               <button key={l} onClick={() => setSex(k)}
-                className={`flex-1 text-xs rounded-xl py-2 border ${profile.sex === k ? 'bg-blue-50 border-blue-200 text-blue-700 font-semibold' : 'border-gray-200 text-gray-500'}`}>
+                className={`flex-1 text-xs rounded-xl py-2 border ${profile.sex === k ? 'bg-tinta-50 border-tinta-200 text-tinta-700 font-semibold' : 'border-gray-200 text-gray-500'}`}>
                 {l}
               </button>
             ))}
@@ -199,7 +199,7 @@ function FamilySection({ profile }: { profile: BabyProfile }) {
         <div>
           <p className="text-xs font-medium text-gray-500 mb-1">Etapa</p>
           {profile.phase === 'trying' ? (
-            <button onClick={() => setTrying(false)} className="text-sm text-blue-600">Ya estamos embarazados → usa la calculadora de fecha de parto</button>
+            <button onClick={() => setTrying(false)} className="text-sm text-tinta-600">Ya estamos embarazados → usa la calculadora de fecha de parto</button>
           ) : new Date(profile.birthDate) > new Date() ? (
             <button onClick={() => setTrying(true)} className="text-sm text-gray-500">Volver a "buscando bebé"</button>
           ) : (
@@ -236,7 +236,7 @@ export default function Settings() {
     try {
       await db.appConfig.update(1, { activeProfileId: p.id! })
     } catch {
-      showToast('Error al cambiar de perfil.')
+      showToast('No se ha podido cambiar de perfil. Vuelve a intentarlo.')
     }
   }
 
@@ -245,7 +245,7 @@ export default function Settings() {
       showToast('No puedes borrar el único perfil.')
       return
     }
-    if (!confirm(`¿Borrar el perfil de ${p.name} y todos sus datos?`)) return
+    if (!confirm(`¿Borrar el perfil de ${p.name}? Se borrarán también su diario, sus cartas y sus medidas, y no se podrán recuperar.`)) return
     try {
       await deleteProfileData(p.id!)
       if (p.id === activeId) {
@@ -254,7 +254,7 @@ export default function Settings() {
       }
       showToast(`Perfil de ${p.name} borrado.`)
     } catch {
-      showToast('Error al borrar el perfil.')
+      showToast('No se ha podido borrar el perfil. Vuelve a intentarlo.')
     }
   }
 
@@ -273,7 +273,7 @@ export default function Settings() {
       showToast('Fecha actualizada')
       setEditingDate(false)
     } catch {
-      showToast('Error al actualizar la fecha.')
+      showToast('No se ha podido cambiar la fecha. Vuelve a intentarlo.')
     }
   }
 
@@ -293,7 +293,7 @@ export default function Settings() {
       URL.revokeObjectURL(url)
       showToast('Backup exportado')
     } catch {
-      showToast('Error al exportar.')
+      showToast('No se ha podido exportar el backup. Vuelve a intentarlo.')
     }
   }
 
@@ -333,7 +333,7 @@ export default function Settings() {
             <div
               key={p.id}
               className={`flex items-center gap-3 rounded-2xl p-4 ${
-                p.id === activeId ? 'bg-blue-50 border border-blue-100' : 'bg-white border border-gray-100'
+                p.id === activeId ? 'bg-tinta-50 border border-tinta-100' : 'bg-white border border-gray-100'
               }`}
             >
               <button
@@ -341,18 +341,18 @@ export default function Settings() {
                 className="flex-1 text-left min-w-0"
               >
                 <div className="flex items-center gap-2">
-                  <p className={`text-sm font-semibold ${p.id === activeId ? 'text-blue-700' : 'text-gray-800'}`}>
+                  <p className={`text-sm font-semibold ${p.id === activeId ? 'text-tinta-700' : 'text-gray-800'}`}>
                     {p.name}
                   </p>
                   {p.id === activeId && (
-                    <span className="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">activo</span>
+                    <span className="text-xs bg-tinta-600 text-white px-2 py-0.5 rounded-full">activo</span>
                   )}
                 </div>
                 <p className="text-xs text-gray-400 mt-0.5">{formatDate(p.birthDate)}</p>
               </button>
               {/* Edit birthDate — only active profile */}
               {p.id === activeId && !editingDate && (
-                <button onClick={() => setEditingDate(true)} className="text-xs text-blue-500 shrink-0">
+                <button onClick={() => setEditingDate(true)} className="text-xs text-tinta-500 shrink-0">
                   Editar fecha
                 </button>
               )}
@@ -374,7 +374,7 @@ export default function Settings() {
                 onChange={e => setNewDateStr(e.target.value)}
                 className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm flex-1"
               />
-              <button onClick={handleDateSave} className="text-blue-600 text-sm font-medium">OK</button>
+              <button onClick={handleDateSave} className="text-tinta-600 text-sm font-medium">OK</button>
               <button onClick={() => setEditingDate(false)} className="text-gray-400 text-sm">✕</button>
             </div>
           )}
@@ -384,7 +384,7 @@ export default function Settings() {
           ) : (
             <button
               onClick={() => setShowAddForm(true)}
-              className="w-full py-3 text-sm text-blue-600 font-medium rounded-2xl border-2 border-dashed border-blue-100"
+              className="w-full py-3 text-sm text-tinta-600 font-medium rounded-2xl border-2 border-dashed border-tinta-100"
             >
               + Añadir bebé
             </button>

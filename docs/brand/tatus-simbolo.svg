@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Tatuś · símbolo "El gesto": la kreska (adulto) se inclina sobre el punto (hijo) -->
+  <rect width="512" height="512" rx="112" fill="#1C2650"/>
+  <line x1="262" y1="214" x2="352" y2="112" stroke="#F4B41A" stroke-width="58" stroke-linecap="round"/>
+  <circle cx="218" cy="330" r="74" fill="#F7F5EF"/>
+</svg>

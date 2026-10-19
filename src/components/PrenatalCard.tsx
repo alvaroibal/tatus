@@ -57,21 +57,21 @@ export function PrenatalCard({ pregnancyWeek, stage, childName, daysUntilBirth }
       </div>
 
       {/* Baby size card */}
-      <div className="bg-blue-50 rounded-2xl px-4 py-3 mb-6 flex items-center justify-between">
+      <div className="bg-tinta-50 rounded-2xl px-4 py-3 mb-6 flex items-center justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-0.5">
+          <p className="text-xs font-semibold uppercase tracking-widest text-tinta-400 mb-0.5">
             Tamaño del bebé
           </p>
-          <p className="text-base font-semibold text-blue-900 capitalize">
+          <p className="text-base font-semibold text-tinta-900 capitalize">
             {stage.babySize}
           </p>
         </div>
         <div className="text-right">
           {stage.babySizeCm > 0 && (
-            <p className="text-sm font-medium text-blue-700">{stage.babySizeCm} cm</p>
+            <p className="text-sm font-medium text-tinta-700">{stage.babySizeCm} cm</p>
           )}
           {stage.babyWeightG > 0 && (
-            <p className="text-xs text-blue-500">{stage.babyWeightG} g</p>
+            <p className="text-xs text-tinta-500">{stage.babyWeightG} g</p>
           )}
         </div>
       </div>

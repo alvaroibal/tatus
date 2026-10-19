@@ -82,11 +82,11 @@ function DueDateForm({ profile, currentWeek }: { profile: BabyProfile; currentWe
       {due && ga && (
         <>
           <div className="px-5 mb-5">
-            <div className="bg-blue-600 text-white rounded-2xl p-5">
-              <p className="text-xs uppercase tracking-widest text-blue-200 font-semibold">Fecha probable</p>
+            <div className="bg-tinta-600 text-white rounded-2xl p-5">
+              <p className="text-xs uppercase tracking-widest text-tinta-200 font-semibold">Fecha probable</p>
               <p className="text-2xl font-bold mt-1 first-letter:uppercase">{formatLongDate(due)}</p>
               {ga.weeks >= 0 && ga.weeks <= 42 && (
-                <p className="text-sm text-blue-100 mt-2">Hoy: semana {ga.weeks} + {ga.days} días</p>
+                <p className="text-sm text-tinta-100 mt-2">Hoy: semana {ga.weeks} + {ga.days} días</p>
               )}
             </div>
             <p className="text-xs text-gray-400 mt-2 leading-relaxed">

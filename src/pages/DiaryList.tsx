@@ -60,13 +60,13 @@ function EntryRow({
                 <button
                   onClick={handleShare}
                   disabled={sharing}
-                  className="text-xs text-gray-300 active:text-blue-500 disabled:opacity-40"
+                  className="text-xs text-gray-300 active:text-tinta-500 disabled:opacity-40"
                   aria-label="Compartir hito"
                 >
                   {sharing ? '…' : '↗'}
                 </button>
               )}
-              {entry.milestone && <span className="text-amber-500 text-sm">★</span>}
+              {entry.milestone && <span className="text-yema text-sm">★</span>}
             </div>
           </div>
           <p className="text-sm text-gray-800 leading-relaxed line-clamp-3">{entry.text}</p>
@@ -119,7 +119,7 @@ export default function DiaryList() {
             onClick={() => setMilestonesOnly(v => !v)}
             className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
               milestonesOnly
-                ? 'bg-yellow-100 text-yellow-700'
+                ? 'bg-yema-100 text-yema-700'
                 : 'bg-gray-100 text-gray-500'
             }`}
           >
@@ -153,7 +153,7 @@ export default function DiaryList() {
 
       <button
         onClick={() => navigate('/diario/nueva')}
-        className="fixed bottom-20 right-5 bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg text-2xl flex items-center justify-center active:bg-blue-700"
+        className="fixed bottom-20 right-5 bg-tinta-600 text-white w-14 h-14 rounded-full shadow-lg text-2xl flex items-center justify-center active:bg-tinta-700"
         aria-label="Nueva entrada"
       >
         +

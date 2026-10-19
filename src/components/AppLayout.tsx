@@ -7,8 +7,8 @@ export default function AppLayout() {
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
 
   return (
-    <div className="min-h-screen bg-[#fafaf8] flex flex-col">
-      <main className="flex-1 overflow-y-auto pb-16 max-w-lg mx-auto w-full bg-[#fafaf8] min-h-screen">
+    <div className="min-h-screen bg-leche flex flex-col">
+      <main className="flex-1 overflow-y-auto pb-16 max-w-lg mx-auto w-full bg-leche min-h-screen">
         <Outlet />
       </main>
       <BottomNav />

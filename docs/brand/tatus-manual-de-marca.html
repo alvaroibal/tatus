@@ -1,0 +1,812 @@
+<title>Manual de marca Tatuś</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap">
+<style>
+/* Layout: una sola columna de lectura (~68ch) con bandas a todo el ancho para logo, color, kreska y aplicaciones. */
+:root {
+  /* Marca (fijos, no cambian con el tema) */
+  --b-tinta: #1C2650;
+  --b-yema: #F4B41A;
+  --b-leche: #F7F5EF;
+  --b-noche: #0F1326;
+  --b-lavanda: #B8B1E2;
+  --b-melocoton: #F2A68A;
+  --b-salvia: #7FA889;
+  /* Interfaz del manual (cambian con el tema) */
+  --bg: #F7F7F3;
+  --surface: #FFFFFF;
+  --band: #ECECE5;
+  --fg: #151A33;
+  --muted: #5C6177;
+  --line: #DCDCD3;
+  --ink: #1C2650;        /* tinta usada como texto de acento */
+  --pop: #F4B41A;
+  --pop-text: #8A5B00;   /* yema legible como texto sobre claro */
+  --future: #D6D6CE;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Verdana", system-ui, sans-serif;
+  --letter: "Literata", "Georgia", "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1326; --surface: #171C36; --band: #141933; --fg: #EEEBE3; --muted: #A2A6BA;
+    --line: #2A3053; --ink: #B4BEF2; --pop: #F0AE1C; --pop-text: #F4C04A; --future: #2B3155;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1326; --surface: #171C36; --band: #141933; --fg: #EEEBE3; --muted: #A2A6BA;
+  --line: #2A3053; --ink: #B4BEF2; --pop: #F0AE1C; --pop-text: #F4C04A; --future: #2B3155;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.6; margin: 0; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.read { max-width: 68ch; }
+section { padding-block: 72px; border-top: 1px solid var(--line); }
+section.band { background: var(--band); }
+h1, h2, h3, h4 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.02em; }
+h2 { font-size: clamp(30px, 5vw, 46px); line-height: 1.05; font-weight: 750; }
+h3 { font-size: 22px; line-height: 1.2; font-weight: 700; }
+h4 { font-size: 17px; font-weight: 700; letter-spacing: 0; }
+p { margin: 0; }
+.eyebrow { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--pop-text); display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.eyebrow::before { content: ""; width: 4px; height: 16px; border-radius: 4px; background: var(--pop); transform: rotate(38deg); }
+.lead { font-size: 20px; color: var(--fg); margin-top: 18px; }
+.muted { color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.grid { display: grid; gap: 20px; }
+.g2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.g3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.g4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.g2 > *, .g3 > *, .g4 > * { min-width: 0; }
+.mt { margin-top: 36px; }
+.mt-s { margin-top: 16px; }
+.small { font-size: 14px; }
+.tag { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+a { color: var(--ink); }
+:focus-visible { outline: 3px solid var(--pop); outline-offset: 3px; border-radius: 4px; }
+
+/* ---------- Wordmark ---------- */
+.wm { font-family: var(--display); font-weight: 800; letter-spacing: -0.045em; line-height: 1; font-variation-settings: "opsz" 96; white-space: nowrap; }
+.wm .s { position: relative; display: inline-block; }
+.wm .s::after { content: ""; position: absolute; left: 30%; top: 0.01em; width: 0.118em; height: 0.29em; border-radius: 1em; background: var(--b-yema); transform: translateX(-10%) rotate(42deg); transform-origin: 50% 100%; }
+
+/* ---------- Hero ---------- */
+.hero { padding-block: 64px 56px; }
+.hero-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+.hero .wm { font-size: clamp(88px, 19vw, 210px); color: var(--fg); margin-top: 40px; }
+.hero h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 600; line-height: 1.15; margin-top: 28px; max-width: 22ch; }
+.hero .lead { max-width: 60ch; }
+.toc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 36px; }
+.toc a { font-size: 14px; text-decoration: none; padding: 6px 12px; border: 1px solid var(--line); border-radius: 99px; color: var(--fg); background: var(--surface); }
+.toc a:hover { border-color: var(--ink); }
+
+/* ---------- Product map ---------- */
+.phases { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 32px; border-radius: 16px; overflow: hidden; }
+.phase { padding: 20px 18px 22px; color: var(--b-tinta); min-width: 0; }
+.phase .when { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+.phase h3 { margin-top: 6px; font-size: 24px; }
+.phase ul { margin: 10px 0 0; padding-left: 18px; font-size: 14.5px; line-height: 1.5; }
+@media (max-width: 760px) { .phases { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 440px) { .phases { grid-template-columns: 1fr; } }
+
+.diag { width: 100%; border-collapse: collapse; font-size: 15px; }
+.diag th, .diag td { text-align: left; padding: 12px 14px 12px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.diag th { font-family: var(--display); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+.diag td:first-child { font-weight: 700; white-space: nowrap; }
+.scroll-x { overflow-x: auto; }
+.scroll-x .diag { min-width: 720px; }
+code { font-size: .88em; background: var(--band); padding: 1px 5px; border-radius: 5px; }
+
+/* ---------- Platform ---------- */
+.pillar { padding-top: 16px; border-top: 2px solid var(--fg); }
+.pillar p { margin-top: 8px; color: var(--muted); font-size: 15.5px; }
+.statement { font-family: var(--letter); font-size: clamp(21px, 2.6vw, 27px); line-height: 1.45; font-style: italic; max-width: 40ch; }
+.statement b { font-style: normal; font-weight: 500; }
+.posmap { width: 100%; max-width: 520px; height: auto; display: block; }
+.posmap text { font-family: var(--body); fill: var(--muted); font-size: 12px; }
+.posmap .ax { stroke: var(--line); stroke-width: 1.5; }
+.posmap .c { fill: var(--future); stroke: var(--muted); stroke-width: 1; }
+.posmap .t { fill: var(--b-yema); stroke: var(--b-tinta); stroke-width: 2; }
+.posmap .lbl { fill: var(--fg); font-size: 13px; }
+.posmap .lblT { fill: var(--fg); font-size: 15px; font-weight: 700; font-family: var(--display); }
+
+/* ---------- Name ---------- */
+.name-hero { display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; }
+.big-s { font-family: var(--display); font-weight: 800; font-size: clamp(140px, 22vw, 240px); line-height: .9; color: var(--fg); position: relative; display: inline-block; }
+.big-s::after { content: ""; position: absolute; left: 30%; top: 0.05em; width: 0.118em; height: 0.29em; border-radius: 1em; background: var(--b-yema); transform: translateX(-10%) rotate(42deg); transform-origin: 50% 100%; }
+.pron { font-family: var(--display); font-size: 22px; font-weight: 600; }
+@media (max-width: 640px) { .name-hero { grid-template-columns: 1fr; gap: 12px; } }
+
+/* ---------- Logo ---------- */
+.logo-board { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; }
+.tile { border-radius: 20px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; min-height: 240px; min-width: 0; }
+.tile .cap { font-size: 13px; opacity: .8; }
+.t-leche { background: var(--b-leche); color: var(--b-tinta); }
+.t-tinta { background: var(--b-tinta); color: var(--b-leche); }
+.t-yema { background: var(--b-yema); color: var(--b-tinta); }
+.t-yema .wm .s::after { background: var(--b-tinta); }
+.t-noche { background: var(--b-noche); color: var(--b-leche); }
+.logo-board .wm { font-size: clamp(64px, 10vw, 112px); }
+.lockup { display: flex; align-items: center; gap: 18px; }
+.lockup svg { width: 64px; height: 64px; flex: none; }
+.lockup .wm { font-size: 56px; }
+.sym { display: block; }
+@media (max-width: 760px) { .logo-board { grid-template-columns: 1fr; } }
+.construct { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
+.construct svg { width: 100%; max-width: 300px; height: auto; display: block; margin: 0 auto; }
+.construct .gl { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; fill: none; opacity: .6; }
+.construct .gt { fill: var(--muted); font-family: var(--body); font-size: 11px; }
+.dont { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.dont figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 14px 12px; text-align: center; }
+.dont figcaption { font-size: 13px; color: var(--muted); margin-top: 10px; }
+.dont .x { color: #C2412D; font-weight: 700; }
+.dont .wm { font-size: 40px; color: var(--fg); }
+
+/* ---------- Color ---------- */
+.swatches { display: grid; grid-template-columns: 2fr 1.4fr 1fr; gap: 14px; }
+.sw { border-radius: 18px; padding: 18px; min-height: 200px; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; border: 0; text-align: left; cursor: pointer; font: inherit; min-width: 0; }
+.sw .n { font-family: var(--display); font-size: 24px; font-weight: 750; letter-spacing: -0.02em; }
+.sw .h { font-size: 13px; font-variant-numeric: tabular-nums; opacity: .85; }
+.sw .u { font-size: 13px; opacity: .85; }
+.sw-tinta { background: var(--b-tinta); color: var(--b-leche); }
+.sw-yema { background: var(--b-yema); color: var(--b-tinta); }
+.sw-leche { background: var(--b-leche); color: var(--b-tinta); box-shadow: inset 0 0 0 1px var(--line); }
+.phase-sw { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px; }
+.phase-sw .sw { min-height: 130px; color: var(--b-tinta); }
+@media (max-width: 760px) { .swatches { grid-template-columns: 1fr 1fr; } .swatches .sw:first-child { grid-column: 1 / -1; } .phase-sw { grid-template-columns: 1fr 1fr; } }
+.ratio { display: flex; height: 18px; border-radius: 99px; overflow: hidden; margin-top: 22px; }
+.ratio span { display: block; }
+.copied { font-size: 13px; color: var(--pop-text); min-height: 20px; margin-top: 8px; }
+
+/* ---------- Type ---------- */
+.typecard { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 26px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.typecard .spec { font-size: 13px; color: var(--muted); }
+.typecard .why { font-size: 15px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; margin-top: auto; }
+.tA { font-family: var(--display); font-size: 58px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+.tB { font-family: var(--body); font-size: 44px; line-height: 1.05; }
+.tC { font-family: var(--letter); font-size: 46px; font-style: italic; line-height: 1.05; }
+.scale { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.scale div { display: flex; align-items: baseline; gap: 18px; border-bottom: 1px solid var(--line); padding-bottom: 10px; min-width: 0; }
+.scale span.k { width: 110px; flex: none; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.scale span.v { min-width: 0; overflow-wrap: anywhere; }
+
+/* ---------- Kreska grid ---------- */
+.kgrid { display: grid; grid-template-columns: 2.6em repeat(52, minmax(0, 1fr)); gap: 3px 2px; margin-top: 28px; align-items: center; }
+.kgrid .yl { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; padding-right: 6px; }
+.kc { height: 13px; display: flex; justify-content: center; }
+.kc i { display: block; width: 3px; height: 100%; border-radius: 3px; background: var(--future); transform: rotate(32deg); }
+.kc.pre i { background: var(--b-melocoton); }
+.kc.bb i { background: var(--b-yema); }
+.kc.cr i { background: var(--b-salvia); }
+.kc.lt i { background: var(--ink); opacity: .55; }
+.kc.now i { background: var(--fg); width: 4px; transform: rotate(32deg) scaleY(1.35); box-shadow: 0 0 0 3px color-mix(in srgb, var(--pop) 45%, transparent); }
+@media (prefers-reduced-motion: no-preference) { .kc.now i { animation: pulse 1.8s ease-in-out infinite; } }
+@keyframes pulse { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--pop) 10%, transparent); } }
+.kctl { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; margin-top: 22px; }
+.kctl input[type=range] { width: min(420px, 100%); accent-color: var(--b-yema); }
+.kread { font-family: var(--display); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); margin-top: 14px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.legend i { width: 4px; height: 13px; border-radius: 3px; transform: rotate(32deg); display: inline-block; }
+@media (max-width: 560px) { .kgrid { gap: 2px 1px; } .kc { height: 9px; } .kc i { width: 2px; } }
+
+/* ---------- Voice ---------- */
+.ba { width: 100%; border-collapse: collapse; }
+.ba td { padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; width: 50%; font-size: 15.5px; }
+.ba .before { color: var(--muted); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 50%, transparent); }
+.ba th { text-align: left; font-family: var(--display); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 8px; }
+.moment { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px; min-width: 0; }
+.moment .say { font-family: var(--letter); font-size: 18px; line-height: 1.5; margin-top: 10px; }
+.moment .rule { font-size: 14px; color: var(--muted); margin-top: 10px; }
+
+/* ---------- Icons ---------- */
+.icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 12px; }
+.ic { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px 10px 12px; display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+.ic svg { width: 36px; height: 36px; color: var(--fg); }
+svg .k { stroke: var(--b-yema); }
+
+/* ---------- Applications ---------- */
+.apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; align-items: start; }
+.apps > figure { margin: 0; min-width: 0; }
+.apps figcaption { font-size: 14px; color: var(--muted); margin-top: 12px; }
+.apps figcaption b { color: var(--fg); font-family: var(--display); }
+.phone { width: 100%; max-width: 300px; margin: 0 auto; border-radius: 40px; padding: 10px; background: #0B0E1C; box-shadow: 0 20px 50px -20px rgba(15,19,38,.45); }
+.screen { border-radius: 31px; overflow: hidden; background: var(--b-leche); color: var(--b-tinta); height: 560px; display: flex; flex-direction: column; font-family: var(--body); }
+.sbar { display: flex; justify-content: space-between; padding: 12px 22px 0; font-size: 12px; font-weight: 700; }
+.scr-body { padding: 18px 18px 0; flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 12px; }
+.scr-week { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #8A5B00; }
+.scr-h { font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: -0.035em; line-height: 1; }
+.scr-days { display: flex; gap: 7px; }
+.scr-days i { width: 5px; height: 16px; border-radius: 4px; background: #D9D6CC; transform: rotate(32deg); }
+.scr-days i.on { background: var(--b-yema); }
+.scr-card { background: #fff; border-radius: 18px; padding: 14px; font-size: 13px; line-height: 1.45; }
+.scr-card .lab { font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #6B6F82; margin-bottom: 4px; }
+.scr-task { background: var(--b-tinta); color: var(--b-leche); border-radius: 18px; padding: 14px; font-size: 13px; line-height: 1.45; }
+.scr-task .lab { color: var(--b-yema); font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+.nav { display: flex; justify-content: space-around; padding: 10px 6px 18px; border-top: 1px solid #E4E1D7; background: #fff; font-size: 9.5px; color: #8C8FA0; }
+.nav span { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.nav svg { width: 21px; height: 21px; }
+.nav .on { color: var(--b-tinta); font-weight: 700; }
+.screen.night { background: #120F0B; color: #E9C99A; }
+.screen.night .scr-week { color: #C98A2B; }
+.screen.night .scr-h { color: #F0D6AE; }
+.night-log { display: flex; flex-direction: column; gap: 8px; }
+.night-log div { display: flex; justify-content: space-between; border-bottom: 1px solid #2A2219; padding: 9px 2px; font-size: 14px; font-variant-numeric: tabular-nums; }
+.night-big { margin-top: auto; margin-bottom: 18px; border-radius: 999px; border: 1.5px solid #6B4A1F; color: #F0D6AE; text-align: center; padding: 16px; font-family: var(--display); font-weight: 700; font-size: 17px; }
+.share { aspect-ratio: 1 / 1; max-width: 100%; border-radius: 18px; background: var(--b-tinta); color: var(--b-leche); padding: 8%; display: flex; flex-direction: column; justify-content: space-between; }
+.share .wm { font-size: 26px; color: var(--b-leche); }
+.share .wk { font-family: var(--display); color: var(--b-yema); font-weight: 700; font-size: 15px; letter-spacing: .04em; }
+.share .q { font-family: var(--letter); font-style: italic; font-size: clamp(20px, 2.4vw, 25px); line-height: 1.35; margin-top: 10px; }
+.share .foot { display: flex; justify-content: space-between; align-items: flex-end; font-size: 13px; opacity: .8; gap: 10px; }
+.share .ticks { display: flex; gap: 3px; }
+.share .ticks i { width: 3px; height: 12px; border-radius: 3px; background: rgba(247,245,239,.25); transform: rotate(32deg); }
+.share .ticks i.on { background: var(--b-yema); }
+.env { aspect-ratio: 1.5 / 1; border-radius: 10px; background: #EFEBDF; position: relative; overflow: hidden; color: var(--b-tinta); box-shadow: 0 14px 34px -18px rgba(15,19,38,.5); }
+.env::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom right, transparent 49.6%, #DCD6C5 50%, transparent 50.4%), linear-gradient(to bottom left, transparent 49.6%, #DCD6C5 50%, transparent 50.4%); background-size: 100% 120%; background-repeat: no-repeat; }
+.env .to { position: absolute; left: 8%; bottom: 10%; font-family: var(--letter); font-size: 15px; line-height: 1.4; }
+.env .to i { font-size: 20px; }
+.seal { position: absolute; left: 50%; top: 52%; width: 22%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F8CB54, #D99A08 70%, #B57F05); box-shadow: 0 3px 8px rgba(0,0,0,.25); display: grid; place-items: center; }
+.seal svg { width: 62%; height: 62%; }
+.box { aspect-ratio: 1.25 / 1; border-radius: 14px; background: var(--b-tinta); color: var(--b-leche); padding: 7%; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+.box .lid { position: absolute; left: 0; right: 0; top: 0; height: 30%; border-bottom: 1px solid rgba(247,245,239,.18); }
+.box .num { font-family: var(--display); font-weight: 800; font-size: clamp(54px, 7vw, 76px); letter-spacing: -0.05em; line-height: .9; color: var(--b-yema); position: relative; }
+.box .sub { font-family: var(--letter); font-style: italic; font-size: 16px; position: relative; }
+.box .usb { position: absolute; right: 8%; top: 14%; width: 22%; aspect-ratio: 1 / 2.3; border-radius: 10px; background: var(--b-yema); }
+.box .usb::before { content: ""; position: absolute; left: 26%; right: 26%; top: -16%; height: 18%; border-radius: 3px 3px 0 0; background: #C9CCD8; }
+.homescreen { border-radius: 26px; background: linear-gradient(160deg, #4B5A8C, #1C2650 60%, #0F1326); padding: 26px 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px 10px; }
+.homescreen div { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; color: #fff; }
+.homescreen .ph { width: 100%; max-width: 58px; aspect-ratio: 1; border-radius: 14px; background: rgba(255,255,255,.16); }
+.homescreen svg { width: 100%; max-width: 58px; height: auto; border-radius: 14px; }
+
+/* ---------- Roadmap ---------- */
+.road { list-style: none; padding: 0; margin: 0; counter-reset: r; display: flex; flex-direction: column; }
+.road li { counter-increment: r; display: grid; grid-template-columns: 3.2rem 1fr auto; gap: 6px 18px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: start; }
+.road li::before { content: counter(r, decimal-leading-zero); font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1; color: var(--pop-text); font-variant-numeric: tabular-nums; }
+.road h4 { font-size: 18px; }
+.road p { color: var(--muted); font-size: 15px; margin-top: 4px; }
+.road .eff { font-size: 12px; font-weight: 700; letter-spacing: .06em; padding: 4px 10px; border-radius: 99px; background: var(--surface); border: 1px solid var(--line); white-space: nowrap; }
+.road .when { grid-column: 2 / -1; }
+@media (max-width: 560px) { .road li { grid-template-columns: 2.4rem 1fr; } .road .eff { grid-column: 2; justify-self: start; } }
+.sign { padding-block: 64px 80px; text-align: left; }
+.sign .wm { font-size: 64px; }
+</style>
+
+<!-- Símbolo reutilizable -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="simbolo" viewBox="0 0 512 512">
+      <rect width="512" height="512" rx="112" fill="#1C2650"/>
+      <line x1="262" y1="214" x2="352" y2="112" stroke="#F4B41A" stroke-width="58" stroke-linecap="round"/>
+      <circle cx="218" cy="330" r="74" fill="#F7F5EF"/>
+    </symbol>
+    <symbol id="gesto" viewBox="0 0 512 512">
+      <line x1="262" y1="214" x2="352" y2="112" stroke="#F4B41A" stroke-width="58" stroke-linecap="round"/>
+      <circle cx="218" cy="330" r="74" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <span>Identidad corporativa · Propuesta v1</span>
+      <span>Octubre 2026</span>
+    </div>
+    <div class="wm" aria-label="tatuś">tatu<span class="s">s</span></div>
+    <h1>Una semana cada vez. Y todas guardadas para cuando tenga 18.</h1>
+    <p class="lead muted">Este manual define cómo se ve, cómo suena y cómo se comporta Tatuś: la app que acompaña al padre desde que buscáis el embarazo hasta los cinco años, y que convierte esas semanas en un archivo que su hijo abrirá de mayor.</p>
+    <nav class="toc" aria-label="Contenido">
+      <a href="#producto">Producto</a><a href="#plataforma">Plataforma</a><a href="#nombre">Nombre</a><a href="#logo">Logo</a><a href="#color">Color</a><a href="#tipo">Tipografía</a><a href="#kreska">La kreska</a><a href="#voz">Voz</a><a href="#iconos">Iconos</a><a href="#aplicaciones">Aplicaciones</a><a href="#propuestas">Propuestas</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ PRODUCTO ============ -->
+<section id="producto">
+  <div class="wrap">
+    <p class="eyebrow">Qué es Tatuś</p>
+    <h2>Dos productos en uno: una guía para hoy y un archivo para siempre</h2>
+    <p class="lead read">Hemos leído el código, el plan de producto y el contenido. Tatuś cubre unas 400 semanas de vida familiar, en cuatro fases. Todo vive en el móvil del padre: sin cuenta, sin servidor y sin anuncios.</p>
+    <div class="phases" role="list">
+      <div class="phase" role="listitem" style="background:var(--b-lavanda)">
+        <p class="when">Antes · hasta 80 sem.</p>
+        <h3>Buscar</h3>
+        <ul><li>Días fértiles y test</li><li>Salud de los dos</li><li>Dinero y organización</li></ul>
+      </div>
+      <div class="phase" role="listitem" style="background:var(--b-melocoton)">
+        <p class="when">Embarazo · sem. 1–40</p>
+        <h3>Esperar</h3>
+        <ul><li>Semana a semana prenatal</li><li>Patadas y contracciones</li><li>Plan y señales de parto</li></ul>
+      </div>
+      <div class="phase" role="listitem" style="background:var(--b-yema)">
+        <p class="when">Bebé · sem. 0–52</p>
+        <h3>Llegar</h3>
+        <ul><li>Desarrollo físico, mental, emocional</li><li>Tomas, pañales y sueño</li><li>Vacunas AEP y percentiles OMS</li></ul>
+      </div>
+      <div class="phase" role="listitem" style="background:var(--b-salvia)">
+        <p class="when">Peque · 1–5 años</p>
+        <h3>Crecer</h3>
+        <ul><li>Etapas por edad</li><li>Dosis orientativas</li><li>Citas y revisiones</li></ul>
+      </div>
+    </div>
+    <p class="small muted mt-s">Transversal a todas las fases: diario con fotos e hitos, timeline, resumen del año, multi-perfil y Cartas del Futuro, que se sellan y se exportan a un HTML para el USB de los 18 años.</p>
+
+    <h3 class="mt">Diagnóstico de la imagen actual</h3>
+    <p class="muted mt-s read">El producto tiene una idea muy fuerte y una imagen por defecto. Hoy Tatuś se parece a cualquier app hecha con Tailwind.</p>
+    <div class="scroll-x mt-s">
+      <table class="diag">
+        <thead><tr><th>Elemento</th><th>Hoy</th><th>Problema</th><th>Propuesta</th></tr></thead>
+        <tbody>
+          <tr><td>Color</td><td><code>#2563eb</code>, el <code>blue-600</code> de Tailwind</td><td>Es el azul de miles de apps y además lee como “bebé niño”.</td><td>Tinta + Yema, con un color por fase.</td></tr>
+          <tr><td>Icono</td><td>Una “T” blanca en fuente del sistema</td><td>Se dibuja distinto en cada móvil y no se puede registrar ni recordar.</td><td>El símbolo “el gesto”.</td></tr>
+          <tr><td>Favicon</td><td><code>public/favicon.svg</code> es el rayo de Vite</td><td>Restos de la plantilla.</td><td>Sustituir por el símbolo.</td></tr>
+          <tr><td>Tipografía</td><td><code>system-ui</code></td><td>Sin personalidad y sin un registro especial para las cartas.</td><td>Tres familias con un papel cada una.</td></tr>
+          <tr><td>Iconografía</td><td>Emojis (📅 🦶 💉 💊)</td><td>Cambian según el sistema y dan un tono infantil a temas médicos.</td><td>Set propio de línea, cada icono con su kreska.</td></tr>
+          <tr><td>Share card</td><td>Degradado azul y “★ Hito especial”</td><td>Genérica, nadie la reconoce al verla en Instagram.</td><td>Tarjeta Tinta con la frase en Literata.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLATAFORMA ============ -->
+<section id="plataforma" class="band">
+  <div class="wrap">
+    <p class="eyebrow">Plataforma de marca</p>
+    <h2>Presencia que queda</h2>
+    <p class="lead read">Las apps de crianza están pensadas para la madre y para el día de hoy. Tatuś se dirige al padre y piensa en dos tiempos a la vez: lo que toca esta semana y lo que su hijo leerá dentro de 18 años.</p>
+
+    <div class="grid g2 mt">
+      <div class="stack">
+        <p class="statement">Para el padre que quiere estar de verdad, <b>Tatuś</b> es la guía semana a semana que le dice qué está viviendo su hijo y qué puede hacer él, y que guarda todo lo que escribe en un archivo privado que su hijo recibirá a los 18.</p>
+        <p class="small muted">Declaración de posicionamiento</p>
+      </div>
+      <div>
+        <svg class="posmap" viewBox="0 0 520 360" role="img" aria-label="Mapa de posicionamiento: Tatuś se sitúa en para siempre y pensado para el padre">
+          <line class="ax" x1="40" y1="180" x2="500" y2="180"/>
+          <line class="ax" x1="270" y1="20" x2="270" y2="330"/>
+          <text x="40" y="200">Para hoy</text>
+          <text x="500" y="200" text-anchor="end">Para siempre</text>
+          <text x="278" y="34">Pensada para el padre</text>
+          <text x="278" y="326">Pensada para la madre</text>
+          <circle class="c" cx="120" cy="268" r="9"/><text class="lbl" x="134" y="273">Apps de semanas mágicas</text>
+          <circle class="c" cx="96" cy="230" r="9"/><text class="lbl" x="110" y="235">Portales de embarazo</text>
+          <circle class="c" cx="410" cy="250" r="9"/><text class="lbl" x="380" y="280" text-anchor="middle">Álbumes familiares</text>
+          <circle class="c" cx="170" cy="160" r="9"/><text class="lbl" x="184" y="165">Trackers de tomas</text>
+          <circle class="t" cx="420" cy="74" r="14"/><text class="lblT" x="402" y="80" text-anchor="end">Tatuś</text>
+        </svg>
+        <p class="small muted">Lectura cualitativa del mercado por categorías, no un estudio.</p>
+      </div>
+    </div>
+
+    <div class="grid g4 mt">
+      <div class="pillar"><h4>Propósito</h4><p>Que ningún padre se pierda los primeros años por no saber qué hacer.</p></div>
+      <div class="pillar"><h4>Promesa</h4><p>Cada semana sabrás qué le pasa a tu hijo y qué puedes hacer tú. Lo que escribas, lo leerá.</p></div>
+      <div class="pillar"><h4>Público</h4><p>Padres primerizos de 28 a 42 años en España. Con ganas, poco tiempo y nadie que les explique nada.</p></div>
+      <div class="pillar"><h4>Personalidad</h4><p>El amigo que fue padre hace dos años: habla claro, no sermonea y no se ríe de ti.</p></div>
+    </div>
+
+    <h3 class="mt">Cuatro valores, cada uno con su prueba en el producto</h3>
+    <div class="grid g4 mt-s">
+      <div class="pillar"><h4>Presente</h4><p>Una tarea concreta por semana, no cien artículos. Prueba: “Tus tareas ahora”.</p></div>
+      <div class="pillar"><h4>Privado</h4><p>Sin cuenta, sin nube obligatoria. Los datos son tuyos. Prueba: offline-first y export JSON.</p></div>
+      <div class="pillar"><h4>Paciente</h4><p>Pensamos en 936 semanas, no en la próxima notificación. Prueba: las cartas selladas.</p></div>
+      <div class="pillar"><h4>Honesto</h4><p>Decimos de dónde sale cada dato y cuándo hay que ir al pediatra. Prueba: AAP, OMS, AEP.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NOMBRE ============ -->
+<section id="nombre">
+  <div class="wrap">
+    <p class="eyebrow">El nombre</p>
+    <div class="name-hero">
+      <div class="big-s" aria-hidden="true">s</div>
+      <div class="stack read">
+        <h2>Tatuś significa “papi” en polaco</h2>
+        <p class="pron">TÁ-tush <span class="muted small">/ˈta.tuɕ/</span></p>
+        <p>Es la forma más cariñosa de decir papá, la que usan los niños pequeños. El nombre ya contiene el tono: no es “padre” ni “papá”, es como te llama tu hijo.</p>
+        <p>El acento sobre la <b>s</b> se llama <b>kreska</b> en polaco, que significa “rayita”. Esa rayita es el activo central de la marca. Sobre la letra es un adulto inclinado sobre algo pequeño, y repetida es la forma más antigua de contar el tiempo: una raya por semana.</p>
+        <p class="small muted">Reglas: el logotipo siempre lleva la kreska. En dominios, usuarios y rutas se escribe <code>tatus</code>. En texto corrido, “Tatuś” con mayúscula.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LOGO ============ -->
+<section id="logo" class="band">
+  <div class="wrap">
+    <p class="eyebrow">Logotipo y símbolo</p>
+    <h2>El gesto: alguien grande inclinado sobre alguien pequeño</h2>
+    <p class="lead read">El logotipo es la palabra en minúsculas con la kreska en yema. El símbolo reduce la ś a lo esencial: la kreska (el padre) se inclina hacia el punto (el hijo). Se lee igual a 16 píxeles que en una caja.</p>
+
+    <div class="logo-board mt">
+      <div class="tile t-leche">
+        <span class="cap">Logotipo principal · sobre Leche</span>
+        <div class="wm">tatu<span class="s">s</span></div>
+      </div>
+      <div class="tile t-tinta">
+        <span class="cap">Símbolo · icono de app</span>
+        <svg class="sym" width="140" height="140" aria-label="Símbolo de Tatuś"><use href="#simbolo"/></svg>
+      </div>
+      <div class="tile t-tinta">
+        <span class="cap">Logotipo invertido · sobre Tinta</span>
+        <div class="wm">tatu<span class="s">s</span></div>
+      </div>
+      <div class="tile t-yema">
+        <span class="cap">Uso de celebración · kreska en Tinta</span>
+        <div class="wm">tatu<span class="s">s</span></div>
+      </div>
+    </div>
+
+    <div class="grid g2 mt">
+      <div class="construct">
+        <svg viewBox="0 0 512 512" role="img" aria-label="Construcción del símbolo">
+          <use href="#simbolo"/>
+          <circle class="gl" cx="218" cy="330" r="74"/>
+          <line class="gl" x1="160" y1="388" x2="380" y2="80"/>
+          <line class="gl" x1="0" y1="330" x2="512" y2="330"/>
+          <line class="gl" x1="218" y1="0" x2="218" y2="512"/>
+          <text class="gt" x="300" y="350" fill="#F7F5EF">punto · r = 74</text>
+          <text class="gt" x="368" y="146" fill="#F7F5EF">kreska · 42°</text>
+        </svg>
+        <p class="small muted mt-s">La kreska va a 42°, con un grosor igual a 0,78 veces el radio del punto y extremos redondos. El hueco entre kreska y punto es igual al grosor de la kreska.</p>
+      </div>
+      <div class="stack">
+        <h3>Versiones y lockup</h3>
+        <div class="lockup">
+          <svg aria-hidden="true"><use href="#simbolo"/></svg>
+          <div class="wm">tatu<span class="s">s</span></div>
+        </div>
+        <p class="muted small">El lockup horizontal se usa en web, la tienda de apps y documentos. El símbolo solo se usa donde la marca ya está presente: icono, favicon, lacre, perfil de redes.</p>
+        <h4 class="mt-s">Espacio y tamaños</h4>
+        <p class="muted small">Área de respeto: la altura de la “t” por los cuatro lados. Tamaño mínimo: logotipo de 72 px (18 mm en impresión) y símbolo de 16 px. Por debajo de 24 px el símbolo pierde las esquinas redondeadas.</p>
+      </div>
+    </div>
+
+    <h3 class="mt">Usos incorrectos</h3>
+    <div class="dont mt-s">
+      <figure><div class="wm" style="font-style:italic;transform:skewX(-12deg)">tatu<span class="s">s</span></div><figcaption><span class="x">✕</span> Inclinar o deformar</figcaption></figure>
+      <figure><div class="wm">Tatus</div><figcaption><span class="x">✕</span> Quitar la kreska</figcaption></figure>
+      <figure><div class="wm" style="background:linear-gradient(90deg,#7c3aed,#2563eb);-webkit-background-clip:text;background-clip:text;color:transparent">tatu<span class="s">s</span></div><figcaption><span class="x">✕</span> Degradados</figcaption></figure>
+      <figure><div class="wm" style="color:#E879A6">tatu<span class="s" style="--x:0">s</span></div><figcaption><span class="x">✕</span> Rosa o azul bebé</figcaption></figure>
+      <figure><div class="wm" style="font-family:Georgia,serif;letter-spacing:0;font-weight:700">tatu<span class="s">s</span></div><figcaption><span class="x">✕</span> Cambiar la letra</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COLOR ============ -->
+<section id="color">
+  <div class="wrap">
+    <p class="eyebrow">Color</p>
+    <h2>Tinta de pluma, yema de huevo y leche</h2>
+    <p class="lead read">Tres colores con nombre propio y su papel. La Tinta remite a las cartas escritas a mano. La Yema es la luz de una lámpara a las tres de la mañana y la marca de cada semana nueva. No usamos rosa ni azul bebé: Tatuś no adivina el sexo de nadie.</p>
+    <div class="swatches mt">
+      <button class="sw sw-tinta" data-hex="#1C2650"><span class="n">Tinta</span><span class="h">#1C2650 · RGB 28 38 80</span><span class="u">Texto, superficies de marca, botones</span></button>
+      <button class="sw sw-yema" data-hex="#F4B41A"><span class="n">Yema</span><span class="h">#F4B41A · RGB 244 180 26</span><span class="u">La kreska, semana nueva, acentos</span></button>
+      <button class="sw sw-leche" data-hex="#F7F5EF"><span class="n">Leche</span><span class="h">#F7F5EF</span><span class="u">Fondo</span></button>
+    </div>
+    <h3 class="mt">Un color por fase de vida</h3>
+    <p class="muted mt-s read">Cada fase de la app tiene su color. Se usa en la cabecera de la semana, en las etiquetas de la guía y en el calendario de kreskas. Nunca como fondo de texto largo.</p>
+    <div class="phase-sw">
+      <button class="sw" style="background:var(--b-lavanda)" data-hex="#B8B1E2"><span class="n">Lavanda</span><span class="h">#B8B1E2 · Buscar</span></button>
+      <button class="sw" style="background:var(--b-melocoton)" data-hex="#F2A68A"><span class="n">Melocotón</span><span class="h">#F2A68A · Esperar</span></button>
+      <button class="sw" style="background:var(--b-yema)" data-hex="#F4B41A"><span class="n">Yema</span><span class="h">#F4B41A · Llegar</span></button>
+      <button class="sw" style="background:var(--b-salvia)" data-hex="#7FA889"><span class="n">Salvia</span><span class="h">#7FA889 · Crecer</span></button>
+    </div>
+    <p class="copied" id="copied" aria-live="polite">Pulsa un color para copiar su código.</p>
+    <h4 class="mt">Proporción en pantalla</h4>
+    <div class="ratio" aria-label="Proporción: 60% Leche, 25% Tinta, 10% blanco, 5% Yema">
+      <span style="flex:60;background:var(--b-leche);box-shadow:inset 0 0 0 1px var(--line)"></span><span style="flex:25;background:var(--b-tinta)"></span><span style="flex:10;background:#fff;box-shadow:inset 0 0 0 1px var(--line)"></span><span style="flex:5;background:var(--b-yema)"></span>
+    </div>
+    <p class="small muted mt-s">60 Leche · 25 Tinta · 10 blanco de tarjeta · 5 Yema. La Yema es escasa a propósito: si aparece, es que algo importa. Como texto sobre claro se usa su versión oscura <code>#8A5B00</code> (contraste AA). Avisos médicos: rojo <code>#C2412D</code> y ámbar <code>#B45309</code>, separados de la marca.</p>
+  </div>
+</section>
+
+<!-- ============ TIPO ============ -->
+<section id="tipo" class="band">
+  <div class="wrap">
+    <p class="eyebrow">Tipografía</p>
+    <h2>Tres voces: la marca, la ayuda y la carta</h2>
+    <p class="lead read">Cada familia tiene un trabajo y no se mezclan. Las tres son libres (Google Fonts) y tienen la ś polaca.</p>
+    <div class="grid g3 mt">
+      <div class="typecard">
+        <span class="spec">Marca y titulares · Bricolage Grotesque 700–800</span>
+        <div class="tA">Semana 23</div>
+        <p class="why">Grotesca con carácter y algo de imperfección, cálida sin ser infantil. Para el logotipo, los números de semana y los titulares.</p>
+      </div>
+      <div class="typecard">
+        <span class="spec">Interfaz y texto · Atkinson Hyperlegible 400/700</span>
+        <div class="tB">5-1-1 · 38,2 °C</div>
+        <p class="why">Diseñada para la máxima legibilidad. Tatuś se usa a las 3 a.m., con un ojo abierto y un bebé en brazos: dosis, temperaturas y horas no pueden confundirse.</p>
+      </div>
+      <div class="typecard">
+        <span class="spec">Cartas del Futuro · Literata cursiva</span>
+        <div class="tC">Querida Lucía,</div>
+        <p class="why">Una serif pensada para leer textos largos. Solo aparece cuando el padre escribe a su hijo: en las cartas, en el USB y en las share cards.</p>
+      </div>
+    </div>
+    <h3 class="mt">Escala</h3>
+    <div class="scale">
+      <div><span class="k">Display 40/44</span><span class="v" style="font-family:var(--display);font-weight:800;font-size:40px;letter-spacing:-.035em;line-height:1.1">Ha empezado la semana 24</span></div>
+      <div><span class="k">Título 24/30</span><span class="v" style="font-family:var(--display);font-weight:700;font-size:24px">Tus tareas esta semana</span></div>
+      <div><span class="k">Cuerpo 17/26</span><span class="v">Empieza a reconocer tu cara. Háblale de cerca, a unos 25 cm.</span></div>
+      <div><span class="k">Etiqueta 12 · +10%</span><span class="v" style="font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase">Físico · Mental · Emocional</span></div>
+      <div><span class="k">Carta 19/30</span><span class="v" style="font-family:var(--letter);font-style:italic;font-size:19px">Hoy te has reído por primera vez y no sabía qué hacer con tanta alegría.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KRESKA ============ -->
+<section id="kreska">
+  <div class="wrap">
+    <p class="eyebrow">El sistema de la kreska</p>
+    <h2>Dieciocho años son 936 rayitas</h2>
+    <p class="lead read">La kreska es la unidad de la marca: una raya por semana, como las marcas en la pared de un cuaderno de bitácora. Las 40 semanas de embarazo y las 936 hasta los 18 forman el patrón gráfico de Tatuś. Sirve de calendario en la app, de textura en la caja del USB y de fondo en la web.</p>
+    <div class="kctl">
+      <label for="wk" class="small muted">Mueve la semana de vida de ejemplo</label>
+      <input type="range" id="wk" min="-40" max="935" value="23">
+      <span class="kread" id="kread">Semana 23</span>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--b-melocoton)"></i>Embarazo</span>
+      <span><i style="background:var(--b-yema)"></i>Primer año</span>
+      <span><i style="background:var(--b-salvia)"></i>1–5 años</span>
+      <span><i style="background:var(--ink);opacity:.55"></i>Años de cartas</span>
+      <span><i style="background:var(--future)"></i>Por vivir</span>
+    </div>
+    <div class="kgrid" id="kgrid" aria-label="Calendario de 936 semanas"></div>
+  </div>
+</section>
+
+<!-- ============ VOZ ============ -->
+<section id="voz" class="band">
+  <div class="wrap">
+    <p class="eyebrow">Voz y tono</p>
+    <h2>Habla como el amigo que ya pasó por esto</h2>
+    <div class="grid g4 mt">
+      <div class="pillar"><h4>Claro antes que bonito</h4><p>A las 3 a.m. no se leen metáforas. Verbo, número y unidad.</p></div>
+      <div class="pillar"><h4>De tú, sin colegueo</h4><p>Nada de “campeón” ni de chistes de padre torpe. Le tratamos como a un adulto capaz.</p></div>
+      <div class="pillar"><h4>Sin culpa</h4><p>“Duerme cuando puedas. No es rendirse, es estrategia.” Nunca “deberías”.</p></div>
+      <div class="pillar"><h4>Honesto con los límites</h4><p>Decimos la fuente y cuándo ir al médico, sin alarmar ni quitar importancia.</p></div>
+    </div>
+
+    <h3 class="mt">Antes y después, con textos reales de la app</h3>
+    <div class="scroll-x mt-s">
+      <table class="ba">
+        <thead><tr><th>Hoy</th><th>Propuesta</th></tr></thead>
+        <tbody>
+          <tr><td class="before">Tu compañero de paternidad, semana a semana.</td><td>Una semana cada vez. Y todas guardadas para cuando tenga 18.</td></tr>
+          <tr><td class="before">¡Nueva semana!</td><td>Ha empezado la semana 24.</td></tr>
+          <tr><td class="before">Error al guardar — intenta de nuevo.</td><td>No se ha guardado. Lo que escribiste sigue aquí; vuelve a intentarlo.</td></tr>
+          <tr><td class="before">¿Borrar esta carta permanentemente?</td><td>¿Borrar esta carta? No se podrá recuperar.</td></tr>
+          <tr><td class="before">¿Sellar esta carta? No podrás editarla después.</td><td>¿Sellar la carta? Quedará cerrada hasta que Lucía la abra.</td></tr>
+          <tr><td class="before">★ Hito especial</td><td>Primera vez</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="mt">El tono cambia según el momento</h3>
+    <div class="grid g3 mt-s">
+      <div class="moment"><span class="tag">3 a.m. · Registro</span><p class="say">Toma anotada: 23:40, 90 ml. La próxima, sobre las 2:40.</p><p class="rule">Lo mínimo posible. Sin saludos ni emojis.</p></div>
+      <div class="moment"><span class="tag">Parto · Contracciones</span><p class="say">Llevas una hora con contracciones cada 5 minutos que duran 1 minuto. Es momento de ir al hospital.</p><p class="rule">Directo, en calma y con la acción primero.</p></div>
+      <div class="moment"><span class="tag">Domingo · Carta</span><p class="say">Esta semana ha empezado a reconocer tu cara. ¿Qué te gustaría que supiera de este momento?</p><p class="rule">Cálido y lento. Aquí sí se permite emocionar.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ICONOS ============ -->
+<section id="iconos">
+  <div class="wrap">
+    <p class="eyebrow">Iconografía</p>
+    <h2>Un set propio que sustituye a los emojis</h2>
+    <p class="lead read">Trazo de 1,75 px en una retícula de 24, extremos redondos, en Tinta. Cada icono lleva una sola kreska en Yema, que marca la parte importante: la aguja del reloj, el día de la cita, el tramo que sube.</p>
+    <div class="icons mt" id="icons"></div>
+  </div>
+</section>
+
+<!-- ============ APLICACIONES ============ -->
+<section id="aplicaciones" class="band">
+  <div class="wrap">
+    <p class="eyebrow">Aplicaciones</p>
+    <h2>La marca en cada punto de contacto</h2>
+    <p class="lead read">Nombres, fechas y textos son ejemplos para mostrar el sistema.</p>
+    <div class="apps mt">
+      <figure>
+        <div class="homescreen" aria-label="Pantalla de inicio de un móvil con el icono de Tatuś">
+          <div><span class="ph"></span>Fotos</div><div><span class="ph"></span>Mapas</div><div><span class="ph"></span>Notas</div><div><span class="ph"></span>Reloj</div>
+          <div><span class="ph"></span>Correo</div><div><svg viewBox="0 0 512 512" aria-hidden="true"><use href="#simbolo"/></svg>Tatuś</div><div><span class="ph"></span>Salud</div><div><span class="ph"></span>Cámara</div>
+        </div>
+        <figcaption><b>Icono de app.</b> Tinta destaca entre fondos de pantalla claros y oscuros; la Yema da el punto de luz.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="screen">
+          <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+          <div class="scr-body">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="wm" style="font-size:22px">tatu<span class="s">s</span></span>
+              <span style="width:30px;height:30px;border-radius:50%;background:var(--b-yema);display:grid;place-items:center;font-weight:700;font-size:13px">L</span>
+            </div>
+            <div>
+              <p class="scr-week">Lucía · Semana 23 de vida</p>
+              <p class="scr-h" style="margin-top:6px">Ya reconoce tu cara</p>
+            </div>
+            <div class="scr-days" aria-label="Día 4 de 7"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+            <div class="scr-card"><p class="lab">Emocional</p>Distingue a las personas cercanas y puede extrañar a los desconocidos.</div>
+            <div class="scr-task"><p class="lab">Tu tarea esta semana</p>Cuando la cambies, háblale a 25 cm de su cara y espera a que te responda con sonidos.</div>
+          </div>
+          <div class="nav">
+            <span class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4.5 20 11v8.5H4z"/><path class="k" d="M11 18.5l2.5-3.5"/></svg>Inicio</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><path class="k" d="M15 19.5l4-5"/></svg>Útiles</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path class="k" d="M10 14.5l4-5"/></svg>Guía</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h10a3 3 0 0 1 3 3v13H9a3 3 0 0 1-3-3z"/><path d="M6 17a3 3 0 0 1 3-3h10"/><path class="k" d="M11 10.5l3-3.5"/></svg>Diario</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3.5 7.5 12 13l8.5-5.5"/><path class="k" d="M17 4.5 19.5 2"/></svg>Cartas</span>
+          </div>
+        </div></div>
+        <figcaption><b>Inicio.</b> El número de semana manda. Los días ya vividos de la semana se marcan con kreskas y la tarea del padre va en bloque Tinta.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="screen night">
+          <div class="sbar"><span>3:12</span><span>●●● ▮</span></div>
+          <div class="scr-body">
+            <p class="scr-week">Modo 3 a.m.</p>
+            <p class="scr-h">Última toma hace 2 h 32 min</p>
+            <div class="night-log">
+              <div><span>00:40</span><span>Biberón · 90 ml</span></div>
+              <div><span>00:55</span><span>Pañal · mojado</span></div>
+              <div><span>21:50</span><span>Pecho · izq. 14 min</span></div>
+            </div>
+            <div class="night-big">+ Anotar toma</div>
+          </div>
+        </div></div>
+        <figcaption><b>Modo 3 a.m.</b> Entre las 22:00 y las 7:00 la app pasa a ámbar sobre negro cálido, sin luz azul y con botones enormes. Es el momento en el que más se usa y donde nadie más lo cuida.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="share">
+          <div class="wm">tatu<span class="s">s</span></div>
+          <div>
+            <p class="wk">PRIMERA VEZ · SEMANA 23</p>
+            <p class="q">“Hoy se ha reído a carcajadas cuando le he soplado en la barriga. Lo he repetido catorce veces.”</p>
+          </div>
+          <div class="foot">
+            <span>Lucía · 14 mar 2026</span>
+            <span class="ticks" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span>
+          </div>
+        </div>
+        <figcaption><b>Share card de hito.</b> La frase del padre en Literata. Se reconoce de un vistazo en una historia de Instagram, sin mostrar la cara del bebé.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="env">
+          <div class="seal"><svg viewBox="0 0 512 512" aria-hidden="true" style="color:#8A5B00"><use href="#gesto"/></svg></div>
+          <p class="to"><i>Para Lucía</i><br>Abrir el 14 de marzo de 2044</p>
+        </div>
+        <figcaption><b>Carta sellada.</b> Al sellarla, la carta se cierra con un lacre Yema que lleva el símbolo. Es el gesto más emotivo de la app y tiene que verse así.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="box">
+          <div class="lid"></div>
+          <div class="usb" aria-hidden="true"></div>
+          <div style="position:relative"><span class="wm" style="font-size:22px;color:var(--b-leche)">tatu<span class="s">s</span></span></div>
+          <div>
+            <p class="num">936</p>
+            <p class="sub">semanas. Las escribió tu padre, una a una.</p>
+          </div>
+        </div>
+        <figcaption><b>La caja de los 18.</b> El objeto final de la marca: una caja Tinta con un USB Yema que contiene el HTML con las cartas, el diario y el timeline. Puede ser un producto físico de pago.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROPUESTAS ============ -->
+<section id="propuestas">
+  <div class="wrap">
+    <p class="eyebrow">Propuestas</p>
+    <h2>Qué hacer, en este orden</h2>
+    <p class="lead read">Las primeras cinco caben en una o dos sesiones de trabajo sobre el código actual. El resto convierte la identidad en producto y en negocio.</p>
+    <ol class="road mt">
+      <li><div><h4>Tokens de marca en la app</h4><p>Definir Tinta, Yema, Leche y los colores de fase en <code>@theme</code> de <code>src/index.css</code>, sustituir <code>blue-600</code> en los componentes y cambiar <code>theme_color</code> a <code>#1C2650</code> en el manifest y en <code>index.html</code>.</p></div><span class="eff">S · 1 h</span></li>
+      <li><div><h4>Icono, favicon y PWA</h4><p>Sustituir <code>tatus-icon.svg</code> por el símbolo (ya está en <code>docs/brand/tatus-simbolo.svg</code>), regenerar los PNG y la versión maskable, y borrar el <code>favicon.svg</code> de Vite.</p></div><span class="eff">S · 30 min</span></li>
+      <li><div><h4>Tipografías</h4><p>Cargar Bricolage, Atkinson y Literata, autoalojadas para que funcionen offline dentro de la PWA. Literata solo en Cartas y en el HTML del USB.</p></div><span class="eff">S · 1 h</span></li>
+      <li><div><h4>Share card nueva</h4><p>Rehacer <code>src/utils/shareCard.ts</code> con el fondo Tinta, la frase en Literata, la etiqueta “Primera vez” y la fila de kreskas.</p></div><span class="eff">S · 1 h</span></li>
+      <li><div><h4>Textos con la nueva voz</h4><p>Revisar los mensajes de error, confirmaciones y toasts siguiendo la tabla de antes y después.</p></div><span class="eff">S · 1 h</span></li>
+      <li><div><h4>Set de iconos propio</h4><p>Sustituir los emojis de <code>src/data/tools.ts</code>, <code>LinkRow</code> y <code>BottomNav</code> por los iconos con kreska.</p></div><span class="eff">M · ½ día</span></li>
+      <li><div><h4>Modo 3 a.m.</h4><p>Tema nocturno ámbar automático por horario y al abrir el Registro de tomas. Es la función con más personalidad y la que más se nota.</p></div><span class="eff">M · ½ día</span></li>
+      <li><div><h4>El ritual del domingo</h4><p>Al desbloquear la semana, la kreska nueva se dibuja en el calendario con una vibración corta. Sustituye al badge “¡Nueva semana!”.</p></div><span class="eff">S · 2 h</span></li>
+      <li><div><h4>Cartas con lacre y USB con identidad</h4><p>Animación de sellado con el lacre y plantilla de <code>exportLetters.ts</code> con Literata, el calendario de 936 kreskas y la portada de la caja.</p></div><span class="eff">M · 1 día</span></li>
+      <li><div><h4>Web y nombre</h4><p>Landing con el calendario de kreskas interactivo como portada. Comprobar <code>tatus.app</code> o <code>tatus.es</code>, el usuario en redes y el registro de la marca en la OEPM (clases 9 y 42) antes de comunicar nada.</p></div><span class="eff">M</span></li>
+      <li><div><h4>La caja de los 18 como producto</h4><p>Caja física con USB grabado y las cartas impresas en un libro. Es una forma de monetizar sin anuncios ni venta de datos, coherente con “Privado”.</p></div><span class="eff">L</span></li>
+    </ol>
+  </div>
+</section>
+
+<footer class="sign">
+  <div class="wrap">
+    <div class="wm">tatu<span class="s">s</span></div>
+    <p class="muted small mt-s">Manual de marca · Propuesta v1 · Octubre 2026</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Copiar códigos de color
+  var out = document.getElementById('copied');
+  document.querySelectorAll('.sw[data-hex]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var hex = b.getAttribute('data-hex');
+      var done = function () { out.textContent = 'Copiado: ' + hex; };
+      try {
+        navigator.clipboard.writeText(hex).then(done, function () { out.textContent = hex + ' (cópialo a mano)'; });
+      } catch (e) { out.textContent = hex + ' (cópialo a mano)'; }
+    });
+  });
+
+  // Calendario de kreskas
+  var grid = document.getElementById('kgrid');
+  var cells = [];
+  function row(label, n, offset) {
+    var l = document.createElement('span');
+    l.className = 'yl'; l.textContent = label; grid.appendChild(l);
+    for (var i = 0; i < 52; i++) {
+      var c = document.createElement('span');
+      c.className = 'kc';
+      c.appendChild(document.createElement('i'));
+      if (i >= n) c.style.visibility = 'hidden';
+      grid.appendChild(c);
+      if (i < n) cells.push({ el: c, w: offset + i });
+    }
+  }
+  row('Emb.', 40, -40);
+  for (var y = 0; y < 18; y++) row(y + ' a', 52, y * 52);
+
+  var range = document.getElementById('wk');
+  var read = document.getElementById('kread');
+  function paint() {
+    var now = parseInt(range.value, 10);
+    cells.forEach(function (c) {
+      var cls = 'kc';
+      if (c.w === now) cls += ' now';
+      else if (c.w < now) cls += c.w < 0 ? ' pre' : c.w < 52 ? ' bb' : c.w < 260 ? ' cr' : ' lt';
+      c.el.className = cls;
+    });
+    if (now < 0) read.textContent = 'Embarazo · semana ' + (40 + now + 1);
+    else read.textContent = 'Semana ' + now + ' · faltan ' + (936 - now) + ' para los 18';
+  }
+  range.addEventListener('input', paint);
+  paint();
+
+  // Set de iconos
+  var S = 'fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"';
+  var icons = [
+    ['Días fértiles', '<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/><path class="k" d="M10.5 17.5l3-4"/>'],
+    ['Patadas', '<path d="M9 21c-2.5 0-3.5-2-3.5-4.5S7 10 9.5 10s3.5 2 3.5 4.5-1.5 6.5-4 6.5z"/><circle cx="8" cy="6.5" r="1.2"/><circle cx="11" cy="5.2" r="1.2"/><circle cx="14" cy="6.5" r="1.2"/><path class="k" d="M16.5 13l3-3.5"/>'],
+    ['Contracciones', '<circle cx="12" cy="13.5" r="7"/><path d="M10 3h4M12 3v3.5"/><path class="k" d="M12 13.5l3-3.5"/>'],
+    ['Registro', '<path d="M9 9h6v9.5a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/><path d="M10 9V6.5h4V9M11 3.5h2"/><path class="k" d="M10.8 17.5l2.4-3"/>'],
+    ['Crecimiento', '<path d="M4 20h16M4 20V4"/><path d="M7 16l4-4 3 2"/><path class="k" d="M14 14l5-6.5"/>'],
+    ['Vacunas', '<path d="M12 3.5l7 3v5c0 4.3-3 7.6-7 9.5-4-1.9-7-5.2-7-9.5v-5z"/><path class="k" d="M10.2 14.5l3.6-4.5"/>'],
+    ['Dosis', '<path d="M12 3.5c3 4 6 7.3 6 10.7a6 6 0 0 1-12 0c0-3.4 3-6.7 6-10.7z"/><path class="k" d="M10 17l3-3.5"/>'],
+    ['Citas', '<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/><circle cx="9" cy="14.5" r=".6"/><path class="k" d="M13.5 17.5l3-4"/>'],
+    ['Listas', '<path d="M9 7h11M9 12h11M9 17h7"/><path d="M4 7h.01M4 12h.01"/><path class="k" d="M3.5 17.5l2-3"/>'],
+    ['Diario', '<path d="M6 4h10a3 3 0 0 1 3 3v13H9a3 3 0 0 1-3-3z"/><path d="M6 17a3 3 0 0 1 3-3h10"/><path class="k" d="M11 10.5l3-3.5"/>'],
+    ['Cartas', '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3.5 7.5 12 13l8.5-5.5"/><path class="k" d="M17 4.5 19.5 2"/>'],
+    ['Hito', '<circle cx="12" cy="13" r="4"/><path d="M12 3v3M12 20v1M4 13H3M21 13h-1"/><path class="k" d="M17 8l2-2.5"/>']
+  ];
+  var box = document.getElementById('icons');
+  icons.forEach(function (ic) {
+    var d = document.createElement('div');
+    d.className = 'ic';
+    d.innerHTML = '<svg viewBox="0 0 24 24" ' + S + ' aria-hidden="true">' + ic[1] + '</svg><span>' + ic[0] + '</span>';
+    box.appendChild(d);
+  });
+})();
+</script>

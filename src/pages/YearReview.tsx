@@ -87,7 +87,7 @@ export default function YearReview() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <div className="min-h-screen bg-[#fafaf8] pb-10">
+    <div className="min-h-screen bg-leche pb-10">
       {/* Header */}
       <div className="flex items-center gap-3 px-5 pt-12 pb-4 border-b border-gray-100">
         <button onClick={() => navigate('/ajustes')} className="text-gray-400">
@@ -130,11 +130,11 @@ export default function YearReview() {
         <div className="px-5 pt-6 space-y-6">
           {/* Baby + week range */}
           {data.weekRange && (
-            <div className="bg-blue-50 rounded-2xl px-5 py-4">
-              <p className="text-xs font-semibold uppercase tracking-widest text-blue-400 mb-1">
+            <div className="bg-tinta-50 rounded-2xl px-5 py-4">
+              <p className="text-xs font-semibold uppercase tracking-widest text-tinta-400 mb-1">
                 {profile.name} en {year}
               </p>
-              <p className="text-sm text-blue-800">
+              <p className="text-sm text-tinta-800">
                 {data.weekRange.min < 0
                   ? `Embarazo — semana ${Math.max(1, 40 + data.weekRange.min)}`
                   : `Semana ${data.weekRange.min}`}
@@ -201,7 +201,7 @@ export default function YearReview() {
               <ul className="space-y-3">
                 {data.topMilestones.map(entry => (
                   <li key={entry.id} className="flex gap-3">
-                    <span className="text-amber-500 mt-0.5 shrink-0">★</span>
+                    <span className="text-yema mt-0.5 shrink-0">★</span>
                     <div className="min-w-0">
                       <p className="text-xs text-gray-400 mb-0.5 capitalize">
                         {new Date(entry.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}

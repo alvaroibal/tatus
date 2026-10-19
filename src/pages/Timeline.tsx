@@ -35,7 +35,7 @@ export default function Timeline() {
         <div className="flex flex-col items-center justify-center py-20 px-6 text-center text-gray-400">
           <p className="text-4xl mb-3">⭐</p>
           <p className="text-sm leading-relaxed max-w-xs">
-            Aún no hay hitos. Marca una entrada del diario como hito especial y aparecerá aquí.
+            Aún no hay primeras veces. Marca una entrada del diario como «primera vez» y aparecerá aquí.
           </p>
         </div>
       ) : (
@@ -48,7 +48,7 @@ export default function Timeline() {
               {milestones.map(entry => (
                 <li key={entry.id} className="relative">
                   {/* dot */}
-                  <div className="absolute -left-7 top-1 w-3 h-3 rounded-full bg-yellow-400 border-2 border-white shadow-sm" />
+                  <div className="absolute -left-7 top-1 w-3 h-3 rounded-full bg-yema border-2 border-white shadow-sm" />
                   <div>
                     <p className="text-xs text-gray-400 capitalize mb-1">
                       {formatDate(entry.date)} · Semana {entry.week}

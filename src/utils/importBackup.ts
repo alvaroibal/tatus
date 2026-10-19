@@ -33,7 +33,7 @@ export async function importBackup(fileContent: string): Promise<boolean> {
 
   const envelope = parsed as BackupEnvelope
   if (![1, 2, 3, 4, 5].includes(envelope?.schemaVersion)) {
-    showToast('Este archivo es de una versión incompatible.')
+    showToast('Este backup es de otra versión de Tatuś y no se puede importar.')
     return false
   }
 

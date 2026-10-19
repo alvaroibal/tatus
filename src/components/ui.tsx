@@ -5,7 +5,7 @@ export function BackHeader({ title, subtitle, right }: { title: string; subtitle
   return (
     <div className="px-5 pt-10 pb-4">
       <div className="flex items-center justify-between mb-2">
-        <button onClick={() => navigate(-1)} className="text-sm text-blue-600 -ml-1 py-1 pr-3">
+        <button onClick={() => navigate(-1)} className="text-sm text-tinta-600 -ml-1 py-1 pr-3">
           ‹ Atrás
         </button>
         {right}
@@ -34,7 +34,7 @@ export function AlertBox({ children, tone = 'red' }: { children: React.ReactNode
   const cls = {
     red: 'bg-red-50 border-red-100 text-red-800',
     amber: 'bg-amber-50 border-amber-100 text-amber-800',
-    blue: 'bg-blue-50 border-blue-100 text-blue-800',
+    blue: 'bg-tinta-50 border-tinta-100 text-tinta-800',
   }[tone]
   return <div className={`border rounded-2xl p-4 text-sm leading-relaxed ${cls}`}>{children}</div>
 }
@@ -55,11 +55,19 @@ export function LinkRow({ emoji, title, subtitle, onClick, badge }: {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="text-sm font-semibold text-gray-900">{title}</p>
-          {badge && <span className="text-[10px] bg-blue-600 text-white px-1.5 py-0.5 rounded-full">{badge}</span>}
+          {badge && <span className="text-[10px] bg-tinta-600 text-white px-1.5 py-0.5 rounded-full">{badge}</span>}
         </div>
         {subtitle && <p className="text-xs text-gray-400 mt-0.5">{subtitle}</p>}
       </div>
       <span className="text-gray-300">›</span>
     </button>
+  )
+}
+
+export function Wordmark({ className = '' }: { className?: string }) {
+  return (
+    <span className={`wordmark ${className}`} aria-label="Tatuś" role="img">
+      tatu<span className="s">s</span>
+    </span>
   )
 }

@@ -3,101 +3,120 @@ import type { DiaryEntry } from '../db/db'
 const W = 1080
 const PAD = 80
 
-function wrapText(
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  x: number,
-  y: number,
-  maxWidth: number,
-  lineHeight: number,
-  maxLines: number
-): void {
-  const words = text.split(' ')
-  let line = ''
-  let drawn = 0
+const TINTA = '#1C2650'
+const YEMA = '#F4B41A'
+const LECHE = '#F7F5EF'
+const DISPLAY = "'Bricolage Grotesque Variable', 'Avenir Next', system-ui, sans-serif"
+const BODY = "'Atkinson Hyperlegible', system-ui, sans-serif"
+const LETTER = "'Literata Variable', Georgia, serif"
 
-  for (let i = 0; i < words.length; i++) {
-    const test = line + words[i] + ' '
-    if (ctx.measureText(test).width > maxWidth && i > 0) {
-      if (drawn === maxLines - 1) {
-        ctx.fillText(line.trimEnd() + '…', x, y)
-        return
-      }
-      ctx.fillText(line.trimEnd(), x, y)
-      line = words[i] + ' '
-      y += lineHeight
-      drawn++
+function drawKreska(ctx: CanvasRenderingContext2D, x: number, y: number, len: number, width: number, color: string) {
+  // Rayita a 42°: (x, y) es el extremo inferior
+  const a = (42 * Math.PI) / 180
+  ctx.strokeStyle = color
+  ctx.lineWidth = width
+  ctx.lineCap = 'round'
+  ctx.beginPath()
+  ctx.moveTo(x, y)
+  ctx.lineTo(x + Math.sin(a) * len, y - Math.cos(a) * len)
+  ctx.stroke()
+}
+
+function drawWordmark(ctx: CanvasRenderingContext2D, x: number, baseline: number, size: number) {
+  ctx.font = `800 ${size}px ${DISPLAY}`
+  ctx.fillStyle = LECHE
+  ctx.fillText('tatus', x, baseline)
+  const sx = x + ctx.measureText('tatu').width
+  const sw = ctx.measureText('s').width
+  drawKreska(ctx, sx + sw * 0.42, baseline - size * 0.6, size * 0.22, size * 0.11, YEMA)
+}
+
+function wrapLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines: number): string[] {
+  const words = text.replace(/\s+/g, ' ').trim().split(' ')
+  const lines: string[] = []
+  let line = ''
+  for (const word of words) {
+    const test = line ? `${line} ${word}` : word
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line)
+      line = word
+      if (lines.length === maxLines) break
     } else {
       line = test
     }
   }
-  if (line.trim()) ctx.fillText(line.trimEnd(), x, y)
+  if (lines.length < maxLines && line) lines.push(line)
+  else if (line && lines.length === maxLines) lines[maxLines - 1] = lines[maxLines - 1].replace(/[\s,.;:]*$/, '') + '…'
+  return lines
 }
 
 export async function generateShareCard(
   entry: DiaryEntry,
   childName: string
 ): Promise<Blob> {
+  try {
+    await Promise.all([
+      document.fonts.load(`800 60px ${DISPLAY}`),
+      document.fonts.load(`700 36px ${DISPLAY}`),
+      document.fonts.load(`italic 400 56px ${LETTER}`),
+      document.fonts.load(`400 34px ${BODY}`),
+    ])
+  } catch { /* si no cargan, el canvas usa las de respaldo */ }
+
   const canvas = document.createElement('canvas')
   canvas.width = W
   canvas.height = W
   const ctx = canvas.getContext('2d')!
+  ctx.textBaseline = 'alphabetic'
 
-  // Background gradient
-  const grad = ctx.createLinearGradient(0, 0, W, W)
-  grad.addColorStop(0, '#1e3a8a')
-  grad.addColorStop(1, '#2563eb')
-  ctx.fillStyle = grad
+  ctx.fillStyle = TINTA
   ctx.fillRect(0, 0, W, W)
 
-  // Subtle texture dots
-  ctx.fillStyle = 'rgba(255,255,255,0.04)'
-  for (let r = 0; r < W; r += 60) {
-    for (let c = 0; c < W; c += 60) {
-      ctx.beginPath()
-      ctx.arc(c, r, 2, 0, Math.PI * 2)
-      ctx.fill()
-    }
+  drawWordmark(ctx, PAD, PAD + 52, 64)
+
+  // Etiqueta de semana
+  const pregnancyWeek = Math.max(1, 40 + entry.week)
+  const weekText = entry.week < 0 ? `SEMANA ${pregnancyWeek} DE EMBARAZO` : `SEMANA ${entry.week}`
+  const label = entry.milestone ? `PRIMERA VEZ · ${weekText}` : weekText
+  ctx.font = `700 34px ${DISPLAY}`
+  ctx.fillStyle = YEMA
+  if ('letterSpacing' in ctx) (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = '2px'
+
+  // Frase del padre en Literata, centrada en vertical en el bloque central
+  const quoteSize = entry.text.length > 160 ? 46 : 56
+  const lineHeight = Math.round(quoteSize * 1.42)
+  ctx.font = `italic 400 ${quoteSize}px ${LETTER}`
+  const lines = wrapLines(ctx, `“${entry.text.trim()}”`, W - PAD * 2, 7)
+  const blockH = 34 + 40 + lines.length * lineHeight
+  let y = Math.max(260, (W - blockH) / 2 + 20)
+
+  ctx.font = `700 34px ${DISPLAY}`
+  ctx.fillText(label, PAD, y)
+  if ('letterSpacing' in ctx) (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = '0px'
+  y += 40 + lineHeight * 0.75
+
+  ctx.font = `italic 400 ${quoteSize}px ${LETTER}`
+  ctx.fillStyle = LECHE
+  for (const line of lines) {
+    ctx.fillText(line, PAD, y)
+    y += lineHeight
   }
 
-  const font = '-apple-system, Helvetica Neue, Arial, sans-serif'
-
-  // App name — top left
-  ctx.fillStyle = 'rgba(255,255,255,0.4)'
-  ctx.font = `500 36px ${font}`
-  ctx.fillText('Tatuś', PAD, PAD + 36)
-
-  // Milestone badge
-  let textY = 220
-  if (entry.milestone) {
-    ctx.fillStyle = '#fbbf24'
-    ctx.font = `600 38px ${font}`
-    ctx.fillText('★ Hito especial', PAD, textY)
-    textY += 70
-  }
-
-  // Week label
-  const weekLabel = entry.week < 0
-    ? `Embarazo — semana ${Math.max(1, 40 + entry.week)}`
-    : `Semana ${entry.week} de vida`
-
-  ctx.fillStyle = 'rgba(147,197,253,0.9)'  // blue-300
-  ctx.font = `500 48px ${font}`
-  ctx.fillText(weekLabel, PAD, textY)
-  textY += 80
-
-  // Entry text
-  ctx.fillStyle = '#ffffff'
-  ctx.font = `400 52px ${font}`
-  wrapText(ctx, entry.text, PAD, textY, W - PAD * 2, 76, 6)
-
-  // Bottom — baby name + date
+  // Pie: nombre y fecha
   const dateStr = new Date(entry.date).toLocaleDateString('es-ES', {
-    day: 'numeric', month: 'long', year: 'numeric',
+    day: 'numeric', month: 'short', year: 'numeric',
   })
-  ctx.fillStyle = 'rgba(255,255,255,0.45)'
-  ctx.font = `400 36px ${font}`
+  ctx.font = `400 34px ${BODY}`
+  ctx.fillStyle = 'rgba(247,245,239,0.7)'
   ctx.fillText(`${childName} · ${dateStr}`, PAD, W - PAD)
+
+  // Pie: kreskas contando de diez en diez, como marcas en la pared
+  const weekNum = entry.week < 0 ? pregnancyWeek : entry.week
+  const lit = (weekNum % 10) + 1
+  for (let i = 0; i < 10; i++) {
+    const x = W - PAD - (9 - i) * 22 - 14
+    drawKreska(ctx, x, W - PAD, 30, 7, i < lit ? YEMA : 'rgba(247,245,239,0.22)')
+  }
 
   return new Promise<Blob>((resolve, reject) =>
     canvas.toBlob(

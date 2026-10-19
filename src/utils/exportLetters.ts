@@ -63,7 +63,7 @@ export async function exportLettersHTML(profile: BabyProfile): Promise<string> {
       font-size: 18px;
       line-height: 1.75;
       color: #1a1a1a;
-      background: #fafaf8;
+      background: #F7F5EF;
       padding: 3rem 1.5rem 6rem;
     }
 
@@ -91,7 +91,7 @@ export async function exportLettersHTML(profile: BabyProfile): Promise<string> {
     header h1 {
       font-size: 2.25rem;
       font-weight: normal;
-      color: #111;
+      color: #1C2650;
       margin-bottom: 0.75rem;
     }
 

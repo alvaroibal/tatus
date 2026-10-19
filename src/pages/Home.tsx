@@ -8,6 +8,7 @@ import { StageCard } from '../components/StageCard'
 import { PrenatalCard } from '../components/PrenatalCard'
 import { SkeletonCard } from '../components/SkeletonCard'
 import { TryingHome } from '../components/TryingHome'
+import { Wordmark } from '../components/ui'
 import { ALL_STAGES } from '../utils/stages'
 import { formatAge, formatTime, startOfDay, timeAgo } from '../utils/age'
 import { VACCINE_LIST_ID, nextVaccineAlert } from '../utils/vaccines'
@@ -67,7 +68,7 @@ function Alert({ emoji, title, subtitle, onClick, tone = 'amber' }: {
 }) {
   const cls = tone === 'amber'
     ? 'bg-amber-50 border-amber-100 [&_.t]:text-amber-800 [&_.s]:text-amber-600 [&_.c]:text-amber-400'
-    : 'bg-blue-50 border-blue-100 [&_.t]:text-blue-800 [&_.s]:text-blue-600 [&_.c]:text-blue-400'
+    : 'bg-tinta-50 border-tinta-100 [&_.t]:text-tinta-800 [&_.s]:text-tinta-600 [&_.c]:text-tinta-400'
   return (
     <button onClick={onClick} className={`w-full border rounded-2xl px-4 py-3 flex items-center gap-3 text-left ${cls}`}>
       <span className="text-base shrink-0">{emoji}</span>
@@ -142,7 +143,9 @@ export default function Home() {
       {/* Cabecera */}
       <div className="px-5 pt-10 pb-3 flex items-center justify-between">
         <div className="min-w-0">
-          <p className="text-2xl font-bold text-gray-900 truncate">{trying ? 'Tatuś' : profile.name}</p>
+          {trying
+            ? <Wordmark className="text-3xl text-tinta-600" />
+            : <p className="font-display text-2xl font-bold text-gray-900 truncate tracking-tight">{profile.name}</p>}
           <p className="text-sm text-gray-400">{subtitle}</p>
         </div>
         <button onClick={() => navigate('/ajustes')} className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 shrink-0" aria-label="Ajustes">
@@ -169,9 +172,12 @@ export default function Home() {
       <div className="px-5 space-y-2 mb-1">
         {showBadge && born && (
           <button onClick={() => setShowBadge(false)} className="w-full">
-            <div className="bg-blue-600 text-white rounded-2xl px-4 py-3 flex items-center justify-between">
-              <span className="text-sm font-semibold">¡Nueva semana desbloqueada! 🎉</span>
-              <span className="text-blue-300 text-sm">✕</span>
+            <div className="bg-tinta-600 text-white rounded-2xl px-4 py-3 flex items-center justify-between">
+              <span className="flex items-center gap-2.5 text-sm font-semibold">
+                <span aria-hidden="true" className="inline-block w-1 h-4 rounded-full bg-yema rotate-[42deg]" />
+                Ha empezado la semana {currentWeek}
+              </span>
+              <span className="text-tinta-300 text-sm">✕</span>
             </div>
           </button>
         )}

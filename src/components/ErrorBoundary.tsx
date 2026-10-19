@@ -23,13 +23,13 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div style={{ padding: '2rem', fontFamily: 'system-ui', textAlign: 'center' }}>
           <p style={{ marginBottom: '1rem' }}>
-            Algo salió mal al cargar los datos.
+            No se han podido cargar tus datos. Siguen guardados en el móvil; recarga la app.
           </p>
           <button
             onClick={() => window.location.reload()}
             style={{
               padding: '0.5rem 1rem',
-              background: '#2563eb',
+              background: '#1C2650',
               color: '#fff',
               border: 'none',
               borderRadius: '0.375rem',

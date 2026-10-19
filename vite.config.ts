@@ -22,8 +22,8 @@ export default defineConfig({
         start_url: '/tatus/',
         scope: '/tatus/',
         display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#2563eb',
+        background_color: '#F7F5EF',
+        theme_color: '#1C2650',
         icons: [
           { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
@@ -32,7 +32,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
         navigateFallback: 'index.html',
       },
     }),

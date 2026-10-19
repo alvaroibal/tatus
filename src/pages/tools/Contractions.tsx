@@ -66,7 +66,7 @@ export default function Contractions() {
         <button
           onClick={toggle}
           className={`w-48 h-48 rounded-full text-white font-bold text-lg shadow-lg active:scale-95 transition-all ${
-            current ? 'bg-red-500' : 'bg-blue-600'
+            current ? 'bg-red-500' : 'bg-tinta-600'
           }`}
         >
           {current ? (

@@ -62,7 +62,7 @@ export default function Kicks() {
             <button onClick={finish} className="text-xs text-gray-400 mt-2 underline">Terminar sesión</button>
           </>
         ) : (
-          <button onClick={start} className="w-48 h-48 rounded-full bg-blue-600 text-white font-bold text-lg shadow-lg active:scale-95">
+          <button onClick={start} className="w-48 h-48 rounded-full bg-tinta-600 text-white font-bold text-lg shadow-lg active:scale-95">
             Empezar a contar
           </button>
         )}

@@ -54,7 +54,7 @@ function GrowthChart({ metric, records, sex, maxWeek }: {
           {sex && <Line dataKey="P97" stroke="#cbd5e1" strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={false} />}
           {sex && <Line dataKey="P50" stroke="#94a3b8" strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={false} />}
           {sex && <Line dataKey="P3" stroke="#cbd5e1" strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={false} />}
-          <Line dataKey="Bebé" stroke={metric === 'weight' ? '#2563eb' : '#16a34a'} strokeWidth={2} dot={{ r: 4 }} connectNulls />
+          <Line dataKey="Bebé" stroke={metric === 'weight' ? '#1C2650' : '#5E8C69'} strokeWidth={2} dot={{ r: 4 }} connectNulls />
         </ComposedChart>
       </ResponsiveContainer>
     </div>
@@ -123,7 +123,7 @@ export default function GrowthTracker() {
       })
       showToast('Medida guardada')
     } catch {
-      showToast('Error al guardar — tu almacenamiento puede estar lleno.')
+      showToast('No se ha guardado la medida. Puede que el móvil no tenga espacio: exporta un backup desde Ajustes.')
     } finally {
       setSaving(false)
     }
@@ -147,11 +147,11 @@ export default function GrowthTracker() {
 
       {!profile.sex && (
         <div className="px-5 mb-5">
-          <div className="bg-blue-50 rounded-2xl p-4">
-            <p className="text-sm text-blue-900 mb-3">Para comparar con las curvas de la OMS (que son distintas para niños y niñas):</p>
+          <div className="bg-tinta-50 rounded-2xl p-4">
+            <p className="text-sm text-tinta-900 mb-3">Para comparar con las curvas de la OMS (que son distintas para niños y niñas):</p>
             <div className="flex gap-2">
-              <button onClick={() => setSex('boy')} className="flex-1 bg-white rounded-xl py-2 text-sm font-semibold text-blue-700">Niño</button>
-              <button onClick={() => setSex('girl')} className="flex-1 bg-white rounded-xl py-2 text-sm font-semibold text-blue-700">Niña</button>
+              <button onClick={() => setSex('boy')} className="flex-1 bg-white rounded-xl py-2 text-sm font-semibold text-tinta-700">Niño</button>
+              <button onClick={() => setSex('girl')} className="flex-1 bg-white rounded-xl py-2 text-sm font-semibold text-tinta-700">Niña</button>
             </div>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function GrowthTracker() {
           <button
             onClick={handleSave}
             disabled={saving || (!weightStr && !heightStr && !headStr)}
-            className="w-full bg-blue-600 text-white rounded-xl py-2.5 text-sm font-semibold disabled:opacity-40"
+            className="w-full bg-tinta-600 text-white rounded-xl py-2.5 text-sm font-semibold disabled:opacity-40"
           >
             {saving ? 'Guardando…' : 'Guardar medida'}
           </button>

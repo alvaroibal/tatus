@@ -75,7 +75,7 @@ export default function GuideList() {
 function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button onClick={onClick}
-      className={`shrink-0 text-xs font-medium rounded-full px-3 py-1.5 transition-colors ${active ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}`}>
+      className={`shrink-0 text-xs font-medium rounded-full px-3 py-1.5 transition-colors ${active ? 'bg-tinta-600 text-white' : 'bg-gray-100 text-gray-600'}`}>
       {children}
     </button>
   )

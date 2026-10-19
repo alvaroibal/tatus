@@ -73,7 +73,7 @@ export default function Dose() {
               <li>No combines dos productos con el mismo principio activo.</li>
             </ul>
           </div>
-          <button onClick={() => setAck(true)} className="w-full mt-4 bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold">
+          <button onClick={() => setAck(true)} className="w-full mt-4 bg-tinta-600 text-white rounded-xl py-3 text-sm font-semibold">
             Entendido, continuar
           </button>
         </div>
@@ -90,7 +90,7 @@ export default function Dose() {
                 <label className="block text-xs font-medium text-gray-500">Medicamento y concentración</label>
                 {MEDS.map(m => (
                   <button key={m.id} onClick={() => setMedId(m.id)}
-                    className={`w-full text-left text-sm rounded-xl px-3 py-2.5 border ${medId === m.id ? 'bg-blue-50 border-blue-200 text-blue-800 font-semibold' : 'border-gray-200 text-gray-600'}`}>
+                    className={`w-full text-left text-sm rounded-xl px-3 py-2.5 border ${medId === m.id ? 'bg-tinta-50 border-tinta-200 text-tinta-800 font-semibold' : 'border-gray-200 text-gray-600'}`}>
                     {m.name}
                   </button>
                 ))}
@@ -102,17 +102,17 @@ export default function Dose() {
             <div className="px-5"><AlertBox>Con {months} {months === 1 ? 'mes' : 'meses'}, consulta con el pediatra antes de darle este medicamento.</AlertBox></div>
           ) : validKg ? (
             <div className="px-5 mb-5">
-              <div className="bg-blue-600 text-white rounded-2xl p-5">
-                <p className="text-xs uppercase tracking-widest text-blue-200 font-semibold">Dosis por toma</p>
+              <div className="bg-tinta-600 text-white rounded-2xl p-5">
+                <p className="text-xs uppercase tracking-widest text-tinta-200 font-semibold">Dosis por toma</p>
                 <p className="text-4xl font-bold mt-1 tabular-nums">
                   {minMl === maxMl ? `${minMl} ml` : `${minMl} – ${maxMl} ml`}
                 </p>
-                <p className="text-sm text-blue-100 mt-2">{med.every}</p>
-                <p className="text-xs text-blue-200 mt-3">
+                <p className="text-sm text-tinta-100 mt-2">{med.every}</p>
+                <p className="text-xs text-tinta-200 mt-3">
                   Máximo {dailyMl} ml en 24 h ({med.maxDailyMgKg} mg/kg/día) · {kg} kg
                 </p>
               </div>
-              <button onClick={() => navigate('/herramientas/registro')} className="w-full mt-3 bg-white border border-gray-100 rounded-2xl py-3 text-sm text-blue-600 font-semibold">
+              <button onClick={() => navigate('/herramientas/registro')} className="w-full mt-3 bg-white border border-gray-100 rounded-2xl py-3 text-sm text-tinta-600 font-semibold">
                 Apuntar la toma en el registro →
               </button>
             </div>

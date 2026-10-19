@@ -59,7 +59,7 @@ export function BottomNav() {
           end={end}
           className={({ isActive }) =>
             `flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors ${
-              isActive ? 'text-blue-600' : 'text-gray-400'
+              isActive ? 'text-tinta-600' : 'text-gray-400'
             }`
           }
         >

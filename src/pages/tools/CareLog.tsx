@@ -161,7 +161,7 @@ export default function CareLog() {
         <div className="bg-white border border-gray-100 rounded-2xl p-3">
           <p className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold">Última toma</p>
           <p className="text-sm font-semibold text-gray-900 mt-1">{lastFeed ? timeAgo(lastFeed.start) : '—'}</p>
-          {nextSide && <p className="text-xs text-blue-600 mt-0.5">Siguiente: pecho {nextSide}</p>}
+          {nextSide && <p className="text-xs text-tinta-600 mt-0.5">Siguiente: pecho {nextSide}</p>}
         </div>
         <div className="bg-white border border-gray-100 rounded-2xl p-3">
           <p className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold">Última medicina</p>
@@ -174,20 +174,20 @@ export default function CareLog() {
       {running.length > 0 && (
         <div className="px-5 mb-4 space-y-2">
           {running.map(r => (
-            <div key={r.id} className="bg-blue-600 text-white rounded-2xl p-4 flex items-center gap-3">
+            <div key={r.id} className="bg-tinta-600 text-white rounded-2xl p-4 flex items-center gap-3">
               <span className="text-2xl">{TYPE_META[r.type].emoji}</span>
               <div className="flex-1">
-                <p className="text-xs text-blue-200">
+                <p className="text-xs text-tinta-200">
                   {r.type === 'breast' ? `Pecho ${r.side === 'L' ? 'izquierdo' : 'derecho'}` : 'Durmiendo'} desde las {formatTime(r.start)}
                 </p>
                 <p className="text-2xl font-bold tabular-nums">{formatClock(now - +new Date(r.start))}</p>
               </div>
               {r.type === 'breast' && (
-                <button onClick={() => switchSide(r)} className="text-xs bg-blue-500 rounded-xl px-3 py-2">
+                <button onClick={() => switchSide(r)} className="text-xs bg-tinta-500 rounded-xl px-3 py-2">
                   Cambiar
                 </button>
               )}
-              <button onClick={() => stopTimer(r)} className="text-xs bg-white text-blue-700 font-semibold rounded-xl px-3 py-2">
+              <button onClick={() => stopTimer(r)} className="text-xs bg-white text-tinta-700 font-semibold rounded-xl px-3 py-2">
                 Parar
               </button>
             </div>
@@ -240,7 +240,7 @@ export default function CareLog() {
                 <div className="flex gap-2">
                   {(['formula', 'breast'] as const).map(k => (
                     <button key={k} onClick={() => setMilk(k)}
-                      className={`flex-1 text-xs rounded-xl py-2 border ${milk === k ? 'bg-blue-50 border-blue-200 text-blue-700 font-semibold' : 'border-gray-200 text-gray-500'}`}>
+                      className={`flex-1 text-xs rounded-xl py-2 border ${milk === k ? 'bg-tinta-50 border-tinta-200 text-tinta-700 font-semibold' : 'border-gray-200 text-gray-500'}`}>
                       {k === 'formula' ? 'Fórmula' : 'Leche materna'}
                     </button>
                   ))}
@@ -253,7 +253,7 @@ export default function CareLog() {
                   ))}
                 </div>
               )}
-              <button onClick={saveForm} className="w-full bg-blue-600 text-white rounded-xl py-2.5 text-sm font-semibold">Guardar</button>
+              <button onClick={saveForm} className="w-full bg-tinta-600 text-white rounded-xl py-2.5 text-sm font-semibold">Guardar</button>
             </div>
           )}
         </div>
@@ -261,9 +261,9 @@ export default function CareLog() {
 
       {/* Navegación de días + resumen */}
       <div className="px-5 mb-3 flex items-center justify-between">
-        <button onClick={() => setDayOffset(d => d - 1)} className="text-blue-600 text-sm px-2 py-1">‹</button>
+        <button onClick={() => setDayOffset(d => d - 1)} className="text-tinta-600 text-sm px-2 py-1">‹</button>
         <p className="text-sm font-semibold text-gray-700 capitalize">{dayLabel}</p>
-        <button onClick={() => setDayOffset(d => Math.min(0, d + 1))} disabled={dayOffset === 0} className="text-blue-600 text-sm px-2 py-1 disabled:opacity-20">›</button>
+        <button onClick={() => setDayOffset(d => Math.min(0, d + 1))} disabled={dayOffset === 0} className="text-tinta-600 text-sm px-2 py-1 disabled:opacity-20">›</button>
       </div>
       <div className="px-5 mb-5 grid grid-cols-4 gap-2 text-center">
         <Stat value={String(feeds.length)} label="tomas" />
@@ -304,7 +304,7 @@ function QuickBtn({ emoji, label, onClick, active }: { emoji: string; label: str
     <button
       onClick={onClick}
       className={`rounded-2xl py-3 flex flex-col items-center gap-1 border active:scale-95 transition-transform ${
-        active ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-100'
+        active ? 'bg-tinta-50 border-tinta-200' : 'bg-white border-gray-100'
       }`}
     >
       <span className="text-xl">{emoji}</span>

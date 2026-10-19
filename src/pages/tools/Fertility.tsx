@@ -88,7 +88,7 @@ function FertilityForm({ profile }: { profile: BabyProfile }) {
             </ul>
           </div>
           <div className="px-5 mb-5">
-            <button onClick={() => navigate('/herramientas/fecha-parto')} className="w-full bg-white border-2 border-dashed border-blue-200 text-blue-600 rounded-2xl py-3 text-sm font-semibold">
+            <button onClick={() => navigate('/herramientas/fecha-parto')} className="w-full bg-white border-2 border-dashed border-tinta-200 text-tinta-600 rounded-2xl py-3 text-sm font-semibold">
               ¿Positivo? Calcula la fecha de parto →
             </button>
           </div>

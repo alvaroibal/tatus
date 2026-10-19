@@ -40,18 +40,18 @@ export default function Vaccines() {
   function renderRow(v: Vaccine, date: Date, highlight = false) {
     const checked = isDone(v)
     return (
-      <li key={vaccineId(v)} className={`rounded-2xl p-4 flex items-start gap-3 ${highlight ? 'bg-blue-50 border border-blue-100' : 'bg-white border border-gray-100'} ${checked ? 'opacity-60' : ''}`}>
+      <li key={vaccineId(v)} className={`rounded-2xl p-4 flex items-start gap-3 ${highlight ? 'bg-tinta-50 border border-tinta-100' : 'bg-white border border-gray-100'} ${checked ? 'opacity-60' : ''}`}>
         <button onClick={() => toggle(v)} aria-label={checked ? 'Marcar como pendiente' : 'Marcar como puesta'}
           className={`mt-0.5 w-6 h-6 rounded-full border-2 shrink-0 flex items-center justify-center text-xs ${checked ? 'bg-green-500 border-green-500 text-white' : 'border-gray-300 bg-white'}`}>
           {checked ? '✓' : ''}
         </button>
         <div className="flex-1 min-w-0">
-          <p className={`text-sm font-semibold ${highlight ? 'text-blue-900' : 'text-gray-800'}`}>
-            {v.name}{v.important && <span className="ml-1.5 text-xs text-blue-500">●</span>}
+          <p className={`text-sm font-semibold ${highlight ? 'text-tinta-900' : 'text-gray-800'}`}>
+            {v.name}{v.important && <span className="ml-1.5 text-xs text-tinta-500">●</span>}
           </p>
-          <p className={`text-xs mt-0.5 ${highlight ? 'text-blue-700' : 'text-gray-500'}`}>{v.description}</p>
+          <p className={`text-xs mt-0.5 ${highlight ? 'text-tinta-700' : 'text-gray-500'}`}>{v.description}</p>
         </div>
-        <p className={`text-xs font-medium shrink-0 text-right ${highlight ? 'text-blue-600' : 'text-gray-400'}`}>{formatDate(date)}</p>
+        <p className={`text-xs font-medium shrink-0 text-right ${highlight ? 'text-tinta-600' : 'text-gray-400'}`}>{formatDate(date)}</p>
       </li>
     )
   }

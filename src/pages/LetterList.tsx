@@ -58,14 +58,14 @@ export default function LetterList() {
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-      showToast('Archivo descargado — guárdalo en un lugar seguro.')
+      showToast('Cartas descargadas. Guarda el archivo en un lugar seguro: es lo que irá en el USB.')
     } catch {
-      showToast('Error al exportar.')
+      showToast('No se han podido exportar las cartas. Vuelve a intentarlo.')
     }
   }
 
   const exportButton = (
-    <button onClick={handleExport} className="text-blue-600 text-sm font-medium">
+    <button onClick={handleExport} className="text-tinta-600 text-sm font-medium">
       Exportar
     </button>
   )
@@ -95,7 +95,7 @@ export default function LetterList() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-semibold text-blue-600 capitalize">
+                      <span className="text-xs font-semibold text-tinta-600 capitalize">
                         {weekLabel(letter)}
                       </span>
                       {letter.locked && (
@@ -103,9 +103,9 @@ export default function LetterList() {
                       )}
                     </div>
                     {letter.title && (
-                      <p className="text-sm font-semibold text-gray-900 mb-0.5">{letter.title}</p>
+                      <p className="font-letter italic text-base text-gray-900 mb-0.5">{letter.title}</p>
                     )}
-                    <p className="text-sm text-gray-500 leading-relaxed">{preview(letter)}</p>
+                    <p className="font-letter text-sm text-gray-500 leading-relaxed">{preview(letter)}</p>
                   </div>
                   <span className="text-xs text-gray-300 shrink-0 mt-0.5">{formatDate(letter.date)}</span>
                 </div>
@@ -118,7 +118,7 @@ export default function LetterList() {
       {/* FAB */}
       <button
         onClick={() => navigate('/cartas/nueva')}
-        className="fixed bottom-20 right-5 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center text-2xl active:bg-blue-700"
+        className="fixed bottom-20 right-5 w-14 h-14 bg-tinta-600 text-white rounded-full shadow-lg flex items-center justify-center text-2xl active:bg-tinta-700"
         aria-label="Escribir carta"
       >
         ✏️

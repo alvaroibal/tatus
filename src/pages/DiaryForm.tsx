@@ -95,13 +95,13 @@ export default function DiaryForm() {
       navigate('/diario', { replace: true })
       showToast(isNew ? 'Entrada guardada' : 'Entrada actualizada')
     } catch {
-      showToast('Error al guardar — puede que el almacenamiento esté lleno.')
+      showToast('No se ha guardado. Lo que escribiste sigue aquí; si vuelve a fallar, puede que el móvil no tenga espacio.')
       setSaving(false)
     }
   }
 
   async function handleDelete() {
-    if (!id || !confirm('¿Borrar esta entrada permanentemente?')) return
+    if (!id || !confirm('¿Borrar esta entrada? No se podrá recuperar.')) return
     try {
       await db.transaction('rw', [db.diaryEntries, db.entryPhotos], async () => {
         await db.diaryEntries.delete(Number(id))
@@ -109,7 +109,7 @@ export default function DiaryForm() {
       })
       navigate('/diario', { replace: true })
     } catch {
-      showToast('Error al borrar.')
+      showToast('No se ha podido borrar. Vuelve a intentarlo.')
     }
   }
 
@@ -124,7 +124,7 @@ export default function DiaryForm() {
         <button
           onClick={handleSave}
           disabled={saving || !text.trim()}
-          className="text-blue-600 text-sm font-semibold disabled:opacity-40"
+          className="text-tinta-600 text-sm font-semibold disabled:opacity-40"
         >
           {saving ? 'Guardando…' : 'Guardar'}
         </button>
@@ -191,12 +191,12 @@ export default function DiaryForm() {
           onClick={() => setMilestone(v => !v)}
           className={`flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-2xl transition-colors ${
             milestone
-              ? 'bg-yellow-50 text-yellow-700 border border-yellow-200'
+              ? 'bg-yema-50 text-yema-700 border border-yema-100'
               : 'bg-gray-100 text-gray-500'
           }`}
         >
-          <span className={milestone ? 'text-yellow-400' : 'text-gray-300'}>★</span>
-          {milestone ? 'Hito marcado' : 'Marcar hito'}
+          <span className={milestone ? 'text-yema' : 'text-gray-300'}>★</span>
+          {milestone ? 'Primera vez' : 'Marcar como primera vez'}
         </button>
 
         {!isNew && (

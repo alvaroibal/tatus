@@ -77,7 +77,7 @@ export default function LetterForm() {
       }
       navigate('/cartas')
     } catch {
-      showToast('Error al guardar la carta.')
+      showToast('No se ha guardado la carta. Lo que escribiste sigue aquí; vuelve a intentarlo.')
     } finally {
       setSaving(false)
     }
@@ -85,24 +85,24 @@ export default function LetterForm() {
 
   async function handleLock() {
     if (!letter?.id) return
-    if (!confirm('¿Sellar esta carta? No podrás editarla después.')) return
+    if (!confirm(`¿Sellar la carta? Quedará cerrada hasta que ${profile?.name ?? 'tu hijo'} la abra.`)) return
     try {
       await db.futureLetters.update(letter.id, { locked: true })
       showToast('Carta sellada.')
       navigate('/cartas')
     } catch {
-      showToast('Error al sellar la carta.')
+      showToast('No se ha podido sellar la carta. Vuelve a intentarlo.')
     }
   }
 
   async function handleDelete() {
     if (!letter?.id) return
-    if (!confirm('¿Borrar esta carta permanentemente?')) return
+    if (!confirm('¿Borrar esta carta? No se podrá recuperar.')) return
     try {
       await db.futureLetters.delete(letter.id)
       navigate('/cartas')
     } catch {
-      showToast('Error al borrar.')
+      showToast('No se ha podido borrar. Vuelve a intentarlo.')
     }
   }
 
@@ -118,7 +118,7 @@ export default function LetterForm() {
           Cancelar
         </button>
         <div className="text-center">
-          <p className="text-xs font-semibold text-blue-600">{contextWeek}</p>
+          <p className="text-xs font-semibold text-tinta-600">{contextWeek}</p>
           <p className="text-xs text-gray-400 capitalize">{todayLong()}</p>
         </div>
         {isLocked ? (
@@ -127,7 +127,7 @@ export default function LetterForm() {
           <button
             onClick={handleSave}
             disabled={saving || !body.trim()}
-            className="text-blue-600 text-sm font-semibold disabled:opacity-40"
+            className="text-tinta-600 text-sm font-semibold disabled:opacity-40"
           >
             {saving ? 'Guardando…' : 'Guardar'}
           </button>
@@ -142,7 +142,7 @@ export default function LetterForm() {
           onChange={e => setTitle(e.target.value)}
           placeholder="Título (opcional)"
           disabled={isLocked}
-          className="text-lg font-semibold text-gray-800 placeholder-gray-300 border-none outline-none bg-transparent disabled:opacity-60"
+          className="font-letter italic text-xl text-gray-800 placeholder-gray-300 border-none outline-none bg-transparent disabled:opacity-60"
         />
 
         <textarea
@@ -151,7 +151,7 @@ export default function LetterForm() {
           onChange={e => setBody(e.target.value)}
           disabled={isLocked}
           placeholder={`Querido ${profile.name},\n\n`}
-          className="flex-1 text-base text-gray-800 leading-relaxed placeholder-gray-300 border-none outline-none resize-none bg-transparent disabled:opacity-70"
+          className="flex-1 font-letter text-[17px] text-gray-800 leading-[1.75] placeholder-gray-300 border-none outline-none resize-none bg-transparent disabled:opacity-70"
           rows={18}
         />
       </div>

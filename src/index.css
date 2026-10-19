@@ -1,19 +1,79 @@
 @import "tailwindcss";
 
+/* Identidad Tatuś — ver docs/brand/tatus-manual-de-marca.html */
+@theme {
+  --font-sans: 'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', 'Avenir Next', system-ui, sans-serif;
+  --font-letter: 'Literata Variable', Georgia, 'Times New Roman', serif;
+
+  /* Tinta: color principal (600 = #1C2650) */
+  --color-tinta-50: #EFF0F6;
+  --color-tinta-100: #DEE1EE;
+  --color-tinta-200: #BDC3DE;
+  --color-tinta-300: #8D97C2;
+  --color-tinta-400: #5A67A0;
+  --color-tinta-500: #36437A;
+  --color-tinta-600: #1C2650;
+  --color-tinta-700: #151D3F;
+  --color-tinta-800: #10172F;
+  --color-tinta-900: #0C1124;
+
+  /* Yema: la kreska, hitos y semana nueva. 700 es la versión legible como texto */
+  --color-yema: #F4B41A;
+  --color-yema-50: #FEF6E0;
+  --color-yema-100: #FDEBBE;
+  --color-yema-700: #8A5B00;
+
+  --color-leche: #F7F5EF;
+
+  /* Un color por fase de vida */
+  --color-fase-buscar: #B8B1E2;
+  --color-fase-esperar: #F2A68A;
+  --color-fase-llegar: #F4B41A;
+  --color-fase-crecer: #7FA889;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  background: #fafaf8;
-  color: #111827;
+  background: var(--color-leche);
+  color: var(--color-tinta-900);
+}
+
+h1, h2 {
+  font-family: var(--font-display);
+  letter-spacing: -0.025em;
 }
 
 #root {
   min-height: 100svh;
+}
+
+/* Logotipo: "tatus" con la kreska en yema sobre la s */
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.wordmark .s { position: relative; display: inline-block; }
+.wordmark .s::after {
+  content: "";
+  position: absolute;
+  left: 30%;
+  top: 0.01em;
+  width: 0.118em;
+  height: 0.29em;
+  border-radius: 1em;
+  background: var(--color-yema);
+  transform: translateX(-10%) rotate(42deg);
+  transform-origin: 50% 100%;
 }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }

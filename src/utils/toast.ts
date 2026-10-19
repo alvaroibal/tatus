@@ -5,7 +5,7 @@ export function showToast(message: string): void {
   el.textContent = message
   el.style.cssText = [
     'position:fixed', 'bottom:1.5rem', 'left:50%', 'transform:translateX(-50%)',
-    'background:#1e293b', 'color:#fff', 'padding:0.75rem 1.25rem',
+    'background:#1C2650', 'color:#fff', 'padding:0.75rem 1.25rem',
     'border-radius:0.5rem', 'font-size:0.875rem', 'z-index:9999',
     'max-width:calc(100vw - 2rem)', 'text-align:center',
     'box-shadow:0 4px 12px rgba(0,0,0,0.3)',
