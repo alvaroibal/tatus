@@ -10,7 +10,7 @@ interface Props {
 function Section({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">
+      <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">
         {title}
       </h3>
       <ul className="space-y-1.5">
@@ -35,7 +35,7 @@ export function StageCard({ week, stage, childName }: Props) {
         <h2 className="text-xl font-bold text-gray-900 leading-snug">
           {week < 52 ? '¿Qué pasa esta semana?' : '¿Qué pasa en esta etapa?'}
         </h2>
-        <p className="text-sm text-gray-400 mt-0.5">{childName}</p>
+        <p className="text-sm text-gray-500 mt-0.5">{childName}</p>
       </div>
 
       <div className="px-5 space-y-5 pb-4">
@@ -61,9 +61,9 @@ export function StageCard({ week, stage, childName }: Props) {
       </div>
 
       <div className="px-5 pb-6">
-        <p className="text-xs text-gray-400 text-center leading-relaxed">
-          Contenido basado en AAP Developmental Milestones.
-          No reemplaza al pediatra.
+        <p className="text-xs text-gray-500 text-center leading-relaxed">
+          Basado en AEP, OMS y los hitos del CDC/AAP.
+          No sustituye al pediatra.
         </p>
       </div>
     </div>

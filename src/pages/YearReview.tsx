@@ -61,7 +61,7 @@ function StatBox({ value, label }: { value: number; label: string }) {
   return (
     <div className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
       <p className="text-3xl font-bold text-gray-900">{value}</p>
-      <p className="text-xs text-gray-400 mt-1">{label}</p>
+      <p className="text-xs text-gray-500 mt-1">{label}</p>
     </div>
   )
 }
@@ -90,7 +90,7 @@ export default function YearReview() {
     <div className="min-h-screen bg-leche pb-10">
       {/* Header */}
       <div className="flex items-center gap-3 px-5 pt-12 pb-4 border-b border-gray-100">
-        <button onClick={() => navigate('/ajustes')} className="text-gray-400">
+        <button onClick={() => navigate('/ajustes')} className="text-gray-500">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
           </svg>
@@ -121,7 +121,7 @@ export default function YearReview() {
           Calculando…
         </div>
       ) : data && data.totalEntries === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 px-6 text-center text-gray-400">
+        <div className="flex flex-col items-center justify-center py-20 px-6 text-center text-gray-500">
           <p className="text-4xl mb-3">📭</p>
           <p className="text-sm">No hay entradas del diario en {year}.</p>
           <p className="text-xs mt-2 text-gray-300">Prueba con otro año.</p>
@@ -148,7 +148,7 @@ export default function YearReview() {
 
           {/* Stats grid */}
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+            <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">
               Este año en números
             </p>
             <div className="grid grid-cols-2 gap-3">
@@ -162,7 +162,7 @@ export default function YearReview() {
           {/* Growth delta */}
           {data.growthFirst && data.growthLast && data.growthFirst.week !== data.growthLast.week && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">
                 Crecimiento
               </p>
               <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-2">
@@ -195,7 +195,7 @@ export default function YearReview() {
           {/* Top milestones */}
           {data.topMilestones.length > 0 && (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">
                 Momentos del año
               </p>
               <ul className="space-y-3">
@@ -203,7 +203,7 @@ export default function YearReview() {
                   <li key={entry.id} className="flex gap-3">
                     <span className="text-yema mt-0.5 shrink-0">★</span>
                     <div className="min-w-0">
-                      <p className="text-xs text-gray-400 mb-0.5 capitalize">
+                      <p className="text-xs text-gray-500 mb-0.5 capitalize">
                         {new Date(entry.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}
                         {' · '}
                         {entry.week < 0 ? `S.emb. ${Math.max(1, 40 + entry.week)}` : `Semana ${entry.week}`}

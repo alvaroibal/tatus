@@ -1,8 +1,10 @@
-import { useLiveQuery } from 'dexie-react-hooks'
+import { useNavigate } from 'react-router-dom'
 import { useCurrentProfile } from '../hooks/useCurrentProfile'
-import { db } from '../db/db'
+import { setCheck, useListChecks } from '../hooks/useChecks'
 import { BackHeader } from '../components/ui'
-import { checkKey } from '../data/checklists'
+import { Icon } from '../components/Icon'
+import { regionName, vaccineRegionNote } from '../data/regions'
+import { downloadIcs } from '../utils/ics'
 import { VACCINES, VACCINE_LIST_ID, vaccineDate, vaccineId, type Vaccine } from '../utils/vaccines'
 import { startOfDay } from '../utils/age'
 
@@ -11,21 +13,27 @@ function formatDate(d: Date): string {
 }
 
 export default function Vaccines() {
+  const navigate = useNavigate()
   const { profile, isLoading } = useCurrentProfile()
-
-  const done = useLiveQuery(async () => {
-    if (!profile?.id) return new Set<string>()
-    const rows = await db.checks.where('profileId').equals(profile.id).toArray()
-    return new Set(rows.filter(r => r.done).map(r => r.key))
-  }, [profile?.id])
+  const done = useListChecks(profile?.id, VACCINE_LIST_ID)
 
   if (isLoading || !profile) return null
   const pid = profile.id!
-  const isDone = (v: Vaccine) => done?.has(checkKey(pid, VACCINE_LIST_ID, vaccineId(v))) ?? false
+  const isDone = (v: Vaccine) => done?.has(vaccineId(v)) ?? false
 
   async function toggle(v: Vaccine) {
-    const key = checkKey(pid, VACCINE_LIST_ID, vaccineId(v))
-    await db.checks.put({ key, profileId: pid, done: !isDone(v) })
+    await setCheck(pid, VACCINE_LIST_ID, vaccineId(v), !isDone(v))
+  }
+
+  function exportUpcoming() {
+    downloadIcs(`vacunas-${profile!.name}.ics`, upcoming.map(x => ({
+      uid: `vacuna-${pid}-${vaccineId(x.v).replace(/\W+/g, '-')}`,
+      title: `Vacuna ${profile!.name}: ${x.v.name}`,
+      start: x.date,
+      allDay: true,
+      description: `${x.v.description} Fecha orientativa: confirma la cita con tu centro de salud.`,
+      alarmMinutesBefore: 7 * 24 * 60,
+    })))
   }
 
   const today = startOfDay(new Date())
@@ -41,27 +49,43 @@ export default function Vaccines() {
     const checked = isDone(v)
     return (
       <li key={vaccineId(v)} className={`rounded-2xl p-4 flex items-start gap-3 ${highlight ? 'bg-tinta-50 border border-tinta-100' : 'bg-white border border-gray-100'} ${checked ? 'opacity-60' : ''}`}>
-        <button onClick={() => toggle(v)} aria-label={checked ? 'Marcar como pendiente' : 'Marcar como puesta'}
-          className={`mt-0.5 w-6 h-6 rounded-full border-2 shrink-0 flex items-center justify-center text-xs ${checked ? 'bg-green-500 border-green-500 text-white' : 'border-gray-300 bg-white'}`}>
-          {checked ? '✓' : ''}
+        <button onClick={() => toggle(v)} aria-label={checked ? 'Marcar como pendiente' : 'Marcar como puesta'} className="-m-2 p-2 shrink-0">
+          <span className={`w-7 h-7 rounded-full border-2 flex items-center justify-center text-sm ${checked ? 'bg-green-600 border-green-600 text-white' : 'border-gray-300 bg-white'}`}>
+            {checked ? '✓' : ''}
+          </span>
         </button>
         <div className="flex-1 min-w-0">
           <p className={`text-sm font-semibold ${highlight ? 'text-tinta-900' : 'text-gray-800'}`}>
             {v.name}{v.important && <span className="ml-1.5 text-xs text-tinta-500">●</span>}
           </p>
           <p className={`text-xs mt-0.5 ${highlight ? 'text-tinta-700' : 'text-gray-500'}`}>{v.description}</p>
+          {vaccineRegionNote(v.name, profile!.region) && (
+            <p className="text-xs mt-1 text-yema-700">{vaccineRegionNote(v.name, profile!.region)}</p>
+          )}
         </div>
-        <p className={`text-xs font-medium shrink-0 text-right ${highlight ? 'text-tinta-600' : 'text-gray-400'}`}>{formatDate(date)}</p>
+        <p className={`text-xs font-medium shrink-0 text-right ${highlight ? 'text-tinta-600' : 'text-gray-500'}`}>{formatDate(date)}</p>
       </li>
     )
   }
 
   return (
     <div className="pb-24">
-      <BackHeader title="Vacunas" subtitle={`Calendario orientativo 2026 · ${profile.name}`} />
-      <p className="px-5 text-xs text-gray-400 mb-5 leading-relaxed">
-        Toca el círculo cuando se la pongan. Las fechas exactas y algunas vacunas varían según tu comunidad autónoma: tu centro de salud te dará la cita. ● = financiada en el calendario común.
-      </p>
+      <BackHeader title="Vacunas" subtitle={`Calendario común 2026 · ${regionName(profile.region) ?? 'sin comunidad'} · ${profile.name}`} />
+      <div className="px-5 mb-5 space-y-2">
+        <p className="text-sm text-gray-600 leading-relaxed">
+          Toca el círculo cuando se la pongan. Las fechas son orientativas: tu centro de salud te dará la cita. ● = en el calendario común.
+        </p>
+        {!profile.region && (
+          <button onClick={() => navigate('/ajustes')} className="text-sm text-tinta-600 font-medium py-1">
+            Indica tu comunidad autónoma para ver sus diferencias →
+          </button>
+        )}
+        {upcoming.length > 0 && (
+          <button onClick={exportUpcoming} className="w-full bg-white border border-gray-200 rounded-2xl py-3 text-sm font-semibold text-tinta-700 flex items-center justify-center gap-2">
+            <Icon name="bell" className="w-4 h-4" /> Añadir las próximas a mi calendario (aviso 1 semana antes)
+          </button>
+        )}
+      </div>
 
       {pending.length > 0 && (
         <section className="mb-6">
@@ -74,7 +98,7 @@ export default function Vaccines() {
 
       {upcoming.length > 0 && (
         <section className="mb-6">
-          <p className="px-5 text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Próximas</p>
+          <p className="px-5 text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">Próximas</p>
           <ul className="space-y-2 px-5">
             {upcoming.map((x, i) => renderRow(x.v, x.date, i < 3))}
           </ul>
@@ -83,14 +107,14 @@ export default function Vaccines() {
 
       {completed.length > 0 && (
         <section>
-          <p className="px-5 text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Puestas</p>
+          <p className="px-5 text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">Puestas</p>
           <ul className="space-y-2 px-5">
             {completed.map(x => renderRow(x.v, x.date))}
           </ul>
         </section>
       )}
 
-      <p className="px-5 text-xs text-gray-400 text-center leading-relaxed mt-6">
+      <p className="px-5 text-xs text-gray-500 text-center leading-relaxed mt-6">
         Las vacunas de la gripe y del VRS dependen de la temporada. Consulta el calendario oficial de tu comunidad y de la AEP.
       </p>
     </div>

@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useCurrentProfile } from '../hooks/useCurrentProfile'
 import { db } from '../db/db'
-import { PageHeader } from '../components/PageHeader'
+import { MemoriesTabs } from '../components/MemoriesTabs'
 
 function formatDate(d: Date): string {
   return new Date(d).toLocaleDateString('es-ES', {
@@ -29,10 +29,10 @@ export default function Timeline() {
 
   return (
     <div className="pb-6">
-      <PageHeader title="Hitos" />
+      <MemoriesTabs />
 
       {milestones === undefined ? null : milestones.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 px-6 text-center text-gray-400">
+        <div className="flex flex-col items-center justify-center py-20 px-6 text-center text-gray-500">
           <p className="text-4xl mb-3">⭐</p>
           <p className="text-sm leading-relaxed max-w-xs">
             Aún no hay primeras veces. Marca una entrada del diario como «primera vez» y aparecerá aquí.
@@ -50,7 +50,7 @@ export default function Timeline() {
                   {/* dot */}
                   <div className="absolute -left-7 top-1 w-3 h-3 rounded-full bg-yema border-2 border-white shadow-sm" />
                   <div>
-                    <p className="text-xs text-gray-400 capitalize mb-1">
+                    <p className="text-xs text-gray-500 capitalize mb-1">
                       {formatDate(entry.date)} · Semana {entry.week}
                     </p>
                     <p className="text-sm text-gray-800 leading-relaxed">{entry.text}</p>

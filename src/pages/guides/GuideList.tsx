@@ -61,11 +61,11 @@ export default function GuideList() {
           {filtered.map(g => (
             <LinkRow key={g.id} emoji={g.emoji} title={g.title} subtitle={g.summary} onClick={() => navigate(`/guia/${g.id}`)} />
           ))}
-          {filtered.length === 0 && <p className="text-sm text-gray-400 text-center py-8">Nada encontrado. Prueba con otra palabra.</p>}
+          {filtered.length === 0 && <p className="text-sm text-gray-500 text-center py-8">Nada encontrado. Prueba con otra palabra.</p>}
         </div>
       </section>
 
-      <p className="px-5 text-xs text-gray-400 text-center leading-relaxed mt-6">
+      <p className="px-5 text-xs text-gray-500 text-center leading-relaxed mt-6">
         Basado en recomendaciones de AEP, Ministerio de Sanidad, AESAN y OMS. No sustituye a tu matrona ni a tu pediatra.
       </p>
     </div>

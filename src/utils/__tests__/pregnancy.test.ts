@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { dueDateFromLastPeriod, dueDateFromConception, fertileCycles, gestationalAge } from '../pregnancy'
 import { ageInMonths, formatAge, weekOfLifeLabel } from '../age'
-import { classify } from '../../data/whoPercentiles'
+import { classify, percentile, referenceSeries } from '../../data/whoPercentiles'
 
 const d = (y: number, m: number, day: number) => new Date(y, m - 1, day)
 
@@ -56,10 +56,26 @@ describe('age', () => {
   })
 })
 
-describe('percentiles OMS', () => {
-  it('clasifica respecto a P3/P97', () => {
-    expect(classify('weight', 'boy', 0, 3.3)).toBe('cerca de la media (P50)')
+describe('percentiles OMS (LMS)', () => {
+  it('la mediana es el P50', () => {
+    expect(percentile('weight', 'boy', 0, 3.3464)).toBeCloseTo(50, 1)
+  })
+
+  it('coincide con la tabla oficial (P2,3 / P97,7 a los 0 meses)', () => {
+    expect(percentile('weight', 'boy', 0, 2.459312)).toBeCloseTo(2.3, 0)
+    expect(percentile('weight', 'boy', 0, 4.419354)).toBeCloseTo(97.7, 0)
+  })
+
+  it('avisa fuera de P3-P97 y no calcula después de 24 meses', () => {
     expect(classify('weight', 'girl', 26, 4.5)).toMatch(/por debajo del P3/)
     expect(classify('height', 'boy', 52, 85)).toMatch(/por encima del P97/)
+    expect(classify('weight', 'boy', 130, 14)).toBe('')
+  })
+
+  it('serie de referencia ordenada', () => {
+    const s = referenceSeries('head', 'girl', 20)
+    expect(s[0].semana).toBe(0)
+    expect(s[1].p3).toBeLessThan(s[1].p50)
+    expect(s[1].p50).toBeLessThan(s[1].p97)
   })
 })

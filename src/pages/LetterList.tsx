@@ -4,7 +4,7 @@ import { useCurrentProfile } from '../hooks/useCurrentProfile'
 import { db, type FutureLetter } from '../db/db'
 import { exportLettersHTML } from '../utils/exportLetters'
 import { showToast } from '../utils/toast'
-import { PageHeader } from '../components/PageHeader'
+import { MemoriesTabs } from '../components/MemoriesTabs'
 
 function formatDate(d: Date): string {
   return new Date(d).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -72,7 +72,7 @@ export default function LetterList() {
 
   return (
     <div className="pb-6">
-      <PageHeader title="Cartas" right={exportButton} />
+      <MemoriesTabs right={exportButton} />
 
       {letters === undefined ? null : letters.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
@@ -80,7 +80,7 @@ export default function LetterList() {
           <p className="text-base font-semibold text-gray-800 mb-2">
             La primera carta está por escribirse
           </p>
-          <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
+          <p className="text-sm text-gray-500 leading-relaxed max-w-xs">
             Escríbele a {profile.name} desde ya. Las leerá cuando sea mayor.
           </p>
         </div>

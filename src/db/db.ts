@@ -14,6 +14,22 @@ export interface BabyProfile extends SyncMeta {
   sex?: BabySex          // para percentiles OMS
   lastPeriod?: Date      // FUR / última regla (modo buscando)
   cycleLength?: number   // días (modo buscando)
+  region?: string        // comunidad autónoma (código de data/regions.ts)
+  medical?: MedicalCard
+}
+
+/** Ficha médica básica para urgencias. */
+export interface MedicalCard {
+  bloodType?: string
+  allergies?: string
+  conditions?: string
+  medications?: string
+  pediatrician?: string
+  pediatricianPhone?: string
+  healthCenter?: string
+  healthCenterPhone?: string
+  hospital?: string
+  notes?: string
 }
 
 export interface DiaryEntry extends SyncMeta {
@@ -39,7 +55,11 @@ export interface AppConfig {
   activeProfileId: number
   partnerName?: string
   parentName?: string
+  role?: ParentRole      // quién usa este dispositivo
+  nightMode?: 'auto' | 'on' | 'off'
 }
+
+export type ParentRole = 'papa' | 'mama'
 
 export interface FutureLetter extends SyncMeta {
   id?: number
@@ -88,6 +108,8 @@ export interface CheckState extends SyncMeta {
   key: string        // `${profileId}|${listId}|${itemId}`
   profileId: number
   done: boolean
+  date?: Date        // cuándo se marcó (hitos, primeros alimentos)
+  note?: string      // p. ej. reacción a un alimento
 }
 
 class TatusDB extends Dexie {

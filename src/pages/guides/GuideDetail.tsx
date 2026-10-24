@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { AlertBox, BackHeader, Disclaimer } from '../../components/ui'
-import { CATEGORY_LABELS, getGuide } from '../../data/guides'
+import { CATEGORY_LABELS, GUIDE_SOURCES, getGuide } from '../../data/guides'
+import { CLINICAL_REVIEWER, CONTENT_REVIEWED, SOURCES } from '../../data/sources'
 
 export default function GuideDetail() {
   const { id } = useParams()
@@ -17,7 +18,7 @@ export default function GuideDetail() {
 
   return (
     <div className="pb-24">
-      <BackHeader title={`${guide.emoji} ${guide.title}`} subtitle={`${CATEGORY_LABELS[guide.category]} · ${guide.summary}`} />
+      <BackHeader title={guide.title} subtitle={`${CATEGORY_LABELS[guide.category]} · ${guide.summary}`} />
 
       {guide.alert && (
         <div className="px-5 mb-5">
@@ -49,6 +50,27 @@ export default function GuideDetail() {
           ))}
         </div>
       )}
+
+      <section className="px-5 mt-8">
+        <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">Fuentes</p>
+        <ul className="space-y-2">
+          {(GUIDE_SOURCES[guide.id] ?? []).map(id => {
+            const src = SOURCES[id]
+            return (
+              <li key={id}>
+                <a href={src.url} target="_blank" rel="noopener noreferrer" className="block bg-white border border-gray-100 rounded-2xl px-4 py-3">
+                  <p className="text-sm text-tinta-700 font-medium">{src.name} ↗</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{src.org}</p>
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+        <p className="text-xs text-gray-500 mt-3 leading-relaxed">
+          Contenido contrastado con estas fuentes en {CONTENT_REVIEWED}.{' '}
+          {CLINICAL_REVIEWER ? `Revisado por ${CLINICAL_REVIEWER}.` : 'Pendiente de revisión por un profesional sanitario.'}
+        </p>
+      </section>
 
       <Disclaimer />
     </div>

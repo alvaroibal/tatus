@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router/router'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { OverlayHost } from './components/OverlayHost'
+import { initInstall } from './utils/install'
 import '@fontsource-variable/bricolage-grotesque/wght.css'
 import '@fontsource/atkinson-hyperlegible/latin-400.css'
 import '@fontsource/atkinson-hyperlegible/latin-ext-400.css'
@@ -39,10 +41,12 @@ if (!(await idbAvailable())) {
     </div>
   `
 } else {
+  initInstall()
   createRoot(root).render(
     <StrictMode>
       <ErrorBoundary>
         <RouterProvider router={router} />
+        <OverlayHost />
       </ErrorBoundary>
     </StrictMode>
   )

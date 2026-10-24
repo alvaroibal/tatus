@@ -7,31 +7,70 @@ import { AlertBox, BackHeader } from '../../components/ui'
 import { inputCls } from '../../components/uiHelpers'
 import { ageInMonths } from '../../utils/age'
 
-interface Med {
+/**
+ * Tablas de dosificación por peso tal como aparecen en los prospectos de los productos
+ * pediátricos más comunes (CIMA, AEMPS). Es información del prospecto, no un cálculo propio:
+ * la app solo resalta la fila que corresponde al peso.
+ */
+interface Band { min: number; max: number; ml: string; note?: string }
+interface Product {
   id: string
   name: string
-  concentration: number // mg/ml
-  minMgKg: number
-  maxMgKg: number
-  maxDailyMgKg: number
   every: string
-  minMonths: number
+  bands: Band[]
 }
 
-const MEDS: Med[] = [
-  { id: 'para100', name: 'Paracetamol 100 mg/ml (gotas / solución oral)', concentration: 100, minMgKg: 15, maxMgKg: 15, maxDailyMgKg: 60, every: 'cada 6 horas (máximo 4 dosis en 24 h)', minMonths: 3 },
-  { id: 'ibu20', name: 'Ibuprofeno 20 mg/ml (suspensión)', concentration: 20, minMgKg: 5, maxMgKg: 10, maxDailyMgKg: 30, every: 'cada 6-8 horas', minMonths: 3 },
-  { id: 'ibu40', name: 'Ibuprofeno 40 mg/ml (suspensión "forte")', concentration: 40, minMgKg: 5, maxMgKg: 10, maxDailyMgKg: 30, every: 'cada 6-8 horas', minMonths: 3 },
+const PARACETAMOL_BANDS: Band[] = Array.from({ length: 18 }, (_, i) => {
+  const kg = i + 3
+  return { min: kg, max: kg + 0.99, ml: `${String(Number((kg * 0.15).toFixed(2))).replace('.', ',')} ml` }
+})
+
+const PRODUCTS: Product[] = [
+  {
+    id: 'para100',
+    name: 'Paracetamol 100 mg/ml solución oral (gotas)',
+    every: '15 mg/kg cada 6 horas. Máximo 4 tomas en 24 h.',
+    bands: PARACETAMOL_BANDS,
+  },
+  {
+    id: 'ibu20',
+    name: 'Ibuprofeno 20 mg/ml suspensión oral',
+    every: 'Cada 8 horas (3 tomas al día; 3-4 entre 6 y 12 meses). Solo desde 3 meses y 5 kg.',
+    bands: [
+      { min: 5, max: 7.6, ml: '2,5 ml', note: '3-6 meses' },
+      { min: 7.7, max: 9.99, ml: '2,5 ml', note: '6-12 meses' },
+      { min: 10, max: 15.99, ml: '5 ml', note: '1-3 años' },
+      { min: 16, max: 20.99, ml: '7,5 ml', note: '4-6 años' },
+      { min: 21, max: 29.99, ml: '10 ml', note: '7-9 años' },
+      { min: 30, max: 40, ml: '15 ml', note: '10-12 años' },
+    ],
+  },
+  {
+    id: 'ibu40',
+    name: 'Ibuprofeno 40 mg/ml suspensión oral ("forte")',
+    every: 'Cada 8 horas (3 tomas al día). Solo desde 3 meses y 5 kg.',
+    bands: [
+      { min: 5, max: 7.6, ml: '1,25 ml', note: '3-6 meses' },
+      { min: 7.7, max: 9.99, ml: '1,25 ml', note: '6-12 meses' },
+      { min: 10, max: 15.99, ml: '2,5 ml', note: '1-3 años' },
+      { min: 16, max: 20.99, ml: '3,75 ml', note: '4-6 años' },
+      { min: 21, max: 29.99, ml: '5 ml', note: '7-9 años' },
+      { min: 30, max: 40, ml: '7,5 ml', note: '10-12 años' },
+    ],
+  },
 ]
 
-const round1 = (n: number) => Math.round(n * 10) / 10
+function bandLabel(product: Product, b: Band): string {
+  if (product.id === 'para100') return `${b.min} kg`
+  const fmt = (n: number) => String(n).replace('.', ',')
+  return `${fmt(b.min)}–${fmt(Math.floor(b.max * 10) / 10)} kg`
+}
 
 export default function Dose() {
   const navigate = useNavigate()
   const { profile, currentWeek } = useCurrentProfile()
   const [weightInput, setWeight] = useState<string | null>(null)
-  const [medId, setMedId] = useState(MEDS[0].id)
-  const [ack, setAck] = useState(false)
+  const [productId, setProductId] = useState(PRODUCTS[0].id)
 
   const lastWeight = useLiveQuery(async () => {
     if (!profile?.id) return undefined
@@ -40,96 +79,84 @@ export default function Dose() {
   }, [profile?.id])
 
   const weight = weightInput ?? (lastWeight?.weightKg ? String(lastWeight.weightKg) : '')
-
-  const months = profile && currentWeek >= 0 ? ageInMonths(profile.birthDate) : null
-  const med = MEDS.find(m => m.id === medId)!
   const kg = parseFloat(weight.replace(',', '.'))
-  const validKg = kg >= 3 && kg <= 40
-  const tooYoung = months !== null && months < med.minMonths
-
-  const minMl = round1((kg * med.minMgKg) / med.concentration)
-  const maxMl = round1((kg * med.maxMgKg) / med.concentration)
-  const dailyMl = round1((kg * med.maxDailyMgKg) / med.concentration)
+  const months = profile && currentWeek >= 0 ? ageInMonths(profile.birthDate) : null
+  const product = PRODUCTS.find(p => p.id === productId)!
+  const match = product.bands.find(b => kg >= b.min && kg <= b.max)
+  const tooYoung = months !== null && months < 3
   const lastWeightOld = lastWeight && currentWeek - lastWeight.week > 4
 
   return (
     <div className="pb-24">
-      <BackHeader title="Dosis orientativa" subtitle="Paracetamol e ibuprofeno según peso" />
+      <BackHeader title="Dosis según prospecto" subtitle="Paracetamol e ibuprofeno por peso" />
 
-      <div className="px-5 mb-5">
+      <div className="px-5 mb-4 space-y-2">
         <AlertBox>
-          <strong>Menores de 3 meses:</strong> no des ningún medicamento sin indicación médica. La fiebre a esta edad es motivo de urgencias.
+          <strong>Menores de 3 meses:</strong> ningún medicamento sin indicación médica. La fiebre a esta edad es motivo de urgencias.
+        </AlertBox>
+        <AlertBox tone="amber">
+          Esta es la tabla del prospecto. <strong>Comprueba la concentración (mg/ml) en tu caja</strong> y usa la jeringa del envase. Si el pediatra te dio otra pauta, sigue la suya.
         </AlertBox>
       </div>
 
-      {!ack ? (
-        <div className="px-5">
-          <div className="bg-white border border-gray-100 rounded-2xl p-4 text-sm text-gray-700 leading-relaxed space-y-2">
-            <p>Esta calculadora usa las dosis habituales por kilo de las fichas técnicas. Antes de usarla:</p>
-            <ul className="list-disc pl-5 space-y-1 text-gray-600">
-              <li>Comprueba la <strong>concentración</strong> en la caja (mg/ml). Es el error más frecuente.</li>
-              <li>Usa siempre la jeringa dosificadora del propio envase.</li>
-              <li>Si tu pediatra te ha dado otra pauta, sigue la suya.</li>
-              <li>No combines dos productos con el mismo principio activo.</li>
-            </ul>
-          </div>
-          <button onClick={() => setAck(true)} className="w-full mt-4 bg-tinta-600 text-white rounded-xl py-3 text-sm font-semibold">
-            Entendido, continuar
-          </button>
+      <div className="px-5 mb-4 space-y-3">
+        <div>
+          <label htmlFor="peso" className="block text-sm font-medium text-gray-700 mb-1.5">Peso actual (kg)</label>
+          <input id="peso" type="number" inputMode="decimal" step="0.1" value={weight} onChange={e => setWeight(e.target.value)} placeholder="ej. 7.5" className={`${inputCls} text-base`} />
+          {lastWeightOld && <p className="text-sm text-yema-700 mt-1">El último peso guardado tiene más de un mes: usa uno reciente.</p>}
         </div>
+        <div className="space-y-2">
+          {PRODUCTS.map(p => (
+            <button key={p.id} onClick={() => setProductId(p.id)}
+              className={`w-full text-left text-sm rounded-xl px-4 py-3 border ${productId === p.id ? 'bg-tinta-50 border-tinta-300 text-tinta-800 font-semibold' : 'bg-white border-gray-200 text-gray-700'}`}>
+              {p.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {tooYoung ? (
+        <div className="px-5"><AlertBox>Con {months} {months === 1 ? 'mes' : 'meses'}, consulta con el pediatra antes de darle cualquier medicamento.</AlertBox></div>
       ) : (
-        <>
-          <div className="px-5 mb-5 space-y-3">
-            <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-3">
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Peso actual (kg)</label>
-                <input type="number" inputMode="decimal" step="0.1" value={weight} onChange={e => setWeight(e.target.value)} placeholder="ej. 7.5" className={inputCls} />
-                {lastWeightOld && <p className="text-xs text-amber-600 mt-1">El último peso guardado tiene más de un mes. Pésale o usa un peso reciente.</p>}
-              </div>
-              <div className="space-y-2">
-                <label className="block text-xs font-medium text-gray-500">Medicamento y concentración</label>
-                {MEDS.map(m => (
-                  <button key={m.id} onClick={() => setMedId(m.id)}
-                    className={`w-full text-left text-sm rounded-xl px-3 py-2.5 border ${medId === m.id ? 'bg-tinta-50 border-tinta-200 text-tinta-800 font-semibold' : 'border-gray-200 text-gray-600'}`}>
-                    {m.name}
-                  </button>
-                ))}
-              </div>
+        <section className="px-5">
+          {match && (
+            <div className="bg-tinta-600 text-white rounded-2xl p-5 mb-3">
+              <p className="text-xs uppercase tracking-widest text-tinta-200 font-semibold">Según el prospecto, para {kg} kg</p>
+              <p className="text-4xl font-bold mt-1">{match.ml}</p>
+              <p className="text-sm text-tinta-100 mt-2">{product.every}</p>
             </div>
-          </div>
-
-          {tooYoung ? (
-            <div className="px-5"><AlertBox>Con {months} {months === 1 ? 'mes' : 'meses'}, consulta con el pediatra antes de darle este medicamento.</AlertBox></div>
-          ) : validKg ? (
-            <div className="px-5 mb-5">
-              <div className="bg-tinta-600 text-white rounded-2xl p-5">
-                <p className="text-xs uppercase tracking-widest text-tinta-200 font-semibold">Dosis por toma</p>
-                <p className="text-4xl font-bold mt-1 tabular-nums">
-                  {minMl === maxMl ? `${minMl} ml` : `${minMl} – ${maxMl} ml`}
-                </p>
-                <p className="text-sm text-tinta-100 mt-2">{med.every}</p>
-                <p className="text-xs text-tinta-200 mt-3">
-                  Máximo {dailyMl} ml en 24 h ({med.maxDailyMgKg} mg/kg/día) · {kg} kg
-                </p>
-              </div>
-              <button onClick={() => navigate('/herramientas/registro')} className="w-full mt-3 bg-white border border-gray-100 rounded-2xl py-3 text-sm text-tinta-600 font-semibold">
-                Apuntar la toma en el registro →
-              </button>
-            </div>
-          ) : (
-            <p className="px-5 text-sm text-gray-400 text-center">Introduce un peso entre 3 y 40 kg.</p>
           )}
-
-          <div className="px-5 mt-4">
-            <AlertBox tone="amber">
-              Trata el malestar, no el número del termómetro. Consulta si la fiebre dura más de 48-72 h, está muy decaído, le cuesta respirar, no bebe o aparecen manchas en la piel.
-            </AlertBox>
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">Tabla del prospecto</p>
+          <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs text-gray-500 border-b border-gray-100">
+                  <th className="px-4 py-2 font-medium">Peso</th>
+                  <th className="px-4 py-2 font-medium">Dosis por toma</th>
+                </tr>
+              </thead>
+              <tbody>
+                {product.bands.map(b => (
+                  <tr key={b.min} className={`border-b border-gray-50 last:border-0 ${b === match ? 'bg-yema-50 font-semibold' : ''}`}>
+                    <td className="px-4 py-2 text-gray-700">
+                      {bandLabel(product, b)}
+                      {b.note && <span className="text-gray-500 font-normal"> · {b.note}</span>}
+                    </td>
+                    <td className="px-4 py-2 text-gray-900">{b.ml}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </>
+          <p className="text-sm text-gray-600 mt-2">{product.every}</p>
+          <button onClick={() => navigate('/herramientas/registro')} className="w-full mt-4 bg-white border border-gray-200 rounded-2xl py-3 text-sm text-tinta-600 font-semibold">
+            Apuntar la toma en el registro (te avisa de la siguiente) →
+          </button>
+        </section>
       )}
 
-      <p className="px-5 text-xs text-gray-400 text-center leading-relaxed mt-6">
-        Cálculo orientativo basado en fichas técnicas (AEMPS). No sustituye la indicación de tu pediatra o farmacéutico.
+      <p className="px-5 text-xs text-gray-500 text-center leading-relaxed mt-6">
+        Información de los prospectos publicados en CIMA (AEMPS). No es una recomendación personalizada ni sustituye a tu pediatra o farmacéutico.
       </p>
     </div>
   )

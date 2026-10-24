@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import {
   ComposedChart, Line, XAxis, YAxis, CartesianGrid,
@@ -11,6 +11,7 @@ import { BackHeader } from '../components/ui'
 import { fromInputDate, inputCls, toInputDate } from '../components/uiHelpers'
 import { classify, referenceSeries, type Metric } from '../data/whoPercentiles'
 import { daysBetween } from '../utils/age'
+import { deleteWithUndo } from '../utils/overlay'
 
 function GrowthChart({ metric, records, sex, maxWeek }: {
   metric: Metric
@@ -18,7 +19,7 @@ function GrowthChart({ metric, records, sex, maxWeek }: {
   sex?: BabySex
   maxWeek: number
 }) {
-  const key = metric === 'weight' ? 'weightKg' : 'heightCm'
+  const key = metric === 'weight' ? 'weightKg' : metric === 'height' ? 'heightCm' : 'headCm'
   const unit = metric === 'weight' ? 'kg' : 'cm'
   const points = records.filter(r => r[key] !== undefined)
   if (points.length === 0) return null
@@ -39,8 +40,8 @@ function GrowthChart({ metric, records, sex, maxWeek }: {
 
   return (
     <div className="px-5 mb-6">
-      <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
-        {metric === 'weight' ? 'Peso' : 'Talla'}{sex ? ' · percentiles OMS' : ''}
+      <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">
+        {metric === 'weight' ? 'Peso' : metric === 'height' ? 'Talla' : 'Perímetro craneal'}{sex ? ' · percentiles OMS' : ''}
       </p>
       <ResponsiveContainer width="100%" height={210}>
         <ComposedChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
@@ -54,7 +55,7 @@ function GrowthChart({ metric, records, sex, maxWeek }: {
           {sex && <Line dataKey="P97" stroke="#cbd5e1" strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={false} />}
           {sex && <Line dataKey="P50" stroke="#94a3b8" strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={false} />}
           {sex && <Line dataKey="P3" stroke="#cbd5e1" strokeDasharray="4 4" dot={false} connectNulls isAnimationActive={false} />}
-          <Line dataKey="Bebé" stroke={metric === 'weight' ? '#1C2650' : '#5E8C69'} strokeWidth={2} dot={{ r: 4 }} connectNulls />
+          <Line dataKey="Bebé" stroke={metric === 'weight' ? '#1C2650' : metric === 'height' ? '#5E8C69' : '#C9724F'} strokeWidth={2} dot={{ r: 4 }} connectNulls />
         </ComposedChart>
       </ResponsiveContainer>
     </div>
@@ -63,9 +64,8 @@ function GrowthChart({ metric, records, sex, maxWeek }: {
 
 export default function GrowthTracker() {
   const { profile, currentWeek, isLoading } = useCurrentProfile()
-  const [weightStr, setWeightStr] = useState('')
-  const [heightStr, setHeightStr] = useState('')
-  const [headStr, setHeadStr] = useState('')
+  // Borrador del formulario; si no hay, se muestran los valores guardados de esa semana
+  const [draft, setDraft] = useState<{ week: number; w: string; h: string; c: string } | null>(null)
   const [dateStr, setDateStr] = useState(toInputDate(new Date()))
   const [saving, setSaving] = useState(false)
 
@@ -82,13 +82,17 @@ export default function GrowthTracker() {
 
   const measureWeek = profile ? Math.max(0, Math.floor(daysBetween(profile.birthDate, fromInputDate(dateStr)) / 7)) : 0
 
-  useEffect(() => {
-    if (!profile?.id || records === undefined) return
-    const existing = records.find(r => r.week === measureWeek)
-    setWeightStr(existing?.weightKg !== undefined ? String(existing.weightKg) : '')
-    setHeightStr(existing?.heightCm !== undefined ? String(existing.heightCm) : '')
-    setHeadStr(existing?.headCm !== undefined ? String(existing.headCm) : '')
-  }, [records, measureWeek, profile?.id])
+  const existing = records?.find(r => r.week === measureWeek)
+  const vals = draft && draft.week === measureWeek ? draft : {
+    week: measureWeek,
+    w: existing?.weightKg !== undefined ? String(existing.weightKg) : '',
+    h: existing?.heightCm !== undefined ? String(existing.heightCm) : '',
+    c: existing?.headCm !== undefined ? String(existing.headCm) : '',
+  }
+  const { w: weightStr, h: heightStr, c: headStr } = vals
+  const setWeightStr = (v: string) => setDraft({ ...vals, w: v })
+  const setHeightStr = (v: string) => setDraft({ ...vals, h: v })
+  const setHeadStr = (v: string) => setDraft({ ...vals, c: v })
 
   if (isLoading || !profile) return null
 
@@ -96,7 +100,7 @@ export default function GrowthTracker() {
     return (
       <div className="pb-6">
         <BackHeader title="Crecimiento" />
-        <p className="px-5 text-sm text-gray-400 text-center py-12">
+        <p className="px-5 text-sm text-gray-500 text-center py-12">
           Podrás registrar peso y talla cuando nazca {profile.name}.
         </p>
       </div>
@@ -122,6 +126,7 @@ export default function GrowthTracker() {
         headCm,
       })
       showToast('Medida guardada')
+      setDraft(null)
     } catch {
       showToast('No se ha guardado la medida. Puede que el móvil no tenga espacio: exporta un backup desde Ajustes.')
     } finally {
@@ -134,7 +139,9 @@ export default function GrowthTracker() {
   }
 
   async function remove(r: GrowthRecord) {
-    if (confirm(`¿Borrar la medida de la semana ${r.week}?`)) await db.growthRecords.delete([r.profileId, r.week])
+    await deleteWithUndo(`Medida de la semana ${r.week} borrada`,
+      () => db.growthRecords.delete([r.profileId, r.week]),
+      () => db.growthRecords.put(r))
   }
 
   const recs = records ?? []
@@ -157,18 +164,20 @@ export default function GrowthTracker() {
         </div>
       )}
 
-      {last && profile.sex && (last.weightKg || last.heightCm) && (
+      {last && profile.sex && (last.weightKg || last.heightCm || last.headCm) && (
         <div className="px-5 mb-5">
           <div className="bg-white border border-gray-100 rounded-2xl p-4 text-sm space-y-1">
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Última medida · semana {last.week}</p>
-            {last.weightKg && <p className="text-gray-800"><strong>{last.weightKg} kg</strong> <span className="text-gray-500">— {classify('weight', profile.sex, last.week, last.weightKg)}</span></p>}
-            {last.heightCm && <p className="text-gray-800"><strong>{last.heightCm} cm</strong> <span className="text-gray-500">— {classify('height', profile.sex, last.week, last.heightCm)}</span></p>}
+            <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-1">Última medida · semana {last.week}</p>
+            {last.weightKg && <p className="text-gray-800"><strong>{last.weightKg} kg</strong> <span className="text-gray-500">— {classify('weight', profile.sex, last.week, last.weightKg) || 'sin referencia OMS después de 2 años'}</span></p>}
+            {last.heightCm && <p className="text-gray-800"><strong>{last.heightCm} cm</strong> <span className="text-gray-500">— {classify('height', profile.sex, last.week, last.heightCm) || 'sin referencia OMS después de 2 años'}</span></p>}
+            {last.headCm && <p className="text-gray-800"><strong>PC {last.headCm} cm</strong> <span className="text-gray-500">— {classify('head', profile.sex, last.week, last.headCm) || 'sin referencia OMS después de 2 años'}</span></p>}
           </div>
         </div>
       )}
 
       <GrowthChart metric="weight" records={recs} sex={profile.sex} maxWeek={maxWeek} />
       <GrowthChart metric="height" records={recs} sex={profile.sex} maxWeek={maxWeek} />
+      <GrowthChart metric="head" records={recs} sex={profile.sex} maxWeek={maxWeek} />
 
       {/* Form */}
       <div className="px-5 mb-4">
@@ -203,11 +212,11 @@ export default function GrowthTracker() {
 
       {recs.length > 0 && (
         <div className="px-5">
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">Historial</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">Historial</p>
           <ul className="space-y-1.5">
             {[...recs].reverse().map(r => (
               <li key={r.week} className="bg-white border border-gray-100 rounded-xl px-4 py-2.5 flex items-center gap-3 text-sm">
-                <span className="text-gray-400 w-12 shrink-0">S{r.week}</span>
+                <span className="text-gray-500 w-12 shrink-0">S{r.week}</span>
                 <span className="flex-1 text-gray-800">
                   {[r.weightKg && `${r.weightKg} kg`, r.heightCm && `${r.heightCm} cm`, r.headCm && `PC ${r.headCm} cm`].filter(Boolean).join(' · ')}
                 </span>
@@ -218,8 +227,8 @@ export default function GrowthTracker() {
         </div>
       )}
 
-      <p className="px-5 text-xs text-gray-400 text-center leading-relaxed mt-6">
-        Las líneas discontinuas son los percentiles 3, 50 y 97 de la OMS (aproximados). Lo importante es que siga su propia curva; el pediatra valora la evolución.
+      <p className="px-5 text-xs text-gray-500 text-center leading-relaxed mt-6">
+        Líneas discontinuas: percentiles 3, 50 y 97 de los Patrones de Crecimiento de la OMS (tablas oficiales LMS, 0-24 meses). Lo importante es que siga su propia curva; el pediatra valora la evolución.
       </p>
     </div>
   )

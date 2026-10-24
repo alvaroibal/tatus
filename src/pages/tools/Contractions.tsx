@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AlertBox, BackHeader, Disclaimer, SectionLabel } from '../../components/ui'
 import { formatClock, formatTime } from '../../utils/age'
+import { toast } from '../../utils/overlay'
 
 interface Contraction { start: number; end?: number }
 
@@ -42,7 +43,9 @@ export default function Contractions() {
   }
 
   function clear() {
-    if (confirm('¿Borrar todas las contracciones registradas?')) update([])
+    const prev = list
+    update([])
+    toast('Contracciones borradas', { label: 'Deshacer', run: () => update(prev) })
   }
 
   const done = list.filter(c => c.end)
@@ -95,15 +98,15 @@ export default function Contractions() {
         <div className="px-5 mb-5 grid grid-cols-3 gap-2 text-center">
           <div className="bg-white border border-gray-100 rounded-2xl py-3">
             <p className="text-sm font-bold text-gray-900">{lastHour.length}</p>
-            <p className="text-[10px] text-gray-400">última hora</p>
+            <p className="text-[11px] text-gray-500">última hora</p>
           </div>
           <div className="bg-white border border-gray-100 rounded-2xl py-3">
             <p className="text-sm font-bold text-gray-900">{avgInterval ? fmtSec(avgInterval) : '—'}</p>
-            <p className="text-[10px] text-gray-400">cada (media)</p>
+            <p className="text-[11px] text-gray-500">cada (media)</p>
           </div>
           <div className="bg-white border border-gray-100 rounded-2xl py-3">
             <p className="text-sm font-bold text-gray-900">{fmtSec(avgDuration)}</p>
-            <p className="text-[10px] text-gray-400">duración media</p>
+            <p className="text-[11px] text-gray-500">duración media</p>
           </div>
         </div>
       )}
@@ -118,7 +121,7 @@ export default function Contractions() {
                 <li key={c.start} className="bg-white border border-gray-100 rounded-xl px-4 py-2.5 flex justify-between text-sm">
                   <span className="text-gray-500 tabular-nums">{formatTime(new Date(c.start))}</span>
                   <span className="text-gray-800">dura {fmtSec(c.end! - c.start)}</span>
-                  <span className="text-gray-400">{prev ? `cada ${fmtSec(c.start - prev.start)}` : ''}</span>
+                  <span className="text-gray-500">{prev ? `cada ${fmtSec(c.start - prev.start)}` : ''}</span>
                 </li>
               )
             })}

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useCurrentProfile } from '../hooks/useCurrentProfile'
 import { db, type FutureLetter } from '../db/db'
 import { showToast } from '../utils/toast'
+import { confirmDialog } from '../utils/overlay'
 
 function weekLabel(week: number, pregnancyWeek?: number): string {
   if (week < 0 && pregnancyWeek != null) return `Semana ${pregnancyWeek} de embarazo`
@@ -85,7 +86,11 @@ export default function LetterForm() {
 
   async function handleLock() {
     if (!letter?.id) return
-    if (!confirm(`¿Sellar la carta? Quedará cerrada hasta que ${profile?.name ?? 'tu hijo'} la abra.`)) return
+    if (!await confirmDialog({
+      title: '¿Sellar la carta?',
+      message: `Quedará cerrada hasta que ${profile?.name ?? 'tu hijo'} la abra.`,
+      confirmLabel: 'Sellar',
+    })) return
     try {
       await db.futureLetters.update(letter.id, { locked: true })
       showToast('Carta sellada.')
@@ -97,7 +102,7 @@ export default function LetterForm() {
 
   async function handleDelete() {
     if (!letter?.id) return
-    if (!confirm('¿Borrar esta carta? No se podrá recuperar.')) return
+    if (!await confirmDialog({ title: '¿Borrar esta carta?', message: 'No se podrá recuperar.', confirmLabel: 'Borrar', danger: true })) return
     try {
       await db.futureLetters.delete(letter.id)
       navigate('/cartas')
@@ -114,12 +119,12 @@ export default function LetterForm() {
     <div className="flex flex-col min-h-screen bg-white">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-12 pb-3 border-b border-gray-100">
-        <button onClick={() => navigate('/cartas')} className="text-gray-400 text-sm">
+        <button onClick={() => navigate('/cartas')} className="text-gray-500 text-sm">
           Cancelar
         </button>
         <div className="text-center">
           <p className="text-xs font-semibold text-tinta-600">{contextWeek}</p>
-          <p className="text-xs text-gray-400 capitalize">{todayLong()}</p>
+          <p className="text-xs text-gray-500 capitalize">{todayLong()}</p>
         </div>
         {isLocked ? (
           <span className="text-sm text-gray-300">🔒</span>
@@ -164,7 +169,7 @@ export default function LetterForm() {
           </button>
           <button
             onClick={handleLock}
-            className="text-sm text-gray-400 flex items-center gap-1.5"
+            className="text-sm text-gray-500 flex items-center gap-1.5"
           >
             <span>Sellar carta</span>
             <span>🔒</span>

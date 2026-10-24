@@ -45,6 +45,8 @@ export async function exportLettersHTML(profile: BabyProfile): Promise<string> {
     .equals(profile.id!)
     .sortBy('date')
 
+  const config = (await db.appConfig.toArray())[0]
+  const who = config?.role === 'mama' ? 'mamá' : 'papá'
   const lettersHtml = letters.map(renderLetter).join('\n')
   const count = letters.length
   const name = profile.name
@@ -54,7 +56,7 @@ export async function exportLettersHTML(profile: BabyProfile): Promise<string> {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cartas de papá para ${escapeHtml(name)}</title>
+  <title>Cartas de ${who} para ${escapeHtml(name)}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -156,7 +158,7 @@ export async function exportLettersHTML(profile: BabyProfile): Promise<string> {
   <div class="wrapper">
     <header>
       <p class="label">Para leer algún día</p>
-      <h1>Cartas de papá para ${escapeHtml(name)}</h1>
+      <h1>Cartas de ${who} para ${escapeHtml(name)}</h1>
       <p class="subtitle">${count} ${count === 1 ? 'carta' : 'cartas'} · Desde el principio</p>
     </header>
 

@@ -61,11 +61,11 @@ export function ChecklistDetail() {
         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
           <div className="h-full bg-green-500 rounded-full transition-all" style={{ width: `${total ? (n / total) * 100 : 0}%` }} />
         </div>
-        <p className="text-xs text-gray-400 mt-1.5">{n} de {total} hechos</p>
+        <p className="text-xs text-gray-500 mt-1.5">{n} de {total} hechos</p>
       </div>
       {list.groups.map(g => (
         <section key={g.title} className="px-5 mb-5">
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">{g.title}</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">{g.title}</p>
           <ul className="bg-white border border-gray-100 rounded-2xl divide-y divide-gray-50">
             {g.items.map(i => {
               const checked = done?.has(checkKey(pid, list.id, i.id)) ?? false
@@ -75,7 +75,7 @@ export function ChecklistDetail() {
                     <span className={`mt-0.5 w-5 h-5 rounded-md border-2 shrink-0 flex items-center justify-center text-xs ${
                       checked ? 'bg-green-500 border-green-500 text-white' : 'border-gray-300'
                     }`}>{checked ? '✓' : ''}</span>
-                    <span className={`text-sm ${checked ? 'text-gray-400 line-through' : 'text-gray-800'}`}>{i.text}</span>
+                    <span className={`text-sm ${checked ? 'text-gray-500 line-through' : 'text-gray-800'}`}>{i.text}</span>
                   </button>
                 </li>
               )

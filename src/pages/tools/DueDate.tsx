@@ -7,6 +7,7 @@ import { formatLongDate, fromInputDate, inputCls, primaryBtn, toInputDate } from
 import { addDays } from '../../utils/age'
 import { dueDateFromConception, dueDateFromLastPeriod, gestationalAge } from '../../utils/pregnancy'
 import { showToast } from '../../utils/toast'
+import { confirmDialog } from '../../utils/overlay'
 
 const MILESTONES = [
   { week: 12, label: 'Ecografía del 1.er trimestre' },
@@ -37,10 +38,10 @@ function DueDateForm({ profile, currentWeek }: { profile: BabyProfile; currentWe
 
   async function apply() {
     if (!profile.id || !due) return
-    const msg = profile.phase === 'trying'
-      ? `¡Enhorabuena! ¿Pasamos ${profile.name} a modo embarazo con fecha probable ${formatLongDate(due)}?`
-      : `¿Cambiar la fecha probable de ${profile.name} a ${formatLongDate(due)}?`
-    if (!confirm(msg)) return
+    const ok = await confirmDialog(profile.phase === 'trying'
+      ? { title: '¡Enhorabuena! 🎉', message: `Pasamos a modo embarazo con fecha probable ${formatLongDate(due)}.`, confirmLabel: 'Empezar el embarazo' }
+      : { title: 'Cambiar fecha probable', message: `La nueva fecha de ${profile.name} será ${formatLongDate(due)}.`, confirmLabel: 'Cambiar fecha' })
+    if (!ok) return
     await db.profiles.update(profile.id, {
       birthDate: due,
       phase: 'expecting',
@@ -89,7 +90,7 @@ function DueDateForm({ profile, currentWeek }: { profile: BabyProfile; currentWe
                 <p className="text-sm text-tinta-100 mt-2">Hoy: semana {ga.weeks} + {ga.days} días</p>
               )}
             </div>
-            <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+            <p className="text-xs text-gray-500 mt-2 leading-relaxed">
               La ecografía del 1.er trimestre puede ajustar esta fecha: si os dan otra, usad la de la ecografía.
             </p>
           </div>
@@ -102,7 +103,7 @@ function DueDateForm({ profile, currentWeek }: { profile: BabyProfile; currentWe
                 const past = d < new Date()
                 return (
                   <li key={m.week} className={`bg-white border border-gray-100 rounded-xl px-4 py-2.5 flex justify-between gap-3 text-sm ${past ? 'opacity-50' : ''}`}>
-                    <span className="text-gray-800"><span className="text-gray-400 mr-2">S{m.week}</span>{m.label}</span>
+                    <span className="text-gray-800"><span className="text-gray-500 mr-2">S{m.week}</span>{m.label}</span>
                     <span className="text-gray-500 shrink-0">{d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
                   </li>
                 )

@@ -7,6 +7,8 @@ import { BackHeader, SectionLabel } from '../../components/ui'
 import { fromInputDate, inputCls, primaryBtn, toInputDate } from '../../components/uiHelpers'
 import { addDays, formatTime, startOfDay } from '../../utils/age'
 import { showToast } from '../../utils/toast'
+import { deleteWithUndo } from '../../utils/overlay'
+import { downloadIcs } from '../../utils/ics'
 
 function fmt(d: Date) {
   return new Date(d).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
@@ -60,29 +62,27 @@ export default function Appointments() {
   }
 
   async function remove(a: Appointment) {
-    if (confirm(`¿Borrar la cita "${a.title}"?`)) await db.appointments.delete(a.id!)
+    await deleteWithUndo(`Cita "${a.title}" borrada`, () => db.appointments.delete(a.id!), () => db.appointments.put(a))
+  }
+
+  function toEvent(a: Appointment) {
+    return {
+      uid: `cita-${a.uid ?? a.id}`,
+      title: `${a.title} (${profile!.name})`,
+      start: new Date(a.date),
+      description: a.notes,
+      alarmMinutesBefore: 24 * 60,
+    }
   }
 
   function exportIcs(a: Appointment) {
-    const d = new Date(a.date)
-    const stamp = (x: Date) => x.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
-    const end = new Date(d.getTime() + 60 * 60_000)
-    const ics = [
-      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Tatus//ES', 'BEGIN:VEVENT',
-      `UID:tatus-${a.id}@tatus`, `DTSTAMP:${stamp(new Date())}`, `DTSTART:${stamp(d)}`, `DTEND:${stamp(end)}`,
-      `SUMMARY:${a.title} (${profile!.name})`, a.notes ? `DESCRIPTION:${a.notes.replace(/\n/g, '\\n')}` : '',
-      'BEGIN:VALARM', 'TRIGGER:-P1D', 'ACTION:DISPLAY', `DESCRIPTION:${a.title}`, 'END:VALARM',
-      'END:VEVENT', 'END:VCALENDAR',
-    ].filter(Boolean).join('\r\n')
-    const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }))
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `cita-${toInputDate(d)}.ics`
-    document.body.appendChild(link)
-    link.click()
-    link.remove()
-    URL.revokeObjectURL(url)
+    downloadIcs(`cita-${toInputDate(new Date(a.date))}.ics`, [toEvent(a)])
   }
+
+  function exportAll() {
+    downloadIcs(`citas-${profile!.name}.ics`, upcoming.map(toEvent))
+  }
+
 
   return (
     <div className="pb-24">
@@ -111,7 +111,7 @@ export default function Appointments() {
             <textarea value={draft.notes} onChange={e => setDraft({ ...draft, notes: e.target.value })} rows={3} placeholder="Preguntas para la consulta, qué llevar…" className={inputCls} />
             <div className="flex gap-2">
               <button onClick={save} disabled={!draft.title.trim()} className={primaryBtn}>Guardar</button>
-              <button onClick={() => setDraft(null)} className="px-4 text-sm text-gray-400">Cancelar</button>
+              <button onClick={() => setDraft(null)} className="px-4 text-sm text-gray-500">Cancelar</button>
             </div>
           </div>
         </div>
@@ -126,7 +126,7 @@ export default function Appointments() {
                 <span className="text-lg">{KIND_LABELS[s.kind].emoji}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-gray-700">{s.title}</p>
-                  <p className="text-xs text-gray-400">hacia el {fmt(s.date)}</p>
+                  <p className="text-xs text-gray-500">hacia el {fmt(s.date)}</p>
                 </div>
                 <button
                   onClick={() => setDraft({ ...EMPTY, title: s.title, kind: s.kind, date: toInputDate(s.date) })}
@@ -137,14 +137,19 @@ export default function Appointments() {
               </li>
             ))}
           </ul>
-          <p className="text-xs text-gray-400 mt-2">Fechas aproximadas: confirma el día con tu centro de salud.</p>
+          <p className="text-xs text-gray-500 mt-2">Fechas aproximadas: confirma el día con tu centro de salud.</p>
         </section>
       )}
 
       <section className="px-5 mb-6">
-        <SectionLabel>Próximas</SectionLabel>
+        <div className="flex items-center justify-between">
+          <SectionLabel>Próximas</SectionLabel>
+          {upcoming.length > 1 && (
+            <button onClick={exportAll} className="text-sm text-tinta-600 font-medium -mt-3 py-1">Todas al calendario</button>
+          )}
+        </div>
         {upcoming.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">No hay citas próximas.</p>
+          <p className="text-sm text-gray-500 py-4 text-center">No hay citas próximas.</p>
         ) : (
           <ul className="space-y-2">
             {upcoming.map(a => (
@@ -177,7 +182,7 @@ export default function Appointments() {
                 <span className={a.done ? 'text-green-500' : 'text-gray-300'}>{a.done ? '✓' : '○'}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-gray-700">{a.title}</p>
-                  <p className="text-xs text-gray-400">{fmt(a.date)}</p>
+                  <p className="text-xs text-gray-500">{fmt(a.date)}</p>
                 </div>
                 <button onClick={() => remove(a)} className="text-gray-300 text-sm">✕</button>
               </li>

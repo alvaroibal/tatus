@@ -14,3 +14,8 @@ export function partnerLabel(config: AppConfig | undefined): string {
 export function withPartner(text: string, partner: string): string {
   return text.replace(/\{pareja\}/g, partner)
 }
+
+/** Rol de quien usa este móvil: cambia algunos textos (papá por defecto, como el nombre de la app). */
+export function useRole(): 'papa' | 'mama' {
+  return useAppConfig()?.role ?? 'papa'
+}

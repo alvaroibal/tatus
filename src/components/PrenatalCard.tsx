@@ -1,5 +1,6 @@
 import type { PrenatalStage } from '../utils/getPrenatalStage'
-import { useAppConfig, partnerLabel, withPartner } from '../hooks/useAppConfig'
+import { useAppConfig, partnerLabel, useRole, withPartner } from '../hooks/useAppConfig'
+import { Fold } from './ui'
 
 interface Props {
   pregnancyWeek: number
@@ -12,7 +13,7 @@ function Section({ emoji, title, items, partner }: { emoji: string; title: strin
   if (items.length === 0) return null
   return (
     <div className="mb-5">
-      <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">
+      <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">
         {emoji} {title}
       </p>
       <ul className="space-y-2">
@@ -30,6 +31,7 @@ function Section({ emoji, title, items, partner }: { emoji: string; title: strin
 export function PrenatalCard({ pregnancyWeek, stage, childName, daysUntilBirth }: Props) {
   const progress = Math.round((pregnancyWeek / 40) * 100)
   const partner = partnerLabel(useAppConfig())
+  const role = useRole()
   const trimester = pregnancyWeek <= 13 ? '1.er trimestre' : pregnancyWeek <= 27 ? '2.º trimestre' : '3.er trimestre'
 
   return (
@@ -39,19 +41,19 @@ export function PrenatalCard({ pregnancyWeek, stage, childName, daysUntilBirth }
         <p className="text-8xl font-bold text-gray-900 leading-none tabular-nums">
           {daysUntilBirth}
         </p>
-        <p className="text-sm text-gray-400 mt-2">días para conocerte, {childName}</p>
+        <p className="text-sm text-gray-500 mt-2">días para conocerte, {childName}</p>
       </div>
 
       {/* Progress bar */}
       <div className="mb-7">
         <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-2">
           <div
-            className="h-full bg-amber-400 rounded-full"
+            className="h-full bg-fase-esperar rounded-full"
             style={{ width: `${progress}%` }}
           />
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-xs text-gray-400">Semana {pregnancyWeek} de 40</span>
+          <span className="text-xs text-gray-500">Semana {pregnancyWeek} de 40</span>
           <span className="text-xs text-gray-300">{trimester}</span>
         </div>
       </div>
@@ -76,13 +78,22 @@ export function PrenatalCard({ pregnancyWeek, stage, childName, daysUntilBirth }
         </div>
       </div>
 
-      {/* Content sections */}
-      <Section emoji="🧬" title="Desarrollo esta semana" partner={partner} items={stage.development} />
-      <Section emoji="👨‍👶" title="Qué hace papá" partner={partner} items={stage.fatherTasks} />
-      {stage.shopping.length > 0 && (
-        <Section emoji="🛒" title="Considerar comprar" partner={partner} items={stage.shopping} />
-      )}
-      <Section emoji="💛" title={`Cómo ayudar a ${partner}`} partner={partner} items={stage.partnerTips} />
+      {/* Lo más importante, a la vista */}
+      <Section emoji="🧬" title="Desarrollo esta semana" partner={partner} items={stage.development.slice(0, 2)} />
+      <div className="-mx-5">
+        <Fold title={`Todo sobre la semana ${pregnancyWeek}`}>
+          <div className="px-4 pt-1">
+            {stage.development.length > 2 && (
+              <Section emoji="🧬" title="Más sobre su desarrollo" partner={partner} items={stage.development.slice(2)} />
+            )}
+            <Section emoji="🤝" title={role === 'mama' ? `Lo que puede hacer ${partner}` : 'Qué puedes hacer tú'} partner={partner} items={stage.fatherTasks} />
+            {stage.shopping.length > 0 && (
+              <Section emoji="🛒" title="Considerar comprar" partner={partner} items={stage.shopping} />
+            )}
+            <Section emoji="💛" title={role === 'mama' ? 'Para ti' : `Cómo ayudar a ${partner}`} partner={partner} items={stage.partnerTips} />
+          </div>
+        </Fold>
+      </div>
     </div>
   )
 }

@@ -20,6 +20,7 @@ export default function Onboarding() {
   const [stage, setStage] = useState<Stage | null>(null)
   const [name, setName] = useState('')
   const [partner, setPartner] = useState('')
+  const [role, setRole] = useState<'papa' | 'mama'>('papa')
   const [dateStr, setDateStr] = useState('')
   const [dateKind, setDateKind] = useState<'due' | 'fur'>('due')
   const [saving, setSaving] = useState(false)
@@ -55,7 +56,7 @@ export default function Onboarding() {
       let profileId: number | undefined
       await db.transaction('rw', db.profiles, db.appConfig, async () => {
         profileId = Number(await db.profiles.add(profile))
-        await db.appConfig.put({ id: 1, activeProfileId: profileId, partnerName: partner.trim() || undefined })
+        await db.appConfig.put({ id: 1, activeProfileId: profileId, partnerName: partner.trim() || undefined, role })
       })
 
       if (!profileId) throw new Error('profileId vacío tras la transacción')
@@ -99,7 +100,7 @@ export default function Onboarding() {
             <>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nombre del bebé {stage !== 'born' && <span className="text-gray-400 font-normal">(opcional)</span>}
+                  Nombre del bebé {stage !== 'born' && <span className="text-gray-500 font-normal">(opcional)</span>}
                 </label>
                 <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="ej. Marco"
                   required={stage === 'born'} className={`${inputCls} text-base py-3`} />
@@ -125,8 +126,20 @@ export default function Onboarding() {
               )}
 
               <div>
+                <p className="block text-sm font-medium text-gray-700 mb-1">Tú eres</p>
+                <div className="flex gap-2">
+                  {([['papa', 'Papá / pareja'], ['mama', 'Mamá']] as const).map(([k, l]) => (
+                    <button type="button" key={k} onClick={() => setRole(k)}
+                      className={`flex-1 rounded-xl py-3 text-sm border-2 ${role === k ? 'border-tinta-600 bg-tinta-50 font-semibold text-tinta-800' : 'border-gray-100 text-gray-600'}`}>
+                      {l}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nombre de tu pareja <span className="text-gray-400 font-normal">(opcional)</span>
+                  Nombre de tu pareja <span className="text-gray-500 font-normal">(opcional)</span>
                 </label>
                 <input type="text" value={partner} onChange={e => setPartner(e.target.value)} placeholder="Para personalizar los consejos" className={`${inputCls} text-base py-3`} />
               </div>

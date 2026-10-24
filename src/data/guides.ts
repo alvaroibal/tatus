@@ -6,6 +6,8 @@
  *   buscando embarazo = -60 · semana N de embarazo = N - 40 · semana N de vida = N
  */
 
+import type { SourceId } from './sources'
+
 export type GuideCategory =
   | 'preconcepcion'
   | 'embarazo'
@@ -295,7 +297,8 @@ export const GUIDES: Guide[] = [
     alert: 'Si hay sangrado abundante, líquido verde o con sangre, fiebre, dolor de cabeza intenso con visión borrosa, o deja de notar al bebé: hospital ya.',
     tools: [
       { label: 'Temporizador de contracciones', to: '/herramientas/contracciones' },
-      { label: 'Contador de movimientos', to: '/herramientas/patadas' },
+      { label: 'Urgencias', to: '/urgencias' },
+      { label: '¿Se mueve menos de lo normal?', to: '/herramientas/patadas' },
     ],
     sections: [
       {
@@ -642,6 +645,7 @@ export const GUIDES: Guide[] = [
   // ── Alimentación ───────────────────────────────────────────────────────────
   {
     id: 'alimentacion-complementaria',
+    tools: [{ label: 'Primeros alimentos', to: '/herramientas/alimentos' }],
     title: 'Empezar a comer: alimentación complementaria',
     emoji: '🥑',
     category: 'alimentacion',
@@ -747,6 +751,7 @@ export const GUIDES: Guide[] = [
   },
   {
     id: 'urgencias',
+    tools: [{ label: 'Abrir pantalla de urgencias', to: '/urgencias' }, { label: 'Ficha médica', to: '/ficha' }],
     title: 'Cuándo ir a urgencias',
     emoji: '🚑',
     category: 'salud',
@@ -788,6 +793,7 @@ export const GUIDES: Guide[] = [
   },
   {
     id: 'atragantamiento',
+    tools: [{ label: 'Pantalla de urgencias', to: '/urgencias' }],
     title: 'Atragantamiento: la maniobra',
     emoji: '🆘',
     category: 'salud',
@@ -982,6 +988,7 @@ export const GUIDES: Guide[] = [
   },
   {
     id: 'lenguaje',
+    tools: [{ label: 'Hitos del desarrollo', to: '/herramientas/desarrollo' }],
     title: 'Lenguaje: cómo estimularlo y señales de alerta',
     emoji: '🗣️',
     category: 'crianza',
@@ -1154,4 +1161,40 @@ export function relevantGuides(lifeWeek: number, limit = 4): Guide[] {
 
 export function getGuide(id: string): Guide | undefined {
   return GUIDES.find(g => g.id === id)
+}
+
+/** Fuentes de cada guía (ver data/sources.ts). */
+export const GUIDE_SOURCES: Record<string, SourceId[]> = {
+  'antes-de-buscar': ['guiasalud', 'sego', 'sanidadVacunas'],
+  'fertilidad': ['sego', 'guiasalud'],
+  'economia-familiar': ['segSocial', 'boe'],
+  'pruebas-embarazo': ['guiasalud', 'sego', 'sanidadVacunas'],
+  'alimentacion-embarazo': ['aesan', 'guiasalud'],
+  'acompanar-embarazo': ['guiasalud', 'ihan'],
+  'preparar-llegada': ['dgt', 'enfamilia', 'familiaysalud'],
+  'senales-parto': ['sego', 'guiasalud'],
+  'plan-parto': ['guiasalud', 'ihan'],
+  'tu-papel-parto': ['guiasalud', 'ihan'],
+  'primeros-dias': ['enfamilia', 'familiaysalud', 'guiasalud'],
+  'sueno-seguro': ['enfamilia', 'familiaysalud'],
+  'lactancia': ['ihan', 'aepLactancia', 'enfamilia'],
+  'biberon': ['enfamilia', 'familiaysalud', 'aesan'],
+  'llanto-colicos': ['familiaysalud', 'enfamilia'],
+  'salud-mental-postparto': ['guiasalud', 'linea024'],
+  'recuperacion-pareja': ['guiasalud', 'sego'],
+  'alimentacion-complementaria': ['aesan', 'enfamilia', 'familiaysalud'],
+  'alimentos-a-evitar': ['aesan'],
+  'fiebre': ['familiaysalud', 'enfamilia', 'aemps'],
+  'urgencias': ['familiaysalud', 'toxicologia'],
+  'atragantamiento': ['erc', 'familiaysalud'],
+  'revisiones-nino-sano': ['familiaysalud', 'enfamilia'],
+  'dientes': ['familiaysalud', 'enfamilia'],
+  'seguridad-hogar': ['familiaysalud', 'enfamilia'],
+  'silla-coche': ['dgt'],
+  'rabietas': ['familiaysalud', 'enfamilia'],
+  'lenguaje': ['cdcHitos', 'familiaysalud'],
+  'esfinteres': ['familiaysalud', 'enfamilia'],
+  'pantallas-juego': ['enfamilia', 'familiaysalud'],
+  'escuela-infantil': ['familiaysalud'],
+  'tramites-nacimiento': ['segSocial', 'boe'],
 }

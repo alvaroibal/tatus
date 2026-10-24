@@ -49,7 +49,7 @@ export function TryingHome({ profile }: { profile: BabyProfile }) {
       <button onClick={() => navigate('/herramientas/checklist/preconcepcion')} className="w-full bg-white border border-gray-100 rounded-2xl p-4 text-left">
         <div className="flex justify-between items-center mb-2">
           <p className="text-sm font-semibold text-gray-900">🌱 Antes de buscar</p>
-          <p className="text-xs text-gray-400">{done}/{total}</p>
+          <p className="text-xs text-gray-500">{done}/{total}</p>
         </div>
         <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
           <div className="h-full bg-green-500 rounded-full" style={{ width: `${(done / total) * 100}%` }} />

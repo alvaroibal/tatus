@@ -1,100 +1,48 @@
-import { useEffect, useState } from 'react'
-import { AlertBox, BackHeader, Disclaimer, SectionLabel } from '../../components/ui'
-import { formatClock } from '../../utils/age'
+import { AlertBox, BackHeader, Disclaimer } from '../../components/ui'
 
-interface Session { start: number; end?: number; count: number }
-
-const KEY = 'tatus_kicks'
-const GOAL = 10
-const LIMIT_MS = 2 * 60 * 60_000
-
-function load(): Session[] {
-  try { return JSON.parse(localStorage.getItem(KEY) ?? '[]') } catch { return [] }
-}
-function save(list: Session[]) {
-  try { localStorage.setItem(KEY, JSON.stringify(list.slice(-50))) } catch { /* sin almacenamiento */ }
-}
-
+/**
+ * Las guías actuales (RCOG, SEGO) ya no recomiendan contar "10 movimientos":
+ * lo importante es conocer el patrón propio del bebé y no esperar si cambia.
+ */
 export default function Kicks() {
-  const [list, setList] = useState<Session[]>(load)
-  const [now, setNow] = useState(() => Date.now())
-  const active = list.length && !list[list.length - 1].end ? list[list.length - 1] : null
-
-  useEffect(() => {
-    if (!active) return
-    const t = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(t)
-  }, [active])
-
-  function update(next: Session[]) { setList(next); save(next) }
-
-  function start() { update([...list, { start: Date.now(), count: 0 }]) }
-
-  function kick() {
-    if (!active) return
-    const count = active.count + 1
-    update(list.map((s, i) => i === list.length - 1 ? { ...s, count, end: count >= GOAL ? Date.now() : undefined } : s))
-  }
-
-  function finish() {
-    update(list.map((s, i) => i === list.length - 1 ? { ...s, end: Date.now() } : s))
-  }
-
-  const elapsed = active ? now - active.start : 0
-  const overLimit = active && elapsed > LIMIT_MS && active.count < GOAL
-  const history = list.filter(s => s.end).reverse()
-
   return (
     <div className="pb-24">
-      <BackHeader title="Movimientos del bebé" subtitle="Desde la semana 28: cuenta hasta 10 movimientos" />
+      <BackHeader title="¿Se mueve menos de lo normal?" subtitle="Movimientos del bebé en el embarazo" />
 
-      <div className="px-5 flex flex-col items-center mb-6">
-        {active ? (
-          <>
-            <button
-              onClick={kick}
-              className="w-48 h-48 rounded-full bg-amber-400 text-white shadow-lg active:scale-95 transition-transform"
-            >
-              <span className="block text-6xl font-bold tabular-nums">{active.count}</span>
-              <span className="block text-sm font-medium">de {GOAL} · toca al notarlo</span>
-            </button>
-            <p className="text-sm text-gray-500 mt-4 tabular-nums">Tiempo: {formatClock(elapsed)}</p>
-            <button onClick={finish} className="text-xs text-gray-400 mt-2 underline">Terminar sesión</button>
-          </>
-        ) : (
-          <button onClick={start} className="w-48 h-48 rounded-full bg-tinta-600 text-white font-bold text-lg shadow-lg active:scale-95">
-            Empezar a contar
-          </button>
-        )}
-      </div>
-
-      {overLimit && (
-        <div className="px-5 mb-5">
-          <AlertBox>Han pasado más de 2 horas sin llegar a 10 movimientos. Llamad a la matrona o id a urgencias de maternidad.</AlertBox>
-        </div>
-      )}
-
-      <div className="px-5 mb-6">
-        <AlertBox tone="blue">
-          Elegid un momento en que el bebé suele estar activo (tras comer, tumbada de lado). Lo importante es conocer su patrón: si notáis que se mueve <strong>menos de lo habitual</strong>, no esperéis al día siguiente.
+      <div className="px-5 mb-5">
+        <AlertBox>
+          <strong>Si notáis que se mueve menos de lo habitual, o deja de moverse, no esperéis al día siguiente.</strong>{' '}
+          Llamad a la maternidad o id a urgencias de obstetricia ese mismo día, aunque sea de madrugada.
         </AlertBox>
       </div>
 
-      {history.length > 0 && (
-        <div className="px-5">
-          <SectionLabel>Sesiones anteriores</SectionLabel>
-          <ul className="space-y-1.5">
-            {history.slice(0, 20).map(s => (
-              <li key={s.start} className="bg-white border border-gray-100 rounded-xl px-4 py-2.5 flex justify-between text-sm">
-                <span className="text-gray-500">{new Date(s.start).toLocaleString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
-                <span className="text-gray-800">{s.count} mov.</span>
-                <span className="text-gray-400 tabular-nums">{formatClock(s.end! - s.start)}</span>
-              </li>
-            ))}
+      <section className="px-5 mb-5 space-y-4 text-[15px] text-gray-700 leading-relaxed">
+        <div>
+          <h2 className="text-base font-bold text-gray-900 mb-1">Lo normal</h2>
+          <ul className="space-y-1.5 list-disc pl-5">
+            <li>Los primeros movimientos se notan entre las semanas 16 y 24 (antes si no es el primer embarazo).</li>
+            <li>Desde la semana 28 suele haber un patrón diario reconocible: momentos de más actividad y ratos de sueño.</li>
+            <li>Los movimientos no disminuyen al final del embarazo: cambian de forma (menos patadas, más giros), pero siguen ahí.</li>
           </ul>
         </div>
-      )}
-      <Disclaimer />
+        <div>
+          <h2 className="text-base font-bold text-gray-900 mb-1">Cómo comprobarlo</h2>
+          <ul className="space-y-1.5 list-disc pl-5">
+            <li>Tumbada de lado, en un rato tranquilo y a la hora en que suele estar activo.</li>
+            <li>Lo que importa es compararlo con <strong>su</strong> patrón, no llegar a un número concreto.</li>
+            <li>No uséis dopplers caseros para quedaros tranquilos: oír el latido no descarta un problema.</li>
+          </ul>
+        </div>
+        <div>
+          <h2 className="text-base font-bold text-gray-900 mb-1">Tu papel</h2>
+          <ul className="space-y-1.5 list-disc pl-5">
+            <li>Pregúntale de vez en cuando cómo nota hoy al bebé.</li>
+            <li>Si tiene dudas, apóyala para llamar: es una consulta frecuente y en maternidad prefieren veros.</li>
+          </ul>
+        </div>
+      </section>
+
+      <Disclaimer>Basado en las recomendaciones de SEGO y RCOG. No sustituye a tu matrona.</Disclaimer>
     </div>
   )
 }

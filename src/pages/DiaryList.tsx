@@ -5,7 +5,7 @@ import { useCurrentProfile } from '../hooks/useCurrentProfile'
 import { db, type DiaryEntry, type EntryPhoto } from '../db/db'
 import { shareEntry } from '../utils/shareCard'
 import { showToast } from '../utils/toast'
-import { PageHeader } from '../components/PageHeader'
+import { MemoriesTabs } from '../components/MemoriesTabs'
 
 function formatDate(d: Date): string {
   return new Date(d).toLocaleDateString('es-ES', {
@@ -52,7 +52,7 @@ function EntryRow({
         )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-gray-400 capitalize">
+            <span className="text-xs text-gray-500 capitalize">
               {formatDate(entry.date)} · Semana {entry.week}
             </span>
             <div className="flex items-center gap-2 shrink-0">
@@ -79,17 +79,15 @@ function EntryRow({
 export default function DiaryList() {
   const navigate = useNavigate()
   const { profile, isLoading } = useCurrentProfile()
-  const [milestonesOnly, setMilestonesOnly] = useState(false)
 
   const entries = useLiveQuery(
     async () => {
       if (!profile?.id) return []
       const all = await db.diaryEntries.where('profileId').equals(profile.id).toArray()
       return all
-        .filter(e => !milestonesOnly || e.milestone)
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     },
-    [profile?.id, milestonesOnly]
+    [profile?.id]
   )
 
   // Load first photo for each entry (for thumbnails)
@@ -112,29 +110,13 @@ export default function DiaryList() {
 
   return (
     <div className="pb-6">
-      <PageHeader
-        title="Diario"
-        right={
-          <button
-            onClick={() => setMilestonesOnly(v => !v)}
-            className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
-              milestonesOnly
-                ? 'bg-yema-100 text-yema-700'
-                : 'bg-gray-100 text-gray-500'
-            }`}
-          >
-            ★ Hitos
-          </button>
-        }
-      />
+      <MemoriesTabs />
 
       {entries === undefined ? null : entries.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 px-6 text-center text-gray-400">
+        <div className="flex flex-col items-center justify-center py-20 px-6 text-center text-gray-500">
           <p className="text-4xl mb-3">📝</p>
           <p className="text-sm">
-            {milestonesOnly
-              ? 'Aún no hay hitos marcados.'
-              : 'Aún no hay entradas. Escribe la primera.'}
+            Aún no hay entradas. Escribe la primera.
           </p>
         </div>
       ) : (

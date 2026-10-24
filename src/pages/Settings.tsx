@@ -6,8 +6,12 @@ import { db, type BabyProfile } from '../db/db'
 import { showToast } from '../utils/toast'
 import { deleteProfileData, exportBackup, importBackup } from '../utils/importBackup'
 import { useAppConfig } from '../hooks/useAppConfig'
+import { REGIONS } from '../data/regions'
+import { InstallCard } from '../components/InstallCard'
+import { LinkRow } from '../components/ui'
 import { toInputDate } from '../components/uiHelpers'
 import { PageHeader } from '../components/PageHeader'
+import { confirmDialog } from '../utils/overlay'
 
 declare const __APP_VERSION__: string
 
@@ -124,7 +128,7 @@ function AddProfileForm({ onDone }: { onDone: () => void }) {
         </button>
         <button
           onClick={onDone}
-          className="px-4 py-2 text-sm text-gray-400"
+          className="px-4 py-2 text-sm text-gray-500"
         >
           Cancelar
         </button>
@@ -161,7 +165,7 @@ function FamilySection({ profile }: { profile: BabyProfile }) {
 
   async function setTrying(trying: boolean) {
     if (trying) {
-      if (!confirm('¿Volver al modo "buscando bebé" para este perfil?')) return
+      if (!await confirmDialog({ title: '¿Volver a "buscando bebé"?', message: 'La fecha probable dejará de usarse hasta que vuelvas a calcularla.', confirmLabel: 'Volver' })) return
       await db.profiles.update(profile.id!, { phase: 'trying' })
     } else {
       await db.profiles.update(profile.id!, { phase: 'expecting' })
@@ -170,7 +174,7 @@ function FamilySection({ profile }: { profile: BabyProfile }) {
 
   return (
     <section className="px-5 mb-6">
-      <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Familia</p>
+      <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">Familia</p>
       <div className="bg-white border border-gray-100 rounded-2xl p-4 space-y-4">
         <div>
           <label className="block text-xs font-medium text-gray-500 mb-1">Nombre del bebé</label>
@@ -183,7 +187,28 @@ function FamilySection({ profile }: { profile: BabyProfile }) {
             <input value={value} onChange={e => setPartner(e.target.value)} onBlur={savePartner} placeholder="tu pareja"
               className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tinta-500" />
           </div>
-          <p className="text-xs text-gray-400 mt-1">Se usa en los consejos del embarazo.</p>
+          <p className="text-xs text-gray-500 mt-1">Se usa en los consejos del embarazo.</p>
+        </div>
+        <div>
+          <p className="text-xs font-medium text-gray-500 mb-1">Quién usa este móvil</p>
+          <div className="flex gap-2">
+            {([['papa', 'Papá / pareja'], ['mama', 'Mamá']] as const).map(([k, l]) => (
+              <button key={k} onClick={() => db.appConfig.update(1, { role: k })}
+                className={`flex-1 text-sm rounded-xl py-2.5 border ${(config?.role ?? 'papa') === k ? 'bg-tinta-50 border-tinta-200 text-tinta-700 font-semibold' : 'border-gray-200 text-gray-600'}`}>
+                {l}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-gray-500 mt-1">Adapta los textos del embarazo. Cada móvil tiene el suyo.</p>
+        </div>
+        <div>
+          <label htmlFor="region" className="block text-xs font-medium text-gray-500 mb-1">Comunidad autónoma</label>
+          <select id="region" value={profile.region ?? ''} onChange={e => db.profiles.update(profile.id!, { region: e.target.value || undefined })}
+            className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-tinta-500">
+            <option value="">Sin indicar</option>
+            {REGIONS.map(r => <option key={r.code} value={r.code}>{r.name}</option>)}
+          </select>
+          <p className="text-xs text-gray-500 mt-1">Para el calendario de vacunas y las ayudas.</p>
         </div>
         <div>
           <p className="text-xs font-medium text-gray-500 mb-1">Sexo de {profile.name} (para percentiles)</p>
@@ -245,7 +270,12 @@ export default function Settings() {
       showToast('No puedes borrar el único perfil.')
       return
     }
-    if (!confirm(`¿Borrar el perfil de ${p.name}? Se borrarán también su diario, sus cartas y sus medidas, y no se podrán recuperar.`)) return
+    if (!await confirmDialog({
+      title: `¿Borrar el perfil de ${p.name}?`,
+      message: 'Se borrarán también su diario, sus cartas, sus medidas y su registro. No se podrá recuperar.',
+      confirmLabel: 'Borrar perfil',
+      danger: true,
+    })) return
     try {
       await deleteProfileData(p.id!)
       if (p.id === activeId) {
@@ -300,7 +330,12 @@ export default function Settings() {
   async function handleImportFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    if (!confirm('Este import reemplazará todos tus datos actuales. ¿Continuar?')) {
+    if (!await confirmDialog({
+      title: '¿Importar este backup?',
+      message: 'Reemplazará todos los datos que hay ahora en este móvil.',
+      confirmLabel: 'Importar y reemplazar',
+      danger: true,
+    })) {
       e.target.value = ''
       return
     }
@@ -327,7 +362,7 @@ export default function Settings() {
 
       {/* Perfiles */}
       <section className="px-5 mb-6">
-        <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Perfiles</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">Perfiles</p>
         <div className="space-y-2">
           {(allProfiles ?? []).map(p => (
             <div
@@ -348,7 +383,7 @@ export default function Settings() {
                     <span className="text-xs bg-tinta-600 text-white px-2 py-0.5 rounded-full">activo</span>
                   )}
                 </div>
-                <p className="text-xs text-gray-400 mt-0.5">{formatDate(p.birthDate)}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{formatDate(p.birthDate)}</p>
               </button>
               {/* Edit birthDate — only active profile */}
               {p.id === activeId && !editingDate && (
@@ -375,7 +410,7 @@ export default function Settings() {
                 className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm flex-1"
               />
               <button onClick={handleDateSave} className="text-tinta-600 text-sm font-medium">OK</button>
-              <button onClick={() => setEditingDate(false)} className="text-gray-400 text-sm">✕</button>
+              <button onClick={() => setEditingDate(false)} className="text-gray-500 text-sm">✕</button>
             </div>
           )}
 
@@ -397,30 +432,18 @@ export default function Settings() {
 
       {/* Más */}
       <section className="px-5 mb-6">
-        <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Más</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">Más</p>
         <div className="space-y-2">
-          {[
-            { to: '/vacunas', title: 'Vacunas', sub: 'Calendario orientativo 2026' },
-            { to: '/crecimiento', title: 'Crecimiento', sub: 'Peso, talla y percentiles OMS' },
-            { to: '/herramientas/citas', title: 'Citas', sub: 'Ecografías, pediatra y revisiones' },
-            { to: '/timeline', title: 'Hitos', sub: 'Línea de tiempo de momentos especiales' },
-            { to: '/year-review', title: 'Año en review', sub: `Resumen de ${new Date().getFullYear()}` },
-          ].map(l => (
-            <button key={l.to} onClick={() => navigate(l.to)}
-              className="w-full bg-white border border-gray-100 rounded-2xl p-4 flex items-center justify-between">
-              <div className="text-left">
-                <p className="text-sm font-medium text-gray-900">{l.title}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{l.sub}</p>
-              </div>
-              <span className="text-gray-300">›</span>
-            </button>
-          ))}
+          <LinkRow icon="shield" title="Ficha médica" subtitle="Alergias, grupo sanguíneo y teléfonos para urgencias" onClick={() => navigate('/ficha')} />
+          <LinkRow icon="star" title="Año en review" subtitle={`Resumen de ${new Date().getFullYear()}`} onClick={() => navigate('/year-review')} />
         </div>
       </section>
 
+      <div className="-mx-0"><InstallCard force /></div>
+
       {/* Backup */}
       <section className="px-5 mb-6">
-        <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Backup</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">Backup</p>
         <div className="space-y-2">
           <button
             onClick={handleExport}
@@ -428,7 +451,7 @@ export default function Settings() {
           >
             <div>
               <p className="text-sm font-medium text-gray-900">Exportar backup</p>
-              <p className="text-xs text-gray-400 mt-0.5">Descarga un archivo JSON con todos tus datos</p>
+              <p className="text-xs text-gray-500 mt-0.5">Descarga un archivo JSON con todos tus datos</p>
             </div>
             <span className="text-gray-300 text-lg">↓</span>
           </button>
@@ -441,7 +464,7 @@ export default function Settings() {
               <p className="text-sm font-medium text-gray-900">
                 {importing ? 'Importando…' : 'Importar backup'}
               </p>
-              <p className="text-xs text-gray-400 mt-0.5">Reemplaza todos los datos con un backup previo</p>
+              <p className="text-xs text-gray-500 mt-0.5">Reemplaza todos los datos con un backup previo</p>
             </div>
             <span className="text-gray-300 text-lg">↑</span>
           </button>

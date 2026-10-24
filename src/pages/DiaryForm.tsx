@@ -4,6 +4,7 @@ import { useCurrentProfile } from '../hooks/useCurrentProfile'
 import { db, type DiaryEntry } from '../db/db'
 import { compressImage } from '../utils/compressImage'
 import { showToast } from '../utils/toast'
+import { confirmDialog } from '../utils/overlay'
 
 const MAX_PHOTOS = 5
 
@@ -101,7 +102,7 @@ export default function DiaryForm() {
   }
 
   async function handleDelete() {
-    if (!id || !confirm('¿Borrar esta entrada? No se podrá recuperar.')) return
+    if (!id || !await confirmDialog({ title: '¿Borrar esta entrada?', message: 'Se borrarán también sus fotos. No se podrá recuperar.', confirmLabel: 'Borrar', danger: true })) return
     try {
       await db.transaction('rw', [db.diaryEntries, db.entryPhotos], async () => {
         await db.diaryEntries.delete(Number(id))
@@ -117,10 +118,10 @@ export default function DiaryForm() {
     <div className="flex flex-col min-h-screen bg-white">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-12 pb-3 border-b border-gray-100">
-        <button onClick={() => navigate('/diario')} className="text-gray-400 text-sm">
+        <button onClick={() => navigate('/diario')} className="text-gray-500 text-sm">
           Cancelar
         </button>
-        <p className="text-xs text-gray-400">{label}</p>
+        <p className="text-xs text-gray-500">{label}</p>
         <button
           onClick={handleSave}
           disabled={saving || !text.trim()}
@@ -160,7 +161,7 @@ export default function DiaryForm() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
               </svg>
-              <span className="text-[10px]">Foto</span>
+              <span className="text-[11px]">Foto</span>
             </button>
           )}
         </div>
