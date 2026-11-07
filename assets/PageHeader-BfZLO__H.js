@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-sR4thDDV.js";var t=e();function n({title:e,right:n}){return(0,t.jsxs)(`div`,{className:`flex items-center justify-between px-5 pt-12 pb-4`,children:[(0,t.jsx)(`h1`,{className:`text-2xl font-bold text-gray-900`,children:e}),n&&(0,t.jsx)(`div`,{children:n})]})}export{n as t};
