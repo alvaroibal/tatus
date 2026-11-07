@@ -53,7 +53,7 @@ jobs:
       # Misma rama gh-pages que `npm run deploy`: no hace falta tocar los ajustes de Pages.
       - run: >-
           npx --yes gh-pages@6 -d dist
-          -u "github-actions[bot] <41898283+github-actions[bot]@users.noreply.github.com>"
+          -u "github-actions <github-actions@users.noreply.github.com>"
           -r "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
