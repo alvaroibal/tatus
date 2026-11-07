@@ -57,7 +57,14 @@ npm run build      # tsc -b + vite build
 
 ## Despliegue
 
-Se publica en GitHub Pages bajo `/tatus/` (ver `base` en `vite.config.ts`):
+Se publica en GitHub Pages bajo `/tatus/` (ver `base` en `vite.config.ts`).
+
+Cada push a `main` pasa por el CI (`.github/workflows/ci.yml`): `npm audit` de
+dependencias de producción, typecheck, lint, tests y build. Si todo pasa, se
+publica solo en la rama `gh-pages`. Los pull requests ejecutan los checks sin
+publicar.
+
+Despliegue manual (por si el CI no está disponible):
 
 ```bash
 npm run deploy     # build + gh-pages -d dist

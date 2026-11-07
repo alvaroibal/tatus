@@ -17,6 +17,7 @@ ningún servidor ni empresa:
 ## Reglas de código
 
 - Antes de dar algo por terminado: `npx tsc -b && npm run lint && npm test`.
+  El CI ejecuta lo mismo en cada push y despliega `main` solo si pasa.
 - Nada de `setState` síncrono dentro de `useEffect` (la regla
   `react-hooks/set-state-in-effect` está activa): deriva el valor en render o
   haz el `setState` en el callback asíncrono.
@@ -26,9 +27,9 @@ ningún servidor ni empresa:
   `src/data/sources.ts`.
 - Archivos de componentes < 500 líneas (`CareLog.tsx` y `Settings.tsx` ya están cerca: partir antes de crecer).
 - Rutas y `start_url` cuelgan de `/tatus/`.
+- Pantallas nuevas: declárala con `lazy()` en `src/router/lazyPages.tsx` (no en
+  `router.tsx`, rompe Fast Refresh) salvo que forme parte del arranque.
 
 ## Pendiente conocido
 
 - Transporte de sincronización (`src/sync/` solo tiene la parte local).
-- CI (tsc + lint + test en cada push).
-- Bundle inicial grande (Recharts y `data/guides.ts`).
