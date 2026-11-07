@@ -70,16 +70,21 @@ export default function YearReview() {
   const navigate = useNavigate()
   const { profile, isLoading } = useCurrentProfile()
   const [year, setYear] = useState(new Date().getFullYear())
-  const [data, setData] = useState<ReviewData | null>(null)
-  const [loading, setLoading] = useState(true)
+  // Guardamos para qué perfil/año es cada resultado: "cargando" se deriva de ahí
+  // y una respuesta antigua nunca pisa a la del año seleccionado.
+  const [result, setResult] = useState<{ key: string; data: ReviewData } | null>(null)
+  const reviewKey = `${profile?.id}-${year}`
+  const data = result?.key === reviewKey ? result.data : null
+  const loading = data === null
 
   useEffect(() => {
     if (!profile?.id) return
-    setLoading(true)
+    let cancelled = false
+    const key = `${profile.id}-${year}`
     computeReview(profile.id, year).then(d => {
-      setData(d)
-      setLoading(false)
+      if (!cancelled) setResult({ key, data: d })
     })
+    return () => { cancelled = true }
   }, [profile?.id, year])
 
   if (isLoading || !profile) return null

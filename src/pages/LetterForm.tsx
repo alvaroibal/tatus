@@ -24,16 +24,17 @@ export default function LetterForm() {
 
   const [letter, setLetter] = useState<FutureLetter | null>(null)
   const [title, setTitle] = useState('')
-  const [body, setBody] = useState('')
+  // null = sin tocar: el saludo inicial se deriva del perfil en vez de copiarse con un efecto
+  const [draft, setDraft] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(!isNew)
   const bodyRef = useRef<HTMLTextAreaElement>(null)
 
+  const body = draft ?? (isNew ? `Querido ${profile?.name ?? ''},\n\n` : '')
   const pregnancyWeek = currentWeek < 0 ? Math.max(1, 40 + currentWeek) : undefined
 
   useEffect(() => {
     if (isNew) {
-      setBody(`Querido ${profile?.name ?? ''},\n\n`)
       setTimeout(() => {
         const el = bodyRef.current
         if (el) { el.focus(); el.selectionStart = el.selectionEnd = el.value.length }
@@ -44,11 +45,11 @@ export default function LetterForm() {
       if (found) {
         setLetter(found)
         setTitle(found.title ?? '')
-        setBody(found.body)
+        setDraft(found.body)
       }
       setLoading(false)
     })
-  }, [id, isNew, profile?.name])
+  }, [id, isNew])
 
   if (loading || !profile) return null
 
@@ -153,7 +154,7 @@ export default function LetterForm() {
         <textarea
           ref={bodyRef}
           value={body}
-          onChange={e => setBody(e.target.value)}
+          onChange={e => setDraft(e.target.value)}
           disabled={isLocked}
           placeholder={`Querido ${profile.name},\n\n`}
           className="flex-1 font-letter text-[17px] text-gray-800 leading-[1.75] placeholder-gray-300 border-none outline-none resize-none bg-transparent disabled:opacity-70"
