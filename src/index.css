@@ -26,6 +26,10 @@
 
   --color-leche: #F7F5EF;
 
+  /* Gris secundario un punto más oscuro que el de Tailwind (#6a7282 da 4,4:1 sobre
+     leche). #646c7c pasa WCAG AA (≥4,5:1) sobre leche, blanco, tinta-50 y yema-50. */
+  --color-gray-500: #646c7c;
+
   /* Un color por fase de vida */
   --color-fase-buscar: #B8B1E2;
   --color-fase-esperar: #F2A68A;

@@ -69,7 +69,7 @@ export default function Onboarding() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-leche">
+    <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-leche">
       <div className="w-full max-w-sm">
         <Wordmark className="block text-6xl text-tinta-600 mb-8" />
         <h1 className="text-3xl font-bold text-gray-900 mb-2 leading-tight">Una semana cada vez.</h1>
@@ -155,6 +155,6 @@ export default function Onboarding() {
           </button>
         </form>
       </div>
-    </div>
+    </main>
   )
 }
