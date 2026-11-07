@@ -1,31 +1,35 @@
 import { createHashRouter } from 'react-router-dom'
-import { GrowthTrackerPage, YearReviewPage } from './lazyPages'
 import AppLayout from '../components/AppLayout'
 import Onboarding from '../pages/Onboarding'
 import Home from '../pages/Home'
-import Vaccines from '../pages/Vaccines'
-import DiaryList from '../pages/DiaryList'
-import DiaryForm from '../pages/DiaryForm'
-import Timeline from '../pages/Timeline'
-import LetterList from '../pages/LetterList'
-import LetterForm from '../pages/LetterForm'
-import Settings from '../pages/Settings'
-import ToolsHub from '../pages/tools/ToolsHub'
-import CareLog from '../pages/tools/CareLog'
-import Contractions from '../pages/tools/Contractions'
-import Kicks from '../pages/tools/Kicks'
-import DueDate from '../pages/tools/DueDate'
-import Fertility from '../pages/tools/Fertility'
-import Dose from '../pages/tools/Dose'
-import Appointments from '../pages/tools/Appointments'
-import { ChecklistDetail, ChecklistIndex } from '../pages/tools/Checklists'
-import GuideList from '../pages/guides/GuideList'
-import GuideDetail from '../pages/guides/GuideDetail'
-import Emergency from '../pages/Emergency'
-import MedicalCardPage from '../pages/MedicalCardPage'
-import Milestones from '../pages/tools/Milestones'
-import Foods from '../pages/tools/Foods'
-import Summary from '../pages/tools/Summary'
+import {
+  Vaccines,
+  DiaryList,
+  DiaryForm,
+  Timeline,
+  GrowthTracker,
+  LetterList,
+  LetterForm,
+  Settings,
+  YearReview,
+  ToolsHub,
+  CareLog,
+  Contractions,
+  Kicks,
+  DueDate,
+  Fertility,
+  Dose,
+  Appointments,
+  ChecklistIndex,
+  ChecklistDetail,
+  GuideList,
+  GuideDetail,
+  Emergency,
+  MedicalCardPage,
+  Milestones,
+  Foods,
+  Summary,
+} from './lazyPages'
 
 export const router = createHashRouter([
   { path: '/onboarding', element: <Onboarding /> },
@@ -39,12 +43,12 @@ export const router = createHashRouter([
       { path: 'diario/nueva',   element: <DiaryForm /> },
       { path: 'diario/:id',     element: <DiaryForm /> },
       { path: 'timeline',       element: <Timeline /> },
-      { path: 'crecimiento',    element: <GrowthTrackerPage /> },
+      { path: 'crecimiento',    element: <GrowthTracker /> },
       { path: 'cartas',         element: <LetterList /> },
       { path: 'cartas/nueva',   element: <LetterForm /> },
       { path: 'cartas/:id',     element: <LetterForm /> },
       { path: 'ajustes',        element: <Settings /> },
-      { path: 'year-review',    element: <YearReviewPage /> },
+      { path: 'year-review',    element: <YearReview /> },
       { path: 'herramientas',                element: <ToolsHub /> },
       { path: 'herramientas/registro',       element: <CareLog /> },
       { path: 'herramientas/contracciones',  element: <Contractions /> },

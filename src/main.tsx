@@ -31,6 +31,16 @@ async function idbAvailable(): Promise<boolean> {
   }
 }
 
+// Si tras un deploy falla la descarga de una pantalla (hash antiguo), recarga una vez.
+window.addEventListener('vite:preloadError', event => {
+  try {
+    if (sessionStorage.getItem('tatus-reloaded')) return
+    sessionStorage.setItem('tatus-reloaded', '1')
+  } catch { return }
+  event.preventDefault()
+  location.reload()
+})
+
 const root = document.getElementById('root')!
 
 if (!(await idbAvailable())) {

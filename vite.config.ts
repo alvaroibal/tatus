@@ -33,7 +33,17 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
+        // La app solo usa alfabeto latino: los subsets cirílico/griego/vietnamita
+        // no se precachean. Si el navegador llega a pedir uno, se guarda al vuelo.
+        globIgnores: ['**/*-{cyrillic,cyrillic-ext,greek,greek-ext,vietnamese}-*.woff2'],
         navigateFallback: 'index.html',
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.endsWith('.woff2'),
+            handler: 'CacheFirst',
+            options: { cacheName: 'tatus-fonts', expiration: { maxEntries: 30 } },
+          },
+        ],
       },
     }),
   ],

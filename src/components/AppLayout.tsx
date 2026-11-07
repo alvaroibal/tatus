@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { BottomNav } from './BottomNav'
 
@@ -9,7 +9,9 @@ export default function AppLayout() {
   return (
     <div className="min-h-screen bg-leche flex flex-col">
       <main className="flex-1 overflow-y-auto pb-16 max-w-lg mx-auto w-full bg-leche min-h-screen">
-        <Outlet />
+        <Suspense fallback={null}>
+          <Outlet />
+        </Suspense>
       </main>
       <BottomNav />
     </div>
