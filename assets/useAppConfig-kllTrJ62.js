@@ -1,0 +1,1 @@
+import{n as e,r as t}from"./useCurrentProfile-rRjmepzR.js";function n(){return t(async()=>(await e.appConfig.toArray())[0],[])}function r(e){return e?.partnerName?.trim()||`tu pareja`}function i(e,t){return e.replace(/\{pareja\}/g,t)}function a(){return n()?.role??`papa`}export{i,n,a as r,r as t};
