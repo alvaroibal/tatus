@@ -75,6 +75,21 @@ function fromBase64(s: string): Uint8Array<ArrayBuffer> {
 
 const toBase64Url = (b: Uint8Array) => toBase64(b).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 
+// --- QR ------------------------------------------------------------------------
+
+const QR_PREFIX = 'tatus-sync:1:'
+
+/** Mismo secreto que la frase, en formato para QR. */
+export const encodeQr = (seed: Uint8Array) => QR_PREFIX + toBase64Url(seed)
+
+export function decodeQr(text: string): Uint8Array<ArrayBuffer> | null {
+  if (!text.startsWith(QR_PREFIX)) return null
+  const b64url = text.slice(QR_PREFIX.length)
+  if (!/^[A-Za-z0-9_-]{22}$/.test(b64url)) return null // 16 bytes
+  const seed = fromBase64(b64url.replace(/-/g, '+').replace(/_/g, '/') + '==')
+  return seed.length === 16 ? seed : null
+}
+
 /** Id opaco del registro: el servidor no sabe ni la tabla ni el uid. */
 export async function recordId(ridKey: CryptoKey, tbl: string, uid: string): Promise<string> {
   const mac = await crypto.subtle.sign('HMAC', ridKey, utf8.encode(`${tbl}:${uid}`))
