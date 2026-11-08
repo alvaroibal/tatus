@@ -285,3 +285,62 @@ grant execute on function public.join_space(text, text)            to authentica
 grant execute on function public.push_records(text, jsonb)         to authenticated;
 grant execute on function public.pull_records(text, bigint, integer) to authenticated;
 grant execute on function public.delete_space(text)                to authenticated;
+
+-- ---------------------------------------------------------------------------
+-- 2.2.3 Storage: bucket privado sync-blobs, ruta {space_id}/{rid}, 1 MB por objeto
+-- ---------------------------------------------------------------------------
+
+insert into storage.buckets (id, name, public, file_size_limit)
+values ('sync-blobs', 'sync-blobs', false, 1048576);
+
+create policy sync_blobs_select_member on storage.objects
+  for select to authenticated
+  using (
+    bucket_id = 'sync-blobs'
+    and exists (
+      select 1 from public.space_members m
+      where m.space_id = split_part(name, '/', 1)
+        and m.user_id = (select auth.uid())
+    )
+  );
+
+create policy sync_blobs_insert_member on storage.objects
+  for insert to authenticated
+  with check (
+    bucket_id = 'sync-blobs'
+    and exists (
+      select 1 from public.space_members m
+      where m.space_id = split_part(name, '/', 1)
+        and m.user_id = (select auth.uid())
+    )
+  );
+
+create policy sync_blobs_update_member on storage.objects
+  for update to authenticated
+  using (
+    bucket_id = 'sync-blobs'
+    and exists (
+      select 1 from public.space_members m
+      where m.space_id = split_part(name, '/', 1)
+        and m.user_id = (select auth.uid())
+    )
+  )
+  with check (
+    bucket_id = 'sync-blobs'
+    and exists (
+      select 1 from public.space_members m
+      where m.space_id = split_part(name, '/', 1)
+        and m.user_id = (select auth.uid())
+    )
+  );
+
+create policy sync_blobs_delete_member on storage.objects
+  for delete to authenticated
+  using (
+    bucket_id = 'sync-blobs'
+    and exists (
+      select 1 from public.space_members m
+      where m.space_id = split_part(name, '/', 1)
+        and m.user_id = (select auth.uid())
+    )
+  );
