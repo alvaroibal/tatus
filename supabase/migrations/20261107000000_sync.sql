@@ -344,3 +344,29 @@ create policy sync_blobs_delete_member on storage.objects
         and m.user_id = (select auth.uid())
     )
   );
+
+-- ---------------------------------------------------------------------------
+-- 2.2.4 Cuota por familia: máx. 20.000 filas en sync_records
+-- AFTER INSERT (no BEFORE): con `insert … on conflict do update`, un BEFORE INSERT se
+-- dispararía también en las actualizaciones y bloquearía editar a una familia llena.
+-- push_records tiene el bloqueo por familia, así que el recuento es coherente.
+-- ---------------------------------------------------------------------------
+
+create function public.enforce_space_quota()
+returns trigger
+language plpgsql
+set search_path = ''
+as $$
+begin
+  if (select count(*) from public.sync_records s where s.space_id = new.space_id) > 20000 then
+    raise exception 'cuota de la familia superada (20.000 registros)' using errcode = '54000';
+  end if;
+  return null;
+end;
+$$;
+
+revoke all on function public.enforce_space_quota() from public, anon, authenticated;
+
+create trigger sync_records_quota
+  after insert on public.sync_records
+  for each row execute function public.enforce_space_quota();
