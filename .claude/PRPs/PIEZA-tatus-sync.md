@@ -1,0 +1,141 @@
+# La Pieza: Tatuś Sync
+
+> **Estado**: PENDIENTE
+> **Blueprint origen**: `BLUEPRINT-tatus-sync.md` (aprobado 2026-11-07)
+> **Fecha**: 2026-11-07
+> **Build Mode**: Feature en app existente (excepción al Golden Path — ver `CLAUDE.md`)
+
+---
+
+## Objetivo
+
+Dos móviles de la misma familia comparten el archivo de Tatuś (texto y fotos) a través de
+Supabase, cifrado de extremo a extremo, y una frase de 12 palabras recupera todo en un
+móvil nuevo. Sin activarla, la app funciona exactamente igual que hoy.
+
+## Por Qué
+
+| Problema del Usuario | Cómo lo Resuelve |
+|---|---|
+| Si se pierde el móvil o iOS borra el almacenamiento, se pierde el archivo del hijo | Copia continua cifrada + frase de rescate |
+| Solo un padre puede apuntar | Mismo archivo en los dos móviles, sincronizado solo |
+| Subir datos de salud de un menor a un servidor | El servidor solo ve bloques cifrados con ids opacos |
+
+**Impacto medible**: cero pérdidas de datos en una semana de uso real con dos móviles; cambio visible en el otro móvil en ≤ 10 s.
+
+## Qué
+
+### Criterios de Éxito (Definition of Done)
+- [ ] Un navegador vacío con la frase recupera perfiles, diario, fotos, cartas, crecimiento, registros, citas y checks con conteos idénticos.
+- [ ] Cambio en A visible en B en ≤ 10 s (B abierta) o en la siguiente apertura.
+- [ ] 100 cambios offline se suben al volver la red, sin duplicados.
+- [ ] Ediciones simultáneas convergen al mismo estado en los dos móviles.
+- [ ] pgTAP: un no miembro no lee, escribe ni lista nada (tablas y Storage).
+- [ ] JS inicial sin cambios de tamaño (sync, QR y Supabase cargan bajo demanda).
+- [ ] Sin variables de Supabase, el build funciona y no muestra la sección.
+
+### Happy Path
+Padre A: Ajustes → Sincronizar → Activar → apunta 12 palabras → confirma 2 → se sube todo.
+→ "Añadir el móvil de tu pareja" → QR. Pareja B instala Tatuś → Bienvenida → "Mi pareja
+ya usa Tatuś" → escanea → descarga → Inicio con el mismo bebé. Desde ahí, lo que apunta
+cada uno aparece en el otro.
+
+---
+
+## Contexto
+
+### Referencias de Código
+- `src/sync/engine.ts` → `collectOutgoing`, `ackOutgoing`, `queueEverything`, `applyRemote` (se reutilizan sin cambios de contrato)
+- `src/sync/merge.ts` → `SyncRecord`, `planMerge` (LWW), codec fila ↔ registro
+- `src/sync/changeLog.ts` → middleware Dexie; **no usar async/await dentro** (zona PSD)
+- `src/sync/__tests__/engine.test.ts` → patrón de tests con `fake-indexeddb`
+- `src/db/db.ts` → versiones Dexie 1-5; la 6 añade `syncState`
+- `src/utils/importBackup.ts` → backup `schemaVersion` 5 (no cambia)
+- `src/router/lazyPages.tsx` → pantallas nuevas con `lazy()`
+- `BLUEPRINT-tatus-sync.md` → fuente de verdad (arquitectura, SQL, wireframes, seguridad)
+
+### Arquitectura (adaptada a la estructura de Tatuś, no Feature-First de Next)
+```
+src/sync/   crypto.ts · keyStore.ts · transport.ts · memoryTransport.ts · runner.ts
+src/pages/sync/   SyncSettings.tsx · SyncSetup.tsx · SyncLink.tsx
+supabase/   migrations/20261107000000_sync.sql · tests/rls.sql
+```
+
+### Modelo de Datos
+Ver *Esquema del servidor* en el Blueprint: `spaces`, `space_members`, `sync_records`
+(RLS en las tres), secuencia `sync_seq`, RPCs `create_space` / `join_space` /
+`push_records` / `pull_records` / `delete_space`, bucket privado `sync-blobs`.
+
+---
+
+## Blueprint (Fases de Construcción)
+
+> Las subtareas se generan al entrar en cada fase (El Yunque). Cada fase = 1 PR a `main`.
+
+### Fase 1: Cripto y llave local
+**Objetivo**: `crypto.ts` + `keyStore.ts` + Dexie v6 con tests; ninguna UI.
+**Validación**: tests de ida y vuelta de frase, vector fijo, manipulación (AAD/IV) y migración v5→v6; CI verde.
+**Tiempo estimado**: ~1 día
+
+### Fase 2: Servidor Supabase
+**Objetivo**: proyecto `tatus` (UE) con migración, RLS, RPCs, bucket y cuotas; variables en Actions.
+**Validación**: pgTAP verde; `get_advisors` sin avisos de seguridad; build sin variables sigue funcionando.
+**Tiempo estimado**: ~1 día
+
+### Fase 3: Bucle de sincronización
+**Objetivo**: `Transport` (Supabase lazy + memoria), `runner.ts` con disparadores, fotos por Storage, `useSyncStatus()`.
+**Validación**: tests con dos BD + `MemoryTransport` (alta, conflicto, borrado, offline, recuperación); demo con dos perfiles de Chrome.
+**Tiempo estimado**: ~1,5 días
+
+### Fase 4: Pantallas de sincronización
+**Objetivo**: activar + frase + confirmación, QR, escanear / escribir palabras, estado, texto RGPD; entrada desde Bienvenida.
+**Validación**: flujo en iPhone (Safari instalada) y Android; Lighthouse a11y 100; JS inicial sin crecer.
+**Tiempo estimado**: ~1,5 días
+
+### Fase 5: Validación final
+**Objetivo**: E2E Playwright con dos contextos + Supabase local en el CI, CSP, `/adversarial-review`, docs.
+**Validación**:
+- [ ] `npx tsc -b` → 0 errores · `npm run lint` · `npm test` · `npm run build`
+- [ ] E2E y pgTAP verdes en el CI
+- [ ] `get_advisors(type: "security")` sin avisos
+- [ ] Todos los criterios de éxito cumplidos
+- [ ] Una semana de uso real en dos móviles
+**Tiempo estimado**: ~1 día
+
+*(Fase 6 — P1: realtime, desactivar, aviso de datos previos, rotar llave. Se planifica tras la Fase 5.)*
+
+---
+
+## 🔒 Auto-Blindaje
+
+> Crece durante la implementación.
+
+*(vacío)*
+
+---
+
+## Gotchas (Antes de Implementar)
+
+- [ ] `main` está protegida: cada fase en rama + PR; el CI ("Typecheck, lint, tests y build") debe pasar antes de fusionar.
+- [ ] Middleware de Dexie: encadenar con `.then`, nunca `async/await` (rompe la zona PSD y `liveQuery`).
+- [ ] `applyRemote` marca la transacción como remota; si se escribe fuera de ella, los cambios se re-sellan y se re-suben en bucle.
+- [ ] `entryPhotos.dataUrl` son JPEG base64 de ~200-400 KB: no meterlos en `sync_records.payload`, van a Storage.
+- [ ] La seed no puede acabar en el backup JSON/HTML ni en `console`.
+- [ ] Safari iOS no tiene `BarcodeDetector`: polyfill `barcode-detector` cargado solo al abrir la cámara.
+- [ ] Llaves WebCrypto `extractable: false`; la seed se guarda en bruto en IndexedDB para poder volver a mostrar QR/frase.
+- [ ] `pull_records` depende del bloqueo por familia en `push_records` para que el cursor `seq` no se salte filas.
+- [ ] Verificar cada paquete npm (versión, fecha, dependencias) antes de instalar y fijar versión exacta.
+- [ ] Supabase gratuito se pausa tras 7 días sin uso: el error de red debe mostrarse claro, no como "datos perdidos".
+
+## Anti-Patrones
+
+- ❌ Reescribir el motor de `src/sync/` existente: se extiende, no se sustituye
+- ❌ Enviar al servidor cualquier campo en claro salvo `rid`, `version`, `version_by`, `size`
+- ❌ Importar `@supabase/supabase-js`, `qrcode` o `barcode-detector` de forma estática
+- ❌ Usar `any` (usar `unknown` + Zod al leer del servidor)
+- ❌ Tablas sin RLS o RPCs sin comprobar pertenencia
+- ❌ `setState` síncrono en `useEffect` (regla de lint activa)
+
+---
+
+*La Pieza pendiente de elegir modo de ejecución. Ninguna línea de código ha sido modificada.*
