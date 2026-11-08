@@ -145,6 +145,18 @@ _(Fase 6 — P1: realtime, desactivar, aviso de datos previos, rotar llave. Se p
 - **Fix**: `blob_path` nulo o exactamente `{familia}/{rid}`; `version_by` ≤ 64 caracteres; 3 pruebas pgTAP.
 - **Aplicar en**: Fase 3: el cliente también debe comprobar que el `blob_path` recibido es `{spaceId}/{rid}` antes de descargar.
 
+### 2026-11-09: los tests de sync dependían del .env.local del desarrollador
+
+- **Error**: el agente dejó un `.env.local` con Supabase local para la demo y 2 tests (sync "no disponible") fallaron en la revisión: Vitest carga las variables `VITE_*` de `.env.local`.
+- **Fix**: `test.env` en `vite.config.ts` fija `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` vacías; los tests usan `MemoryTransport`.
+- **Aplicar en**: cualquier test que dependa de variables de entorno: fijarlas en `test.env` o con `vi.stubEnv`, nunca heredarlas.
+
+### 2026-11-09: carrera entre el blob de una foto y el LWW de push_records (riesgo aceptado)
+
+- **Error**: `putBlob` sobrescribe `{familia}/{rid}` antes de que `push_records` decida por versión. Si dos móviles cambian la misma foto a la vez, el blob puede quedarse con la versión que perdió.
+- **Fix**: pendiente. Las fotos se añaden o se borran, no se editan, así que es muy improbable. Solución prevista: ruta de blob con versión (`{familia}/{rid}/{version}`) aceptada por el servidor.
+- **Aplicar en**: Fase 5 (o 6) junto con la cuota de Storage.
+
 ---
 
 ## Gotchas (Antes de Implementar)
