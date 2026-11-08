@@ -3,7 +3,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(62);
+select plan(65);
 
 -- Datos fijos -----------------------------------------------------------------
 --   familia S   = 'aaaa…' (32 hex)
@@ -277,6 +277,23 @@ select results_eq(
 select throws_ok(
   $$ select public.push_records(repeat('a', 32), (select jsonb_agg(jsonb_build_object('rid', lpad(g::text, 40, '0'), 'version', 1, 'version_by', 'x')) from generate_series(1, 501) g)) $$,
   '22023', null, 'push_records rechaza más de 500 registros'
+);
+select throws_ok(
+  $$ select public.push_records(repeat('a', 32), jsonb_build_array(
+       jsonb_build_object('rid', repeat('3', 40), 'version', 1, 'version_by', repeat('x', 65), 'payload', 'p'))) $$,
+  '22023', null, 'push_records rechaza version_by de más de 64 caracteres'
+);
+select throws_ok(
+  $$ select public.push_records(repeat('a', 32), jsonb_build_array(
+       jsonb_build_object('rid', repeat('3', 40), 'version', 1, 'version_by', 'x', 'payload', null,
+                          'blob_path', repeat('b', 32) || '/' || repeat('3', 40)))) $$,
+  '22023', null, 'push_records rechaza un blob_path de otra familia'
+);
+select throws_ok(
+  $$ select public.push_records(repeat('a', 32), jsonb_build_array(
+       jsonb_build_object('rid', repeat('3', 40), 'version', 1, 'version_by', 'x', 'payload', null,
+                          'blob_path', repeat('a', 32) || '/' || repeat('4', 40)))) $$,
+  '22023', null, 'push_records rechaza un blob_path que no es el de su rid'
 );
 
 -- =============================================================================
