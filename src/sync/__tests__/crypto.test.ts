@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { deriveKeys, newSeed, openRecord, phraseToSeed, recordId, sealRecord, seedToPhrase } from '../crypto'
+import { decodeQr, deriveKeys, encodeQr, newSeed, openRecord, phraseToSeed, recordId, sealRecord, seedToPhrase } from '../crypto'
 import type { SyncRecord } from '../merge'
 
 const FIXED = Uint8Array.from({ length: 16 }, (_, i) => i) // 0x00..0x0f
@@ -130,5 +130,25 @@ describe('registros cifrados', () => {
     expect(err).toBeInstanceOf(Error)
     expect((err as Error).message).toBe('No se pudo abrir el registro')
     expect((err as Error).cause).toBeUndefined()
+  })
+})
+
+describe('QR', () => {
+  it('codifica y decodifica la seed', () => {
+    const seed = newSeed()
+    const text = encodeQr(seed)
+    expect(text).toMatch(/^tatus-sync:1:[A-Za-z0-9_-]{22}$/)
+    expect(decodeQr(text)).toEqual(seed)
+    expect(encodeQr(FIXED)).toBe('tatus-sync:1:AAECAwQFBgcICQoLDA0ODw')
+  })
+
+  it('devuelve null con otro prefijo, otra versión o longitud incorrecta', () => {
+    const body = encodeQr(FIXED).slice('tatus-sync:1:'.length)
+    expect(decodeQr(body)).toBeNull()
+    expect(decodeQr(`tatus-sync:2:${body}`)).toBeNull()
+    expect(decodeQr(`tatus-sync:1:${body}A`)).toBeNull()
+    expect(decodeQr(`tatus-sync:1:${body.slice(1)}`)).toBeNull()
+    expect(decodeQr('tatus-sync:1:AAECAwQFBgcICQoLDA0OD+')).toBeNull()
+    expect(decodeQr('https://ejemplo.com')).toBeNull()
   })
 })
