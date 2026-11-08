@@ -112,6 +112,17 @@ export interface CheckState extends SyncMeta {
   note?: string      // p. ej. reacción a un alimento
 }
 
+/** Estado de la sincronización de este dispositivo. No se sincroniza ni se exporta. */
+export interface SyncState {
+  id: 'self'
+  seed: Uint8Array   // en bruto, para poder volver a mostrar la frase y el QR
+  spaceId: string
+  cursor: number     // último seq del servidor aplicado
+  lastSyncAt?: number
+  lastError?: string
+  enabled: boolean
+}
+
 class TatusDB extends Dexie {
   profiles!: EntityTable<BabyProfile, 'id'>
   diaryEntries!: EntityTable<DiaryEntry, 'id'>
@@ -123,6 +134,7 @@ class TatusDB extends Dexie {
   appointments!: EntityTable<Appointment, 'id'>
   checks!: Dexie.Table<CheckState, string>
   syncChanges!: Dexie.Table<SyncChange, [string, string]>
+  syncState!: Dexie.Table<SyncState, 'self'>
 
   constructor() {
     super('tatus-db')
@@ -201,6 +213,21 @@ class TatusDB extends Dexie {
           r.updatedBy = by
         })
       }
+    })
+    // v6: estado local de la sincronización (seed y cursor). Fuera de
+    // SYNC_TABLES y del backup: la frase es la que recupera la sincronización.
+    this.version(6).stores({
+      profiles: '++id,name,uid',
+      diaryEntries: '++id,profileId,date,week,milestone,uid',
+      growthRecords: '[profileId+week],date,uid',
+      appConfig: 'id',
+      futureLetters: '++id,profileId,date,week,uid',
+      entryPhotos: '++id,diaryEntryId,uid',
+      careLogs: '++id,profileId,start,type,uid',
+      appointments: '++id,profileId,date,uid',
+      checks: 'key,profileId,uid',
+      [CHANGES_TABLE]: '[tbl+uid],at',
+      syncState: '&id',
     })
     this.use(syncMiddleware)
   }
