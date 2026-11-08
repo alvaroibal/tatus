@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { lazy, Suspense, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useCurrentProfile } from '../hooks/useCurrentProfile'
@@ -12,6 +12,9 @@ import { LinkRow } from '../components/ui'
 import { toInputDate } from '../components/uiHelpers'
 import { PageHeader } from '../components/PageHeader'
 import { confirmDialog } from '../utils/overlay'
+
+// Temporal (Fase 3 de Tatuś Sync): en producción DEV es false y el import() desaparece del build.
+const SyncDebug = import.meta.env.DEV ? lazy(() => import('../components/SyncDebug')) : null
 
 declare const __APP_VERSION__: string
 
@@ -484,6 +487,8 @@ export default function Settings() {
 
       {/* Debug panel */}
       {debugVisible && <DebugPanel profile={profile} />}
+
+      {SyncDebug && <Suspense fallback={null}><SyncDebug /></Suspense>}
 
       {/* Footer */}
       <button onClick={handleFooterTap} className="w-full px-5 text-center py-2">

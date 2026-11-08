@@ -5,6 +5,7 @@ import { router } from './router/router'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { OverlayHost } from './components/OverlayHost'
 import { initInstall } from './utils/install'
+import { db } from './db/db'
 import '@fontsource-variable/bricolage-grotesque/wght.css'
 import '@fontsource/atkinson-hyperlegible/latin-400.css'
 import '@fontsource/atkinson-hyperlegible/latin-ext-400.css'
@@ -41,6 +42,15 @@ window.addEventListener('vite:preloadError', event => {
   location.reload()
 })
 
+// Sincronización: el runner (y con él la cripto y supabase-js) solo se descarga si
+// hay servidor configurado y este móvil la tiene activada.
+function startSyncIfEnabled() {
+  if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) return
+  db.syncState.get('self')
+    .then(state => state?.enabled ? import('./sync/runner').then(m => m.startSync()) : undefined)
+    .catch(() => { /* sin IndexedDB o sin red para el chunk: la app sigue igual y se reintenta al reabrir */ })
+}
+
 const root = document.getElementById('root')!
 
 if (!(await idbAvailable())) {
@@ -52,6 +62,7 @@ if (!(await idbAvailable())) {
   `
 } else {
   initInstall()
+  startSyncIfEnabled()
   createRoot(root).render(
     <StrictMode>
       <ErrorBoundary>
