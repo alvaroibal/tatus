@@ -6,9 +6,9 @@ Ejecución de `BLUEPRINT-tatus-sync.md` con agentes autónomos, por oleadas.
 
 | Oleada | Sandbox | Personalidad | Fase | Necesita |
 |---|---|---|---|---|
-| **1** (paralelo) | sandbox-1 · `forja/sync-f1-cripto` | Literal | 1 · Cripto y llave local | — |
-| **1** (paralelo) | sandbox-2 · `forja/sync-f2-supabase` | Literal | 2 · Servidor Supabase (local) | Docker |
-| 2 | 1 agente | Literal | 3 · Bucle de sincronización | Oleada 1 fusionada |
+| **1** ✅ | sandbox-1 · `forja/sync-f1-cripto` | Literal | 1 · Cripto y llave local | — |
+| **1** ✅ | sandbox-2 · `forja/sync-f2-supabase` | Literal | 2 · Servidor Supabase (local) | Docker |
+| 2 | oleada-2-f3 · `forja/sync-f3-runner` | Literal | 3 · Bucle de sincronización | Oleada 1 fusionada, Docker |
 | 3 | 1 agente | Literal | 4 · Pantallas | Oleada 2 fusionada |
 | 4 | 1 agente | Literal | 5 · Validación final | Oleada 3 fusionada |
 
@@ -37,6 +37,13 @@ Luego abre dos pestañas y pega los dos comandos que imprime el setup. En una te
 ```
 
 Cuando los dos marquen ✅ TERMINADO, la revisión usa `forja/prompts/review-prompt.md`.
+
+### Oleada 2
+
+```bash
+./forja/cleanup.sh            # quita los sandboxes de la oleada 1
+./forja/setup-oleada-2.sh     # crea ../../tatus-forja/oleada-2-f3 con su propio node_modules
+```
 
 ## Limpieza
 
