@@ -29,16 +29,17 @@ Documentos que mandan, en este orden:
 - Después de cada tarea: `npx tsc -b && npm run lint && npm test`. No avances con algo en rojo.
 - Si la misma tarea falla 3 veces, documenta en `PROBLEMAS.md` y pasa a la siguiente.
 - Un commit por tarea o grupo pequeño de tareas, formato: `feat(sync-F<N>-T<x.y.z>): descripción`.
-- Termina cada commit con: `Co-Authored-By: Claude <noreply@anthropic.com>`.
+- Sin líneas de atribución (`Co-Authored-By`) en los commits.
 - **No hagas push, no abras PRs, no toques `main`.** El humano revisa y abre el PR.
 - **No commitees** `RESUMEN.md`, `PROBLEMAS.md` ni `DECISIONES.md`: son para la revisión.
 
 ## Reglas de disco y dependencias (CRÍTICO)
 
-- `node_modules` es un **symlink** al repo principal. **NO ejecutes `npm install`** a secas,
-  ni `npm ci`, ni `npm update`: reconstruiría el árbol compartido y rompería al otro agente.
+- Si tu `node_modules` es un **symlink** al repo principal (oleada 1, sandbox sin
+  permiso de instalar), **NO ejecutes `npm install`, `npm ci` ni `npm update`**.
 - Solo el sandbox que tenga permitido instalar algo (lo dice su prompt) puede usar
-  `npm install <paquete>@<versión exacta> --save-exact`, una vez, al principio.
+  `npm install <paquete>@<versión exacta> --save-exact`, una vez, al principio. Ese
+  sandbox tiene su propio `node_modules` (npm sustituye un symlink; ver Auto-Blindaje).
 - Antes de instalar un paquete: `npm view <paquete> version time.modified dependencies`.
 - No redirijas logs grandes a disco. Si tu worktree supera 2 GB, para y documenta.
 
