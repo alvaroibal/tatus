@@ -95,3 +95,44 @@ describe('keyStore', () => {
     expect(await db.syncChanges.count()).toBe(0)
   })
 })
+
+describe('backup', () => {
+  it('el backup exportado no contiene syncState ni la seed', async () => {
+    const { db } = await import('../../db/db')
+    const { saveSyncState } = await import('../keyStore')
+    const { exportBackup } = await import('../../utils/importBackup')
+    await db.profiles.add({ name: 'Bebé', birthDate: new Date('2026-09-01'), createdAt: new Date() })
+    await saveSyncState(STATE)
+    const json = await exportBackup()
+    expect(json).not.toContain('syncState')
+    expect(json).not.toContain(STATE.spaceId)
+    const parsed = JSON.parse(json)
+    expect(parsed.schemaVersion).toBe(5)
+    expect(Object.keys(parsed.data)).not.toContain('syncState')
+  })
+
+  it('importar un backup antiguo (v1) o v5 funciona y no toca syncState', async () => {
+    const { db } = await import('../../db/db')
+    const { saveSyncState, getSyncState } = await import('../keyStore')
+    const { importBackup } = await import('../../utils/importBackup')
+    await saveSyncState(STATE)
+    const v1 = {
+      schemaVersion: 1,
+      exportedAt: '2025-01-01T00:00:00.000Z',
+      data: {
+        profiles: [{ id: 1, name: 'Bebé', birthDate: '2025-06-01T00:00:00.000Z', createdAt: '2025-01-01T00:00:00.000Z' }],
+        diaryEntries: [{ id: 1, profileId: 1, date: '2025-01-02T00:00:00.000Z', week: -20, text: 'Hola', milestone: false }],
+        growthRecords: [],
+        appConfig: { id: 1, activeProfileId: 1 },
+      },
+    }
+    expect(await importBackup(JSON.stringify(v1))).toBe(true)
+    expect(await db.diaryEntries.count()).toBe(1)
+    expect(await getSyncState()).toMatchObject({ spaceId: STATE.spaceId })
+
+    const { exportBackup } = await import('../../utils/importBackup')
+    expect(await importBackup(await exportBackup())).toBe(true)
+    expect(await db.profiles.count()).toBe(1)
+    expect(await getSyncState()).toMatchObject({ spaceId: STATE.spaceId })
+  })
+})
