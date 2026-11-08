@@ -197,6 +197,14 @@ begin
     select x.rid, x.version, x.version_by, x.payload, x.blob_path
     from jsonb_to_recordset(p_records) as x(rid text, version bigint, version_by text, payload text, blob_path text)
   loop
+    if r.version_by is null or length(r.version_by) > 64 then
+      raise exception 'version_by inválido' using errcode = '22023';
+    end if;
+    -- Un blob solo puede vivir en el hueco de su propio registro dentro de la familia.
+    if r.blob_path is not null and r.blob_path <> p_space || '/' || r.rid then
+      raise exception 'blob_path inválido' using errcode = '22023';
+    end if;
+
     insert into public.sync_records as s (space_id, rid, version, version_by, payload, blob_path, seq)
     values (p_space, r.rid, r.version, r.version_by, r.payload, r.blob_path, nextval('public.sync_seq'))
     on conflict (space_id, rid) do update set
