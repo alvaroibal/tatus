@@ -1,5 +1,8 @@
 import { entropyToMnemonic, mnemonicToEntropy } from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/spanish.js'
+import { z } from 'zod'
+import { SYNC_TABLES } from './changeLog'
+import type { SyncRecord } from './merge'
 
 // Cripto de Tatuś Sync. Todo sale de una seed de 16 bytes que solo vive en los
 // dispositivos de la familia; el servidor nunca la ve. Los errores son
@@ -66,10 +69,57 @@ function toBase64(b: Uint8Array): string {
   return btoa(s)
 }
 
+function fromBase64(s: string): Uint8Array<ArrayBuffer> {
+  return Uint8Array.from(atob(s), c => c.charCodeAt(0))
+}
+
 const toBase64Url = (b: Uint8Array) => toBase64(b).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 
 /** Id opaco del registro: el servidor no sabe ni la tabla ni el uid. */
 export async function recordId(ridKey: CryptoKey, tbl: string, uid: string): Promise<string> {
   const mac = await crypto.subtle.sign('HMAC', ridKey, utf8.encode(`${tbl}:${uid}`))
   return toBase64Url(new Uint8Array(mac))
+}
+
+// --- Registros cifrados ----------------------------------------------------
+
+// Refleja SyncRecord (merge.ts). Lo que llega del servidor no es de fiar.
+const SyncRecordSchema = z.object({
+  tbl: z.enum(SYNC_TABLES),
+  uid: z.string(),
+  updatedAt: z.number(),
+  updatedBy: z.string(),
+  deleted: z.boolean(),
+  data: z.record(z.string(), z.unknown()).optional(),
+})
+
+// El AAD ata el bloque a su familia y a su hueco: moverlo hace fallar el descifrado.
+const aad = (spaceId: string, rid: string) => utf8.encode(`${spaceId}|${rid}`)
+
+/** base64(iv[12] ‖ AES-GCM(JSON(rec))). */
+export async function sealRecord(keys: SyncKeys, rid: string, rec: SyncRecord): Promise<string> {
+  const iv = crypto.getRandomValues(new Uint8Array(12))
+  const ct = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv, additionalData: aad(keys.spaceId, rid) },
+    keys.encKey,
+    utf8.encode(JSON.stringify(rec)),
+  )
+  const out = new Uint8Array(iv.length + ct.byteLength)
+  out.set(iv)
+  out.set(new Uint8Array(ct), iv.length)
+  return toBase64(out)
+}
+
+export async function openRecord(keys: SyncKeys, rid: string, payload: string): Promise<SyncRecord> {
+  try {
+    const bytes = fromBase64(payload)
+    const plain = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: bytes.subarray(0, 12), additionalData: aad(keys.spaceId, rid) },
+      keys.encKey,
+      bytes.subarray(12),
+    )
+    return SyncRecordSchema.parse(JSON.parse(new TextDecoder().decode(plain)))
+  } catch {
+    throw new Error('No se pudo abrir el registro')
+  }
 }
