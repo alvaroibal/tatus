@@ -28,6 +28,10 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+        # Opcionales: sin ellas el build funciona y la sincronización no aparece.
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
       - uses: actions/upload-artifact@v4
         with:
           name: dist
