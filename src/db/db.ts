@@ -216,19 +216,8 @@ class TatusDB extends Dexie {
     })
     // v6: estado local de la sincronización (seed y cursor). Fuera de
     // SYNC_TABLES y del backup: la frase es la que recupera la sincronización.
-    this.version(6).stores({
-      profiles: '++id,name,uid',
-      diaryEntries: '++id,profileId,date,week,milestone,uid',
-      growthRecords: '[profileId+week],date,uid',
-      appConfig: 'id',
-      futureLetters: '++id,profileId,date,week,uid',
-      entryPhotos: '++id,diaryEntryId,uid',
-      careLogs: '++id,profileId,start,type,uid',
-      appointments: '++id,profileId,date,uid',
-      checks: 'key,profileId,uid',
-      [CHANGES_TABLE]: '[tbl+uid],at',
-      syncState: '&id',
-    })
+    // Dexie hereda el resto de tablas de v5: solo se declara la nueva.
+    this.version(6).stores({ syncState: '&id' })
     this.use(syncMiddleware)
   }
 }
