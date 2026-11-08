@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { newSeed, phraseToSeed, seedToPhrase } from '../crypto'
+import { deriveKeys, newSeed, phraseToSeed, recordId, seedToPhrase } from '../crypto'
 
 const FIXED = Uint8Array.from({ length: 16 }, (_, i) => i) // 0x00..0x0f
 
@@ -42,5 +42,31 @@ describe('frase de recuperación', () => {
 
   it('rechaza una frase con menos de 12 palabras', () => {
     expect(() => phraseToSeed(seedToPhrase(FIXED).split(' ').slice(0, 11).join(' '))).toThrow('Frase no válida')
+  })
+})
+
+describe('llaves', () => {
+  it('vector fijo: la misma seed da siempre el mismo spaceId y rid', async () => {
+    const keys = await deriveKeys(FIXED)
+    // Calculados la primera vez (y comprobados con node:crypto hkdfSync/createHmac).
+    // Si cambian, las familias existentes dejarían de encontrar sus datos.
+    expect(keys.spaceId).toBe('0c903d6246207aa27c5d3faad5ced482')
+    expect(await recordId(keys.ridKey, 'diaryEntries', 'u1')).toBe('E7VgaHjuRgYzoOHq_svoG1I41DVHtM5OvuaoqXS7IJI')
+    expect(keys.authSecret).toHaveLength(32)
+  })
+
+  it('las llaves no se pueden extraer', async () => {
+    const keys = await deriveKeys(FIXED)
+    expect(keys.encKey.extractable).toBe(false)
+    expect(keys.ridKey.extractable).toBe(false)
+    await expect(crypto.subtle.exportKey('raw', keys.encKey)).rejects.toThrow()
+    await expect(crypto.subtle.exportKey('raw', keys.ridKey)).rejects.toThrow()
+  })
+
+  it('rid distinto para otra tabla u otro uid', async () => {
+    const { ridKey } = await deriveKeys(FIXED)
+    const a = await recordId(ridKey, 'diaryEntries', 'u1')
+    expect(await recordId(ridKey, 'diaryEntries', 'u2')).not.toBe(a)
+    expect(await recordId(ridKey, 'careLogs', 'u1')).not.toBe(a)
   })
 })
