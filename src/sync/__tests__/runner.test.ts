@@ -261,7 +261,9 @@ describe('seguridad', () => {
 
     const rows = [...server.records.values()]
     const tampered = rows.find(r => r.payload !== null && r.payload.length > 100)!
-    tampered.payload = (tampered.payload![50] === 'A' ? 'B' : 'A') + tampered.payload!.slice(1)
+    // Cambiar el primer carácter (parte del IV) por otro distinto: si coincidía, el
+    // "manipulado" quedaba intacto y el test fallaba al azar (~1 de cada 64).
+    tampered.payload = (tampered.payload![0] === 'A' ? 'B' : 'A') + tampered.payload!.slice(1)
     const photo = rows.find(r => r.blob_path !== null)!
     const other = 'f'.repeat(32)
     photo.blob_path = `${other}/${photo.rid}`
@@ -324,9 +326,12 @@ describe('exclusión y estado', () => {
     await vi.waitFor(() => expect(push).toHaveBeenCalledTimes(1), { timeout: 5000, interval: 100 })
     expect(push.mock.calls[0][1]).toHaveLength(2)
 
+    // Esperar a que acabe el ciclo del disparador: si no, visibilitychange reutiliza
+    // ese mismo ciclo y su pull puede haber ocurrido antes de crear el espía.
+    await vi.waitFor(() => expect(a.isSyncing()).toBe(false), { timeout: 5000, interval: 50 })
     const pull = vi.spyOn(a.transport, 'pull')
     document.dispatchEvent(new Event('visibilitychange')) // jsdom: visibilityState = 'visible'
-    await vi.waitFor(() => expect(pull).toHaveBeenCalled())
+    await vi.waitFor(() => expect(pull).toHaveBeenCalled(), { timeout: 5000, interval: 50 })
   }, 30000)
 
   it('subscribeSyncing avisa al empezar y al terminar', async () => {
