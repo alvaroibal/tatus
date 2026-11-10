@@ -57,6 +57,8 @@ export interface AppConfig {
   parentName?: string
   role?: ParentRole      // quién usa este dispositivo
   nightMode?: 'auto' | 'on' | 'off'
+  lastBackupAt?: number     // última copia verificada (ms); solo de este móvil
+  lastBackupItems?: number  // recuerdos que había al hacerla
 }
 
 export type ParentRole = 'papa' | 'mama'

@@ -98,6 +98,54 @@ export function exportBackup(): Promise<string> {
   })
 }
 
+const BACKUP_ARRAYS = [
+  'profiles', 'diaryEntries', 'growthRecords', 'futureLetters',
+  'entryPhotos', 'careLogs', 'appointments', 'checks',
+] as const
+
+export type BackupCounts = Record<typeof BACKUP_ARRAYS[number], number>
+
+/** Lo que hay ahora en la base de datos, tabla a tabla. */
+export async function currentCounts(): Promise<BackupCounts> {
+  const tables = BACKUP_ARRAYS.map(name => db.table(name))
+  const counts = await Promise.all(tables.map(t => t.count()))
+  return Object.fromEntries(BACKUP_ARRAYS.map((name, i) => [name, counts[i]])) as BackupCounts
+}
+
+/**
+ * Comprueba que un backup recién generado se puede volver a leer y trae lo mismo
+ * que hay en la base de datos. Sin esto no se da la copia por buena.
+ */
+export function verifyBackup(json: string, expected: BackupCounts): boolean {
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(json)
+  } catch {
+    return false
+  }
+  const envelope = parsed as Partial<BackupEnvelope> | null
+  if (!envelope || envelope.schemaVersion !== 5 || !envelope.data) return false
+  const data = envelope.data as unknown as Record<string, unknown>
+  return BACKUP_ARRAYS.every(name => Array.isArray(data[name]) && (data[name] as unknown[]).length === expected[name])
+}
+
+export interface VerifiedBackup {
+  json: string
+  ok: boolean
+  /** Recuerdos incluidos (entradas, cartas, fotos y medidas), para el recordatorio. */
+  items: number
+}
+
+/** Genera el backup y lo verifica dentro de la misma lectura, sin cambios entre medias. */
+export function exportVerifiedBackup(): Promise<VerifiedBackup> {
+  return db.transaction('r', ALL_TABLES(), async () => {
+    const json = await exportBackup()
+    const counts = await currentCounts()
+    const items = counts.diaryEntries + counts.futureLetters + counts.entryPhotos + counts.growthRecords
+    return { json, ok: verifyBackup(json, counts), items }
+  })
+}
+
 /** Borra un perfil y todo lo que cuelga de él. */
 export async function deleteProfileData(profileId: number): Promise<void> {
   await db.transaction('rw', ALL_TABLES(), async () => {

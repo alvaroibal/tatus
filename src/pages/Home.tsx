@@ -8,6 +8,8 @@ import { StageCard } from '../components/StageCard'
 import { PrenatalCard } from '../components/PrenatalCard'
 import { SkeletonCard } from '../components/SkeletonCard'
 import { TryingHome } from '../components/TryingHome'
+import { useBackupStatus } from '../hooks/useBackupStatus'
+import { formatBackupDate } from '../utils/backupStatus'
 import { InstallCard } from '../components/InstallCard'
 import { Icon, IconBadge, type IconName } from '../components/Icon'
 import { Fold, Wordmark } from '../components/ui'
@@ -81,6 +83,7 @@ function TodayCard({ stage, dayIndex }: { stage: Stage; dayIndex: number }) {
 export default function Home() {
   const navigate = useNavigate()
   const { profile, currentWeek, isLoading } = useCurrentProfile()
+  const backup = useBackupStatus()
   const [badgeDismissed, setBadgeDismissed] = useState(false)
   const [dayIndex] = useState(() => Math.floor(Date.now() / 86_400_000))
   const pid = profile?.id
@@ -189,6 +192,11 @@ export default function Home() {
           <Alert icon="syringe" title={vaccineAlert.name}
             subtitle={vaccineAlert.daysUntil === 0 ? 'Vacuna hoy' : vaccineAlert.daysUntil === 1 ? 'Vacuna mañana' : `Vacuna en ${vaccineAlert.daysUntil} días`}
             onClick={() => navigate('/vacunas')} />
+        )}
+        {backup?.due && (
+          <Alert icon="shield" title="Haz una copia de tus recuerdos"
+            subtitle={backup.lastBackupAt ? `La última fue el ${formatBackupDate(backup.lastBackupAt)}` : 'Aún no has guardado ninguna copia'}
+            onClick={() => navigate('/ajustes')} />
         )}
         {extras?.nextAppt && (
           <Alert icon="stethoscope" title={extras.nextAppt.title}

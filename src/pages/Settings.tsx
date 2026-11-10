@@ -1,10 +1,12 @@
-import { lazy, Suspense, useRef, useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useCurrentProfile } from '../hooks/useCurrentProfile'
 import { db, type BabyProfile } from '../db/db'
 import { showToast } from '../utils/toast'
-import { deleteProfileData, exportBackup, importBackup } from '../utils/importBackup'
+import { deleteProfileData } from '../utils/importBackup'
+import { BackupSection } from '../components/settings/BackupSection'
+import { PrivacyNote } from '../components/PrivacyNote'
 import { useAppConfig } from '../hooks/useAppConfig'
 import { REGIONS } from '../data/regions'
 import { InstallCard } from '../components/InstallCard'
@@ -246,11 +248,9 @@ export default function Settings() {
   const { profile, isLoading } = useCurrentProfile()
   const [editingDate, setEditingDate] = useState(false)
   const [newDateStr, setNewDateStr] = useState('')
-  const [importing, setImporting] = useState(false)
   const [showAddForm, setShowAddForm] = useState(false)
   const [tapCount, setTapCount] = useState(0)
   const [debugVisible, setDebugVisible] = useState(false)
-  const fileRef = useRef<HTMLInputElement>(null)
 
   const allProfiles = useLiveQuery(() => db.profiles.toArray(), [])
   const activeId = profile?.id
@@ -308,45 +308,6 @@ export default function Settings() {
     } catch {
       showToast('No se ha podido cambiar la fecha. Vuelve a intentarlo.')
     }
-  }
-
-  // ── Backup ──────────────────────────────────────────────────────────────
-
-  async function handleExport() {
-    try {
-      const json = await exportBackup()
-      const blob = new Blob([json], { type: 'application/json' })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `tatus-backup-${new Date().toISOString().slice(0, 10)}.json`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      URL.revokeObjectURL(url)
-      showToast('Backup exportado')
-    } catch {
-      showToast('No se ha podido exportar el backup. Vuelve a intentarlo.')
-    }
-  }
-
-  async function handleImportFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    if (!await confirmDialog({
-      title: '¿Importar este backup?',
-      message: 'Reemplazará todos los datos que hay ahora en este móvil.',
-      confirmLabel: 'Importar y reemplazar',
-      danger: true,
-    })) {
-      e.target.value = ''
-      return
-    }
-    setImporting(true)
-    const ok = await importBackup(await file.text())
-    if (ok) showToast('Backup importado correctamente')
-    setImporting(false)
-    e.target.value = ''
   }
 
   // ── Debug tap ───────────────────────────────────────────────────────────
@@ -444,45 +405,10 @@ export default function Settings() {
 
       <div className="-mx-0"><InstallCard force /></div>
 
-      {/* Backup */}
-      <section className="px-5 mb-6">
-        <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">Backup</p>
-        <div className="space-y-2">
-          <button
-            onClick={handleExport}
-            className="w-full bg-white border border-gray-100 rounded-2xl p-4 flex items-center justify-between"
-          >
-            <div>
-              <p className="text-sm font-medium text-gray-900">Exportar backup</p>
-              <p className="text-xs text-gray-500 mt-0.5">Descarga un archivo JSON con todos tus datos</p>
-            </div>
-            <span className="text-gray-300 text-lg">↓</span>
-          </button>
-          <button
-            onClick={() => fileRef.current?.click()}
-            disabled={importing}
-            className="w-full bg-white border border-gray-100 rounded-2xl p-4 flex items-center justify-between disabled:opacity-50"
-          >
-            <div>
-              <p className="text-sm font-medium text-gray-900">
-                {importing ? 'Importando…' : 'Importar backup'}
-              </p>
-              <p className="text-xs text-gray-500 mt-0.5">Reemplaza todos los datos con un backup previo</p>
-            </div>
-            <span className="text-gray-300 text-lg">↑</span>
-          </button>
-          <input ref={fileRef} type="file" accept=".json" onChange={handleImportFile} className="hidden" />
-        </div>
-      </section>
+      <BackupSection />
 
-      {/* iOS warning */}
       <section className="px-5 mb-6">
-        <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4">
-          <p className="text-xs text-amber-800 leading-relaxed">
-            ⚠️ iOS puede borrar los datos de la app si no la abres durante más de 7 días.
-            Exporta el diario regularmente.
-          </p>
-        </div>
+        <PrivacyNote />
       </section>
 
       {/* Debug panel */}
