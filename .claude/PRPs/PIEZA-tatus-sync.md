@@ -157,6 +157,11 @@ _(Fase 6 — P1: realtime, desactivar, aviso de datos previos, rotar llave. Se p
 - **Fix**: pendiente. Las fotos se añaden o se borran, no se editan, así que es muy improbable. Solución prevista: ruta de blob con versión (`{familia}/{rid}/{version}`) aceptada por el servidor.
 - **Aplicar en**: Fase 5 (o 6) junto con la cuota de Storage.
 
+### 2026-11-10: dos tests del runner fallaban al azar (~1 de cada 5 ejecuciones)
+- **Error**: (1) el test de payload manipulado cambiaba el primer carácter por uno elegido mirando el carácter 50; si coincidía con el que ya había, el bloque quedaba intacto. (2) El test de disparadores creaba el espía de `pull` mientras el ciclo anterior seguía en marcha: `visibilitychange` reutilizaba ese ciclo y su `pull` ya había ocurrido.
+- **Fix**: elegir un carácter distinto del que había; esperar a `isSyncing() === false` antes de espiar `pull` y dar 5 s al `waitFor`. 8 ejecuciones seguidas en verde.
+- **Aplicar en**: tests con temporizadores o ciclos asíncronos: esperar a un estado observable, no a "lo que tarde"; y una manipulación de datos en un test tiene que garantizar que cambia algo.
+
 ---
 
 ## Gotchas (Antes de Implementar)
