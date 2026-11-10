@@ -529,6 +529,8 @@ US-1, US-2, US-3, US-4 y US-7.
 - **6.2** Desactivar en este móvil (US-9): borrar `syncState` y la sesión; los datos locales se quedan.
 - **6.3** Aviso al unirse con datos previos (US-10): elegir "Combinar" o "Empezar desde el archivo común" (exportando antes un backup automático).
 - **6.4** Rotar la llave (US-12): nueva seed, re-subir todo con la nueva llave, borrar la familia antigua y volver a vincular el otro móvil.
+- **6.6** Que nunca se pierda una edición (informe de competencia, nov-2026): si los dos editan la misma entrada a la vez, guardar la versión perdedora como copia ("Versión de tu pareja") en vez de descartarla.
+- **6.7** Papelera de 30 días: un borrado que llega del otro móvil va a la papelera y se puede recuperar.
 - **6.5** Relleno de tamaño (padding) de los bloques a múltiplos de 1 KB para ocultar mejor el tipo de dato.
 
 ---
@@ -566,3 +568,4 @@ Las Fases 1 y 2 son independientes y pueden hacerse en paralelo.
 | Fecha | Cambio |
 |---|---|
 | 2026-11-07 | Versión inicial: Supabase, QR + frase de rescate, fotos incluidas, ruta corta |
+| 2026-11-10 | Fase 6: 6.6 (no perder ediciones simultáneas) y 6.7 (papelera), del informe de competencia |
