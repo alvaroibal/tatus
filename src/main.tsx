@@ -5,6 +5,7 @@ import { router } from './router/router'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { OverlayHost } from './components/OverlayHost'
 import { initInstall } from './utils/install'
+import { requestPersistentStorage } from './utils/persistStorage'
 import { db } from './db/db'
 import '@fontsource-variable/bricolage-grotesque/wght.css'
 import '@fontsource/atkinson-hyperlegible/latin-400.css'
@@ -62,6 +63,8 @@ if (!(await idbAvailable())) {
   `
 } else {
   initInstall()
+  // Que el navegador no borre el archivo si le falta espacio. No bloquea el arranque.
+  void requestPersistentStorage()
   startSyncIfEnabled()
   createRoot(root).render(
     <StrictMode>

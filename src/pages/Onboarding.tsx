@@ -6,6 +6,7 @@ import { addDays } from '../utils/age'
 import { dueDateFromLastPeriod } from '../utils/pregnancy'
 import { fromInputDate, inputCls } from '../components/uiHelpers'
 import { Wordmark } from '../components/ui'
+import { PrivacyNote } from '../components/PrivacyNote'
 
 type Stage = 'trying' | 'expecting' | 'born'
 
@@ -154,6 +155,7 @@ export default function Onboarding() {
             {saving ? 'Guardando…' : 'Empezar'}
           </button>
         </form>
+        <PrivacyNote className="mt-6 text-center" />
       </div>
     </main>
   )
