@@ -6,6 +6,7 @@ import { getDeviceId, newUid, nextStamp } from './clock'
 export const SYNC_TABLES = [
   'profiles', 'diaryEntries', 'futureLetters', 'growthRecords',
   'careLogs', 'appointments', 'checks', 'entryPhotos',
+  'medPlans', 'medDoses',
 ] as const
 export type SyncTable = typeof SYNC_TABLES[number]
 

@@ -29,7 +29,7 @@ describe('backup verificado', () => {
     const counts = await currentCounts()
     const { json } = await exportVerifiedBackup()
     expect(verifyBackup(json.slice(0, -10), counts)).toBe(false)
-    expect(verifyBackup(json.replace('"schemaVersion": 5', '"schemaVersion": 4'), counts)).toBe(false)
+    expect(verifyBackup(json.replace('"schemaVersion": 6', '"schemaVersion": 4'), counts)).toBe(false)
     expect(verifyBackup(json, { ...counts, diaryEntries: counts.diaryEntries + 1 })).toBe(false)
   })
 

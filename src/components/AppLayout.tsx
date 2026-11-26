@@ -1,9 +1,11 @@
 import { Suspense, useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { BottomNav } from './BottomNav'
+import { useReminders } from '../hooks/useReminders'
 
 export default function AppLayout() {
   const { pathname } = useLocation()
+  useReminders()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
 
   return (

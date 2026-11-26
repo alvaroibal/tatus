@@ -47,6 +47,30 @@ beforeEach(async () => {
   await freshModules()
 })
 
+describe('Dexie v7', () => {
+  it('migra de v6 (versión publicada) a v7 sin perder filas ni la sincronización', async () => {
+    const old = new Dexie('tatus-db')
+    old.version(5).stores(V5)
+    old.version(6).stores({ syncState: '&id' })
+    await old.open()
+    await old.table('profiles').add({ name: 'Jan', birthDate: new Date('2026-12-02'), createdAt: new Date(), phase: 'expecting', uid: 'p1', updatedAt: 1, updatedBy: 'A' })
+    await old.table('careLogs').add({ profileId: 1, type: 'bottle', start: new Date(), amountMl: 60, uid: 'c1', updatedAt: 1, updatedBy: 'A' })
+    await old.table('syncState').put(STATE)
+    old.close()
+
+    const { db } = await import('../../db/db')
+    await db.open()
+    expect(db.verno).toBe(7)
+    expect(await db.profiles.toArray()).toEqual([expect.objectContaining({ name: 'Jan', uid: 'p1' })])
+    expect(await db.careLogs.count()).toBe(1)
+    const sync = await db.syncState.get('self')
+    expect(sync?.spaceId).toBe(STATE.spaceId)
+    expect(Array.from(sync!.seed)).toEqual(Array.from(STATE.seed))
+    expect(await db.medPlans.count()).toBe(0)
+    expect(await db.medDoses.count()).toBe(0)
+  })
+})
+
 describe('Dexie v6', () => {
   it('migra de v5 a v6 sin perder filas y con syncState vacío', async () => {
     const old = new Dexie('tatus-db')
@@ -60,7 +84,7 @@ describe('Dexie v6', () => {
 
     const { db } = await import('../../db/db')
     await db.open()
-    expect(db.verno).toBe(6)
+    expect(db.verno).toBe(7) // v6 syncState + v7 medicación
     expect(await db.profiles.toArray()).toEqual([expect.objectContaining({ id: 1, name: 'Bebé', uid: 'p1' })])
     expect(await db.diaryEntries.toArray()).toEqual([expect.objectContaining({ text: 'Hola', uid: 'd1' })])
     expect(await db.appConfig.get(1)).toEqual({ id: 1, activeProfileId: 1 })
@@ -107,7 +131,7 @@ describe('backup', () => {
     expect(json).not.toContain('syncState')
     expect(json).not.toContain(STATE.spaceId)
     const parsed = JSON.parse(json)
-    expect(parsed.schemaVersion).toBe(5)
+    expect(parsed.schemaVersion).toBe(6)
     expect(Object.keys(parsed.data)).not.toContain('syncState')
   })
 
