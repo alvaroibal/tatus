@@ -14,12 +14,17 @@ import { InstallCard } from '../components/InstallCard'
 import { Icon, IconBadge, type IconName } from '../components/Icon'
 import { Fold, Wordmark } from '../components/ui'
 import { ALL_STAGES } from '../utils/stages'
-import { ageInMonths, formatAge, formatTime, startOfDay, timeAgo } from '../utils/age'
+import { ageInMonths, daysBetween, formatAge, formatTime, startOfDay, timeAgo } from '../utils/age'
 import { VACCINE_LIST_ID, nextVaccineAlert } from '../utils/vaccines'
 import { doseStatus } from '../utils/meds'
 import { lifeWeekFor, relevantGuides } from '../data/guides'
 import { MILESTONE_LIST_ID, currentMilestoneGroup } from '../data/milestones'
 import { TOOLS } from '../data/tools'
+import { NEWBORN_HOME_DAYS, NEWBORN_LIST_ID, NEWBORN_TASKS, taskState } from '../data/newborn'
+import { FEED_WATCH_DAYS } from '../utils/feeding'
+import { medOwnerLabel } from '../utils/momMeds'
+import { useAppConfig } from '../hooks/useAppConfig'
+import { BirthCta, FeedCard, MedAlerts, NewbornCard } from '../components/HomeCards'
 import { db } from '../db/db'
 
 function lastSeenKey(profileId: number) {
@@ -84,6 +89,7 @@ export default function Home() {
   const navigate = useNavigate()
   const { profile, currentWeek, isLoading } = useCurrentProfile()
   const backup = useBackupStatus()
+  const config = useAppConfig()
   const [badgeDismissed, setBadgeDismissed] = useState(false)
   const [dayIndex] = useState(() => Math.floor(Date.now() / 86_400_000))
   const pid = profile?.id
@@ -104,7 +110,12 @@ export default function Home() {
       .filter(l => l.type === 'breast' || l.type === 'bottle')
       .sort((a, b) => +new Date(b.start) - +new Date(a.start))[0]
     const doses = doseStatus(logs).filter(d => !d.canGiveNow)
-    return { nextAppt: appts[0], vaccineDone, milestonesDone, running, lastFeed, doses }
+    const newbornDone = new Set(checks.filter(c => c.key.startsWith(`${pid}|${NEWBORN_LIST_ID}|`)).map(c => c.key.split('|')[2]))
+    const [medPlans, medDoses] = await Promise.all([
+      db.medPlans.where('profileId').equals(pid).toArray(),
+      db.medDoses.where('profileId').equals(pid).toArray(),
+    ])
+    return { nextAppt: appts[0], vaccineDone, milestonesDone, running, lastFeed, doses, logs, newbornDone, medPlans, medDoses }
   }, [pid])
 
   useEffect(() => {
@@ -117,7 +128,7 @@ export default function Home() {
   const trying = profile.phase === 'trying'
   const born = !trying && currentWeek >= 0
   const lw = lifeWeekFor(profile.phase, currentWeek)
-  const quickTools = TOOLS.filter(t => lw >= t.from && lw <= t.to_ && !['checklists', 'ficha', 'resumen'].includes(t.id)).slice(0, 4)
+  const quickTools = TOOLS.filter(t => lw >= t.from && lw <= t.to_ && !['checklists', 'ficha', 'resumen', 'recien-nacido'].includes(t.id)).slice(0, 4)
   const guides = relevantGuides(lw, 3)
   const vaccineAlert = born && extras ? nextVaccineAlert(profile.birthDate, extras.vaccineDone) : null
   const stage = born ? getStage(currentWeek, ALL_STAGES) : null
@@ -129,11 +140,20 @@ export default function Home() {
     : 0
 
   // El aviso de semana nueva se queda hasta que se cierra
-  const showBadge = born && !badgeDismissed && currentWeek > getLastSeenWeek(profile.id!)
+  const showBadge = born && currentWeek > 0 && !badgeDismissed && currentWeek > getLastSeenWeek(profile.id!)
   function dismissBadge() {
     try { localStorage.setItem(lastSeenKey(profile!.id!), String(currentWeek)) } catch { /* sin almacenamiento */ }
     setBadgeDismissed(true)
   }
+
+  const ageDays = born ? daysBetween(profile.birthDate, new Date()) : -1
+  const watchFeeds = born && ageDays <= FEED_WATCH_DAYS
+  const showNewborn = born && ageDays <= NEWBORN_HOME_DAYS
+  const birthAt = profile.birth?.at ?? profile.birthDate
+  const newbornPending = showNewborn && extras
+    ? NEWBORN_TASKS.filter(t => ['overdue', 'now'].includes(taskState(t, birthAt, extras.newbornDone.has(t.id)))).length
+    : 0
+  const medWho = medOwnerLabel(config?.role, config?.partnerName).who
 
   const subtitle = trying
     ? 'Buscando bebé'
@@ -174,13 +194,17 @@ export default function Home() {
             </div>
           </button>
         )}
-        {extras?.running && (
+        {showNewborn && extras && (
+          <NewbornCard name={profile.name} pendingNow={newbornPending} hasBirthData={!!profile.birth} />
+        )}
+        {extras && <MedAlerts plans={extras.medPlans} doses={extras.medDoses} who={medWho} />}
+        {extras?.running && (extras.running.type === 'sleep' || !watchFeeds) && (
           <Alert tone="blue" icon={extras.running.type === 'sleep' ? 'moon' : 'heart'}
             title={extras.running.type === 'sleep' ? 'Durmiendo' : `Tomando pecho ${extras.running.side === 'L' ? 'izquierdo' : 'derecho'}`}
             subtitle={`Desde las ${formatTime(extras.running.start)}`}
             onClick={() => navigate('/herramientas/registro')} />
         )}
-        {born && !extras?.running && extras?.lastFeed && currentWeek < 52 && (
+        {born && !watchFeeds && !extras?.running && extras?.lastFeed && currentWeek < 52 && (
           <Alert tone="blue" icon="bottle" title="Última toma" subtitle={timeAgo(extras.lastFeed.start)}
             onClick={() => navigate('/herramientas/registro')} />
         )}
@@ -205,11 +229,16 @@ export default function Home() {
         )}
       </div>
 
+      {watchFeeds && extras && <FeedCard profileId={profile.id!} name={profile.name} logs={extras.logs} />}
+
       {/* Contenido de la etapa */}
       {trying ? (
         <TryingHome profile={profile} />
       ) : !born ? (
-        <BeforeBirth birthDate={profile.birthDate} childName={profile.name} currentWeek={currentWeek} />
+        <>
+          <BirthCta name={profile.name} pregnancyWeek={Math.max(1, 40 + currentWeek)} />
+          <BeforeBirth birthDate={profile.birthDate} childName={profile.name} currentWeek={currentWeek} />
+        </>
       ) : stage && (
         <>
           <TodayCard stage={stage} dayIndex={dayIndex} />

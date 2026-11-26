@@ -29,6 +29,9 @@ import {
   Milestones,
   Foods,
   Summary,
+  MomMeds,
+  Birth,
+  Newborn,
 } from './lazyPages'
 
 export const router = createHashRouter([
@@ -62,6 +65,9 @@ export const router = createHashRouter([
       { path: 'herramientas/desarrollo',     element: <Milestones /> },
       { path: 'herramientas/alimentos',      element: <Foods /> },
       { path: 'herramientas/resumen',        element: <Summary /> },
+      { path: 'herramientas/medicacion',     element: <MomMeds /> },
+      { path: 'nacimiento',     element: <Birth /> },
+      { path: 'recien-nacido',  element: <Newborn /> },
       { path: 'urgencias',      element: <Emergency /> },
       { path: 'ficha',          element: <MedicalCardPage /> },
       { path: 'guia',           element: <GuideList /> },

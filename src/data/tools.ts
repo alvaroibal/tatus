@@ -14,8 +14,10 @@ export interface ToolDef {
 export const TOOLS: ToolDef[] = [
   { id: 'fertilidad', short: 'Ciclo', to: '/herramientas/fertilidad', icon: 'sprout', title: 'Días fértiles', subtitle: 'Ventana fértil y fecha del test', from: -80, to_: -36 },
   { id: 'fecha-parto', short: 'Fecha parto', to: '/herramientas/fecha-parto', icon: 'calendar', title: 'Fecha probable de parto', subtitle: 'Semanas de embarazo y fechas clave', from: -80, to_: -1 },
-  { id: 'patadas', short: 'Movimientos', to: '/herramientas/patadas', icon: 'move', title: '¿Se mueve menos?', subtitle: 'Qué es normal y cuándo consultar', from: -16, to_: 0 },
-  { id: 'contracciones', short: 'Contracc.', to: '/herramientas/contracciones', icon: 'timer', title: 'Contracciones', subtitle: 'Temporizador con regla 5-1-1', from: -6, to_: 0 },
+  { id: 'patadas', short: 'Movimientos', to: '/herramientas/patadas', icon: 'move', title: '¿Se mueve menos?', subtitle: 'Qué es normal y cuándo consultar', from: -16, to_: -1 },
+  { id: 'contracciones', short: 'Contracc.', to: '/herramientas/contracciones', icon: 'timer', title: 'Contracciones', subtitle: 'Temporizador con regla 5-1-1', from: -6, to_: -1 },
+  { id: 'recien-nacido', short: 'Primeros días', to: '/recien-nacido', icon: 'checklist', title: 'Primeros días', subtitle: 'Pruebas, papeles y cuidados con su plazo', from: -2, to_: 8 },
+  { id: 'medicacion', short: 'Medicación', to: '/herramientas/medicacion', icon: 'pill', title: 'Medicación de mamá', subtitle: 'Tratamientos del alta y próxima toma', from: -1, to_: 26 },
   { id: 'registro', short: 'Registro', to: '/herramientas/registro', icon: 'bottle', title: 'Registro diario', subtitle: 'Tomas, pañales, sueño y medicinas', from: 0, to_: 156 },
   { id: 'crecimiento', short: 'Crecer', to: '/crecimiento', icon: 'chart', title: 'Crecimiento', subtitle: 'Peso, talla, cabeza y percentiles OMS', from: 0, to_: 520 },
   { id: 'desarrollo', short: 'Hitos', to: '/herramientas/desarrollo', icon: 'sparkles', title: 'Hitos del desarrollo', subtitle: 'Qué suele hacer a su edad', from: 4, to_: 200 },

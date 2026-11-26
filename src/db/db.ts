@@ -16,6 +16,23 @@ export interface BabyProfile extends SyncMeta {
   cycleLength?: number   // días (modo buscando)
   region?: string        // comunidad autónoma (código de data/regions.ts)
   medical?: MedicalCard
+  birth?: BirthRecord    // datos del parto, se rellenan al pulsar «Ya ha nacido»
+}
+
+export type DeliveryType = 'vaginal' | 'instrumental' | 'cesarea'
+
+/** Datos del nacimiento tal y como vienen en el informe del hospital. */
+export interface BirthRecord {
+  at: Date               // fecha y hora exactas
+  weightG?: number
+  lengthCm?: number
+  headCm?: number
+  gestationWeeks?: number
+  delivery?: DeliveryType
+  apgar1?: number
+  apgar5?: number
+  hospital?: string
+  notes?: string
 }
 
 /** Ficha médica básica para urgencias. */
@@ -125,6 +142,27 @@ export interface SyncState {
   enabled: boolean
 }
 
+/** Tratamiento de la madre (o de quien sea): qué, cada cuánto y hasta cuándo. */
+export interface MedPlan extends SyncMeta {
+  id?: number
+  profileId: number      // familia a la que pertenece (perfil del bebé)
+  name: string           // «Ibuprofeno 600 mg»
+  dose?: string          // «1 comprimido»
+  everyHours: number
+  startAt: Date          // primera dosis prevista o ya tomada
+  days?: number          // duración del tratamiento; sin valor = hasta que se pare
+  active: boolean
+  notes?: string
+}
+
+/** Una toma de un tratamiento. Referencia el plan por uid (estable entre dispositivos). */
+export interface MedDose extends SyncMeta {
+  id?: number
+  profileId: number
+  planUid: string
+  takenAt: Date
+}
+
 class TatusDB extends Dexie {
   profiles!: EntityTable<BabyProfile, 'id'>
   diaryEntries!: EntityTable<DiaryEntry, 'id'>
@@ -135,6 +173,8 @@ class TatusDB extends Dexie {
   careLogs!: EntityTable<CareLog, 'id'>
   appointments!: EntityTable<Appointment, 'id'>
   checks!: Dexie.Table<CheckState, string>
+  medPlans!: EntityTable<MedPlan, 'id'>
+  medDoses!: EntityTable<MedDose, 'id'>
   syncChanges!: Dexie.Table<SyncChange, [string, string]>
   syncState!: Dexie.Table<SyncState, 'self'>
 
@@ -220,6 +260,11 @@ class TatusDB extends Dexie {
     // SYNC_TABLES y del backup: la frase es la que recupera la sincronización.
     // Dexie hereda el resto de tablas de v5: solo se declara la nueva.
     this.version(6).stores({ syncState: '&id' })
+    // v7: medicación de la madre (planes y tomas), compartida entre los dos.
+    this.version(7).stores({
+      medPlans: '++id,profileId,uid',
+      medDoses: '++id,profileId,planUid,takenAt,uid',
+    })
     this.use(syncMiddleware)
   }
 }

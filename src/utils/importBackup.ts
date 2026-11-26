@@ -14,12 +14,17 @@ export interface BackupEnvelope {
     careLogs?: unknown[]
     appointments?: unknown[]
     checks?: unknown[]
+    medPlans?: unknown[]
+    medDoses?: unknown[]
   }
 }
 
+/** Versión del formato de copia que se exporta ahora (6: añade la medicación de mamá). */
+export const BACKUP_SCHEMA_VERSION = 6
+
 const ALL_TABLES = () => [
   db.profiles, db.diaryEntries, db.growthRecords, db.appConfig, db.futureLetters,
-  db.entryPhotos, db.careLogs, db.appointments, db.checks,
+  db.entryPhotos, db.careLogs, db.appointments, db.checks, db.medPlans, db.medDoses,
 ]
 
 export async function importBackup(fileContent: string): Promise<boolean> {
@@ -32,7 +37,7 @@ export async function importBackup(fileContent: string): Promise<boolean> {
   }
 
   const envelope = parsed as BackupEnvelope
-  if (![1, 2, 3, 4, 5].includes(envelope?.schemaVersion)) {
+  if (![1, 2, 3, 4, 5, 6].includes(envelope?.schemaVersion)) {
     showToast('Este backup es de otra versión de Tatuś y no se puede importar.')
     return false
   }
@@ -61,6 +66,12 @@ export async function importBackup(fileContent: string): Promise<boolean> {
     if (envelope.data.checks?.length) {
       await db.checks.bulkAdd(envelope.data.checks as Parameters<typeof db.checks.bulkAdd>[0])
     }
+    if (envelope.data.medPlans?.length) {
+      await db.medPlans.bulkAdd(envelope.data.medPlans as Parameters<typeof db.medPlans.bulkAdd>[0])
+    }
+    if (envelope.data.medDoses?.length) {
+      await db.medDoses.bulkAdd(envelope.data.medDoses as Parameters<typeof db.medDoses.bulkAdd>[0])
+    }
   })
 
   return true
@@ -68,7 +79,7 @@ export async function importBackup(fileContent: string): Promise<boolean> {
 
 export function exportBackup(): Promise<string> {
   return db.transaction('r', ALL_TABLES(), async () => {
-    const [profiles, diaryEntries, growthRecords, appConfigArr, futureLetters, entryPhotos, careLogs, appointments, checks] = await Promise.all([
+    const [profiles, diaryEntries, growthRecords, appConfigArr, futureLetters, entryPhotos, careLogs, appointments, checks, medPlans, medDoses] = await Promise.all([
       db.profiles.toArray(),
       db.diaryEntries.toArray(),
       db.growthRecords.toArray(),
@@ -78,9 +89,11 @@ export function exportBackup(): Promise<string> {
       db.careLogs.toArray(),
       db.appointments.toArray(),
       db.checks.toArray(),
+      db.medPlans.toArray(),
+      db.medDoses.toArray(),
     ])
     const envelope: BackupEnvelope = {
-      schemaVersion: 5,
+      schemaVersion: BACKUP_SCHEMA_VERSION,
       exportedAt: new Date().toISOString(),
       data: {
         profiles,
@@ -92,6 +105,8 @@ export function exportBackup(): Promise<string> {
         careLogs,
         appointments,
         checks,
+        medPlans,
+        medDoses,
       },
     }
     return JSON.stringify(envelope, null, 2)
@@ -100,7 +115,7 @@ export function exportBackup(): Promise<string> {
 
 const BACKUP_ARRAYS = [
   'profiles', 'diaryEntries', 'growthRecords', 'futureLetters',
-  'entryPhotos', 'careLogs', 'appointments', 'checks',
+  'entryPhotos', 'careLogs', 'appointments', 'checks', 'medPlans', 'medDoses',
 ] as const
 
 export type BackupCounts = Record<typeof BACKUP_ARRAYS[number], number>
@@ -124,7 +139,7 @@ export function verifyBackup(json: string, expected: BackupCounts): boolean {
     return false
   }
   const envelope = parsed as Partial<BackupEnvelope> | null
-  if (!envelope || envelope.schemaVersion !== 5 || !envelope.data) return false
+  if (!envelope || envelope.schemaVersion !== BACKUP_SCHEMA_VERSION || !envelope.data) return false
   const data = envelope.data as unknown as Record<string, unknown>
   return BACKUP_ARRAYS.every(name => Array.isArray(data[name]) && (data[name] as unknown[]).length === expected[name])
 }
@@ -162,5 +177,7 @@ export async function deleteProfileData(profileId: number): Promise<void> {
     await db.careLogs.where('profileId').equals(profileId).delete()
     await db.appointments.where('profileId').equals(profileId).delete()
     await db.checks.where('profileId').equals(profileId).delete()
+    await db.medPlans.where('profileId').equals(profileId).delete()
+    await db.medDoses.where('profileId').equals(profileId).delete()
   })
 }

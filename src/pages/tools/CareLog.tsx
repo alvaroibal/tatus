@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useCurrentProfile } from '../../hooks/useCurrentProfile'
 import { useAppConfig } from '../../hooks/useAppConfig'
@@ -7,6 +7,7 @@ import { db, type CareLog as CareLogEntry, type CareType } from '../../db/db'
 import { Icon, type IconName } from '../../components/Icon'
 import { addDays, formatClock, formatDuration, formatTime, startOfDay, timeAgo } from '../../utils/age'
 import { doseStatus } from '../../utils/meds'
+import { startCareTimer } from '../../utils/careActions'
 import { deleteWithUndo, toast } from '../../utils/overlay'
 
 const TYPE_META: Record<CareType, { icon: IconName; label: string }> = {
@@ -80,7 +81,11 @@ export default function CareLog() {
   const { profile, isLoading } = useCurrentProfile()
   const config = useAppConfig()
   const [dayOffset, setDayOffset] = useState(0)
-  const [form, setForm] = useState<FormKind | null>(null)
+  const [params] = useSearchParams()
+  const [form, setForm] = useState<FormKind | null>(() => {
+    const f = params.get('form')
+    return f === 'bottle' || f === 'med' || f === 'pump' ? f : null
+  })
   const [editing, setEditing] = useState<CareLogEntry | null>(null)
   const [now, setNow] = useState(() => Date.now())
 
@@ -128,10 +133,11 @@ export default function CareLog() {
   }
 
   async function startTimer(type: 'breast' | 'sleep', side?: 'L' | 'R') {
-    for (const r of running.filter(r => r.type === type)) {
-      await db.careLogs.update(r.id!, { end: new Date() })
+    try {
+      await startCareTimer(pid!, type, side)
+    } catch {
+      toast('No se ha podido guardar. Vuelve a intentarlo.')
     }
-    await add({ type, side, start: new Date() })
   }
 
   async function stopTimer(l: CareLogEntry) {
